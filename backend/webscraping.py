@@ -31,7 +31,7 @@ def get_info_on_top_singers():
     data = requests.post(AJAX, data=payload,
                         timeout=15).json()["data"]
 
-    return(data)  # first 3 rows
+    return(data) 
 
 #debugging purposes
 # info = get_info_on_top_singers()[1]

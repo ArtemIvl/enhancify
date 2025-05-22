@@ -1,3 +1,4 @@
-selenium
 requests
+apscheduler
+numpy
 beautifulsoup4
