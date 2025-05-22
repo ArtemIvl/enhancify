@@ -2,3 +2,6 @@ requests
 apscheduler
 numpy
 beautifulsoup4
+redis
+fastapi[standard]
+uvicorn
