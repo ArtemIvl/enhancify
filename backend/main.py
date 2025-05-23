@@ -15,6 +15,9 @@ r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
 
 app = FastAPI()
 
+#make sure to install all requirements from requirements.txt before running the code
+#pip install -r requirements.txt
+
 scheduler = AsyncIOScheduler()
 ARTIST_UPDATE_FREQUENCY_PER_DAY = 4
 scheduler.start()
@@ -28,8 +31,7 @@ def update_artist_leaderboard():
     current_date = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
     r.json().set("top_listened_artists:content", "$", info_on_top_singers)
     r.set("top_listened_artists:last_updated_at", current_date)
-    #to-do: write received information to redis
-    #measure the execution time
+    
     # print(info_on_top_singers[1])
 
 @app.get("/get_top_artists")
@@ -41,13 +43,5 @@ def get_top_artists():
     print(exec_end - exec_start)
     return {"Last updated": last_updated_at, "Top 500": info_on_top_singers}
 
-#just a temporary solution till we setup the fastapi server
-"""
-if __name__ == "__main__":
-    scheduler.start()
-    try:
-        # keep main thread alive
-        import time;  time.sleep(1e9)
-    except (KeyboardInterrupt, SystemExit):
-        scheduler.shutdown()
-"""
+#RUN THE SERVER (COMMAND)
+#uvicorn main:app --reload

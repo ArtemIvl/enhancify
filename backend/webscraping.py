@@ -18,9 +18,11 @@ def get_info_on_top_singers():
 
     #find nonce using beautifulsoup webscraper
     #nonce is like a safety keyword, generated once every 12 hours
+    #we find the nonce by searching the website
     nonce = (BeautifulSoup(html, "lxml")
             .find("input", id="wdtNonceFrontendServerSide_74")["value"])
-                
+    
+    #mimic the payload of the request that retreives singers
     payload = {
         "draw":"1", "start":"0", "length":"-1",
         "order[0][column]":"4", "order[0][dir]":"desc",
