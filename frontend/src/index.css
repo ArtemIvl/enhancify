@@ -1,23 +1,58 @@
 @import "tailwindcss";
+@import "@fontsource/inter";
+@import "@fontsource/inter/100.css"; /* thin */
+@import "@fontsource/inter/300.css"; /* light */
+@import "@fontsource/inter/400.css"; /* normal */
+@import "@fontsource/inter/600.css"; /* semi-bold */
 
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* Base styles */
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #d3cfce; /* main background */
+  color: #000000; /* default font color */
+  padding: 8px;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  min-width: 320px;
-  min-height: 100vh;
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-size: 24px;
+  margin-bottom: 12px; /* space between heading and content */
+  color: #000000;
+}
+
+/* Normal text */
+p, span, div, label {
+  font-size: 16px;
+  color: #000000;
+}
+
+/* Subtext */
+.subtext {
+  font-size: 12px;
+  color: #000000;
+}
+
+/* Elements, buttons, inputs etc */
+.element {
+  background-color: #2e2e2e;
+  color: #ffffff;
+  padding: 8px; /* padding between elements */
+  border: 1px solid #ffffff; /* outline color */
+  border-radius: 4px;
+  margin-bottom: 8px; /* spacing between elements */
+}
+
+/* If background is black, override font color to white */
+.bg-black {
+  color: #ffffff !important;
+}
+
+/* Example: search bar style */
+.search-bar {
+  background-color: #2e2e2e;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+  padding: 8px;
+  border-radius: 4px;
+  margin-bottom: 8px;
 }
