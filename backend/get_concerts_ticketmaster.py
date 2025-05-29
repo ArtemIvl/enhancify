@@ -15,7 +15,7 @@ DEFAULT_START_DATE_TIME = (datetime.now(timezone.utc) + timedelta(days=2)).strft
 #same logic - what's the point of planning a concert more than 2 years in advance
 DEFAULT_END_DATE_TIME =  (datetime.now(timezone.utc) + relativedelta(years=2)).strftime("%Y-%m-%dT%H:%M:%SZ")
 
-def query_concert_info_for_one_singer(artist_id = None, params = dict()):
+def query_concert_info_for_one_singer(artist_id = None, artist_name = None, params = dict()):
     
     #params - request parameters that we want to see in our reuquest
     #in other words query filters
