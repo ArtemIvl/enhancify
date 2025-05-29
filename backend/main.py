@@ -14,6 +14,7 @@ import os
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from get_concerts_ticketmaster import query_concert_info_for_one_singer
+from api_schema.request_schema import ConcertsRequest
 
 load_dotenv()
 
@@ -64,50 +65,6 @@ def update_artist_leaderboard():
     r.set("top_listened_artists:last_updated_at", current_date)
         
     print(info_on_top_singers[1])
-
-
-@scheduler.scheduled_job(
-        id="update_artist_leaderboard",
-        trigger=CronTrigger(hour='*', minute='*', second='*/10', timezone=pytz.UTC, jitter=0))
-def update_concerts_for_top_global_singers(n = 100):
-    #n - how much top artists we want to select from top 500? (narrowing the scope)
-    #if 100 - we select top 100
-    top_listened_artists = []
-    
-    global_artists_in_redis = r.exists("top_listened_artists:content")
-    
-    #not a very good implementation Artem
-    #we can't find a field by name
-    #better use dict with dicts, not dict with lists
-    if not global_artists_in_redis:
-        columns = [
-        "Index", "Rank", "Image", "Artist", "Monthly listeners (millions)",
-        "Change vs yesterday", "Change vs last month", "Spotify ID",
-        "Country", "Genre", "Language", "Group type"
-        ]
-        top_listened_artists_raw = get_info_on_top_singers()
-        top_listened_artists = [dict(zip(columns, row)) for row in top_listened_artists_raw]
-        
-    else:
-        top_listened_artists = r.get("top_listened_artists:content")
-
-    #select first n items
-    top_listened_artists = top_listened_artists[:n]
-    
-    #get top n artists
-    #get concert info for them
-    #overrides redis keys even if we already have concert info stored
-    #generally shouldn't happen - expiration time = update frequency
-    for artist in top_listened_artists:
-        #if something breaks, this might be a problem
-        artist_name = artist[3]
-        artist_spotify_id = artist[8]
-        #returns all concerts for one singer with specified params
-        concert_info_list = query_concert_info_for_one_singer(artist_id=artist_spotify_id, artist_name=artist_name)
-        #lets say we have 6 concert frequency per day, meaning that we should expire the key in 4 hours.
-        #the expiration time = a bit longer than frequency of updates per day, so that we can constantly refresh the keys
-        r.set(f"top_listened_artists:concert_info:{artist_spotify_id}", concert_info_list, ex=(3600*24/CONCERT_UPDATE_FREQUENCY_PER_DAY) + 100)
-        
         
 
 @app.get("/login")
@@ -165,6 +122,7 @@ def get_followed_artists(token: str):
         return JSONResponse({"error": "Failed to fetch followed artists"}, status_code=400)
     return res.json()["artists"]["items"]
 
+
 @app.get("/get_top_artists")
 def get_top_artists():
     exec_start = time.time()
@@ -177,3 +135,106 @@ def get_top_artists():
 
 #RUN THE SERVER (COMMAND)
 #uvicorn main:app --reload
+
+
+##################### CONCERTS
+#################################################################
+
+
+@scheduler.scheduled_job(
+        id="update_artist_leaderboard",
+        trigger=CronTrigger(hour='*', minute='*', second='*/10', timezone=pytz.UTC, jitter=0))
+def update_concerts_for_top_global_singers(n = 100):
+    #n - how much top artists we want to select from top 500? (narrowing the scope)
+    #if 100 - we select top 100
+    top_listened_artists = []
+    
+    global_artists_in_redis = r.exists("top_listened_artists:content")
+    
+    #not a very good implementation Artem
+    #we can't find a field by name
+    #better use dict with dicts, not dict with lists
+    if not global_artists_in_redis:
+        columns = [
+        "Index", "Rank", "Image", "Artist", "Monthly listeners (millions)",
+        "Change vs yesterday", "Change vs last month", "Spotify ID",
+        "Country", "Genre", "Language", "Group type"
+        ]
+        top_listened_artists_raw = get_info_on_top_singers()
+        top_listened_artists = [dict(zip(columns, row)) for row in top_listened_artists_raw]
+        
+    else:
+        top_listened_artists = r.get("top_listened_artists:content")
+
+    #select first n items
+    top_listened_artists = top_listened_artists[:n]
+    
+    #get top n artists
+    #get concert info for them
+    #overrides redis keys even if we already have concert info stored
+    #generally shouldn't happen - expiration time = update frequency
+    for artist in top_listened_artists:
+        #if something breaks, this might be a problem
+        artist_name = artist[3]
+        artist_spotify_id = artist[8]
+        #returns all concerts for one singer with specified params
+        concert_info_list = query_concert_info_for_one_singer(artist_id=artist_spotify_id, artist_name=artist_name)
+        #lets say we have 6 concert frequency per day, meaning that we should expire the key in 4 hours.
+        #the expiration time = a bit longer than frequency of updates per day, so that we can constantly refresh the keys
+        r.set(f"top_listened_artists:concert_info:{artist_spotify_id}", concert_info_list, ex=(3600*24/CONCERT_UPDATE_FREQUENCY_PER_DAY) + 100)
+        
+
+@app.get("/get_concerts")
+def get_concerts(request_model: ConcertsRequest):
+    
+    retreived_concert_info = []
+    #for followed artists
+    if not request_model.get_top_artist_info:
+        #get artist name and id supplied from frontend
+        
+        for item in request_model.artists:
+            
+            concert_info = None
+            #if the artist was already queried recently, get from redis directly
+            if r.exists(f"top_listened_artists:concert_info:{item["artist_id"]}"):
+                concert_info = r.get(f"top_listened_artists:concert_info:{item["artist_id"]}")
+            #otherwise make a request to ticketmaster
+            else:
+                concert_info = query_concert_info_for_one_singer(artist_id=item["artist_id"], artist_name=item["artist_name"])
+                r.set(f"top_listened_artists:concert_info:{item["artist_id"]}", concert_info, ex=(3600*24/CONCERT_UPDATE_FREQUENCY_PER_DAY) + 100)
+
+            #filtering the concerts by provided fields
+            #notice that theoretically back-end supports multiple filters (first by country, then by state then by code)
+            if (request_model.countries != []):
+                1 = 1
+            if (request_model.stateCode != None):
+                2 = 2
+            if (request_model.geo_latitude != None and request_model.geo_longtitude != None):
+                0 = 0
+            retreived_concert_info.append(concert_info)
+        
+    #for global artists (default setting)
+    else:
+        
+        #check if global artists were updated (there's at least one artist)
+        any_keys_exist = any(r.scan_iter("top_listened_artists:concert_info:*"))
+        
+        #can take a lot of time to execute, avoid this at all cost
+        if not any_keys_exist:
+            update_concerts_for_top_global_singers(n=100)
+        
+
+        #scan through every global artist, get the info
+        for concerts_most_popular in r.scan_iter("top_listened_artists:concert_info:*"):
+            concert_info_per_artist = r.get(concerts_most_popular)
+            if (request_model.countries != []):
+                1 = 1
+            if (request_model.stateCode != None):
+                2 = 2
+            if (request_model.geo_latitude != None and request_model.geo_longtitude != None):
+                0 = 0
+            retreived_concert_info.append(concert_info_per_artist)
+    
+    return JSONResponse({"concerts": retreived_concert_info, "is_followed": request_model.get_top_artist_info}, status_code=200)
+
+        

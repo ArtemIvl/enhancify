@@ -3,5 +3,7 @@ apscheduler
 numpy
 beautifulsoup4
 redis
-fastapi[standard]
+fastapi[all]
+pydantic
+typing
 uvicorn
