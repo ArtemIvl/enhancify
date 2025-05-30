@@ -224,7 +224,7 @@ def get_concerts(request_model: ConcertsRequest):
             #notice that theoretically back-end supports multiple filters (first by country, then by state then by code)
             final_concert_list_with_filters_applied = [item for item in concert_info if 
             concerts_sorting(item, countries=request_model.countries, stateCode=request_model.stateCode, 
-            geo_latitude=request_model.geo_latitude, geo_longtitude=request_model.geo_longtitude)]
+            geo_latitude=request_model.geo_latitude, geo_longitude=request_model.geo_longitude)]
             
             final_concert_dict_to_be_used_in_response[artist_id] = final_concert_list_with_filters_applied
 
@@ -246,12 +246,13 @@ def get_concerts(request_model: ConcertsRequest):
             concert_info_per_artist = json.loads(concert_info_per_artist) if concert_info_per_artist else []
             final_concert_list_with_filters_applied = [item for item in concert_info_per_artist if 
             concerts_sorting(item, countries=request_model.countries, stateCode=request_model.stateCode, 
-                             geo_latitude=request_model.geo_latitude, geo_longtitude=request_model.geo_longtitude)]
-            final_concert_dict_to_be_used_in_response[artist_id] = final_concert_list_with_filters_applied
+                             geo_latitude=request_model.geo_latitude, geo_longitude=request_model.geo_longitude)]
+            if final_concert_list_with_filters_applied != []:
+                final_concert_dict_to_be_used_in_response[artist_id] = final_concert_list_with_filters_applied
 
     return JSONResponse(final_concert_dict_to_be_used_in_response, status_code=200)
 
-def concerts_sorting(concert_to_sort_through, countries = [], stateCode = None, geo_latitude = None, geo_longtitude = None):
+def concerts_sorting(concert_to_sort_through, countries = [], stateCode = None, geo_latitude = None, geo_longitude = None):
     #To-do: process more than one venue (if the coordinates/city matches at least one venue)
     get_the_venues = concert_to_sort_through.get("_embedded", dict()).get("venues", list())
     venue = None
@@ -267,20 +268,18 @@ def concerts_sorting(concert_to_sort_through, countries = [], stateCode = None, 
         state_code_of_concert = venue.get("state", dict()).get("stateCode", None)
         if state_code_of_concert != stateCode:
             return False
-    if (geo_latitude != None and geo_longtitude != None):
+    if (geo_latitude != None and geo_longitude != None):
         #the radius in which we search for conerts if coordinates are provided
         allowed_distance_threshold_km = 100
-        concert_coords_lat = venue.get("location", dict()).get("longtitude", None)
-        concert_coords_lng = venue.get("location", dict()).get("latitude", None)
+        concert_coords_lat = venue.get("location", dict()).get("latitude", None)
+        concert_coords_lng = venue.get("location", dict()).get("longitude", None)
         if concert_coords_lat and concert_coords_lng:
-            distance = geodesic((geo_latitude, geo_longtitude), (concert_coords_lat, concert_coords_lng)).km
+            distance = geodesic((geo_latitude, geo_longitude), (concert_coords_lat, concert_coords_lng)).km
             if distance > allowed_distance_threshold_km:
                 return False
+            
         else:
+            print("not found")
             return False
     
     return True
-
-for key in r.scan_iter("top_listened_artists:concert_info:*"):
-    r.delete(key)
-    print("Deleted")
