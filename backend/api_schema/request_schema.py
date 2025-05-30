@@ -10,8 +10,3 @@ class ConcertsRequest(BaseModel):
     geo_longtitude: Optional[float] = None
     stateCode: Optional[str] = None
     countries: Optional[List[str]] = ['US']
-    
-class ConcertsResponseSchema(BaseModel):
-    #example response
-    #{"artist_id": ["concert1", "concert2"]}
-    __root__: Dict[str, List[Any]]

@@ -45,13 +45,25 @@ def query_concert_info_for_one_singer(redis_instance: redis.Redis, artist_id = N
     
     request_params["attractionId"] = look_up_artists_attraction_id(redis=redis_instance, artist_name=artist_name, artist_spotify_id=artist_id)
     
-    
+    start = time.time()
     response = requests.get("https://app.ticketmaster.com/discovery/v2/events.json", params=request_params)
+    end = time.time()
+    #we can afford one request every 280 ms to avoid errors from ticketmaster API related to spike rate 
+    if (end - start) < 0.28:
+        time.sleep(0.28 - (end - start))
+    
+    
+    response_filtered = response.json()
+
+    #if there were not concerts
+    if response_filtered.get("_embedded", None) == None:
+        #return an empty dict
+        return response.status_code, {}
 
     if (response.status_code == 200):
-        return response.status_code, response.json()["_embedded"]["events"]
+        return response.status_code, response_filtered["_embedded"]["events"]
     else:
-        return 401, "Unknown error"
+        return 401, response["fault"]
     
 #this method is a one-time ops - one we have artists attraction id we don't have to update it
 def look_up_artists_attraction_id(redis: redis.Redis, artist_name = None, artist_spotify_id = None):
@@ -66,7 +78,7 @@ def look_up_artists_attraction_id(redis: redis.Redis, artist_name = None, artist
         request_parameters["keyword"] = artist_name
         
         request_url = "https://app.ticketmaster.com/discovery/v2/attractions.json"
-        time.sleep(0.6)
+        time.sleep(0.3)
         response = requests.get(request_url, params=request_parameters)  
         # wait 600ms before next request - ticketmaster api has limits on amount of requests per second
         data = response.json()

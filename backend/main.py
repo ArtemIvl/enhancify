@@ -14,7 +14,7 @@ import os
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from get_concerts_ticketmaster import query_concert_info_for_one_singer, look_up_artists_attraction_id
-from api_schema.request_schema import ConcertsRequest, ConcertsResponseSchema
+from api_schema.request_schema import ConcertsRequest
 from geopy.distance import geodesic
 
 load_dotenv()
@@ -140,7 +140,7 @@ def get_top_artists():
 
 @scheduler.scheduled_job(
         id="update_concerts_for_top_global_singers",
-        trigger=CronTrigger(hour='*', minute='*/2', second='*', timezone=pytz.UTC, jitter=0))
+        trigger=CronTrigger(hour='*', minute='*/10', timezone=pytz.UTC, jitter=0))
 def update_concerts_for_top_global_singers(n = 100):
     #n - how much top artists we want to select from top 500? (narrowing the scope)
     #if 100 - we select top 100
@@ -173,6 +173,13 @@ def update_concerts_for_top_global_singers(n = 100):
         artist_spotify_id = artist['Spotify ID']
         #returns all concerts for one singer with specified params
         response_code, concert_info_list = query_concert_info_for_one_singer(redis_instance=r, artist_id=artist_spotify_id, artist_name=artist_name)
+        #if no concerts for that artist
+        if concert_info_list == {}:
+            continue
+        
+        with open("response_v3.txt", "w", encoding="utf-8") as f:
+            f.write(str(concert_info_list))
+            
         if response_code == 200:
             #lets say we have 6 concert frequency per day, meaning that we should expire the key in 4 hours.
             #the expiration time = a bit longer than frequency of updates per day, so that we can constantly refresh the keys
@@ -182,6 +189,9 @@ def update_concerts_for_top_global_singers(n = 100):
             #To-do - log errors to something like graylog
             continue
         
+@app.get("/")
+def goodbye_world():
+    return JSONResponse(status_code=200, content={"Hello": "World"})
 
 @app.get("/get_concerts")
 def get_concerts(request_model: ConcertsRequest):
@@ -249,7 +259,6 @@ def concerts_sorting(concert_to_sort_through, countries = [], stateCode = None, 
         venue = get_the_venues[0]
     else:
         return False
-    
     if (countries != []):
         country_of_concert = venue.get("country", dict()).get("countryCode", None)
         if not country_of_concert in countries:
@@ -271,3 +280,7 @@ def concerts_sorting(concert_to_sort_through, countries = [], stateCode = None, 
             return False
     
     return True
+
+for key in r.scan_iter("top_listened_artists:concert_info:*"):
+    r.delete(key)
+    print("Deleted")
