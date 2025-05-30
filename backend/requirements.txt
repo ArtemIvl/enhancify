@@ -6,4 +6,5 @@ redis
 fastapi[all]
 pydantic
 typing
+geopy
 uvicorn

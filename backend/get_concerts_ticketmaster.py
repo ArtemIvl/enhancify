@@ -47,12 +47,9 @@ def query_concert_info_for_one_singer(redis_instance: redis.Redis, artist_id = N
     
     
     response = requests.get("https://app.ticketmaster.com/discovery/v2/events.json", params=request_params)
-    with open("response_v2.json", "w", encoding="utf-8") as f:
-        json.dump(response.json(), f, ensure_ascii=False, indent=2)
-    
+
     if (response.status_code == 200):
-        result = []
-        return response.status_code, result
+        return response.status_code, response.json()["_embedded"]["events"]
     else:
         return 401, "Unknown error"
     

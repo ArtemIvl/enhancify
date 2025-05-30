@@ -14,7 +14,8 @@ import os
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from get_concerts_ticketmaster import query_concert_info_for_one_singer, look_up_artists_attraction_id
-from api_schema.request_schema import ConcertsRequest
+from api_schema.request_schema import ConcertsRequest, ConcertsResponseSchema
+from geopy.distance import geodesic
 
 load_dotenv()
 
@@ -139,7 +140,7 @@ def get_top_artists():
 
 @scheduler.scheduled_job(
         id="update_concerts_for_top_global_singers",
-        trigger=CronTrigger(hour='*', minute='*', second='*/59', timezone=pytz.UTC, jitter=0))
+        trigger=CronTrigger(hour='*', minute='*/2', second='*', timezone=pytz.UTC, jitter=0))
 def update_concerts_for_top_global_singers(n = 100):
     #n - how much top artists we want to select from top 500? (narrowing the scope)
     #if 100 - we select top 100
@@ -171,18 +172,23 @@ def update_concerts_for_top_global_singers(n = 100):
         artist_name = artist['Artist']
         artist_spotify_id = artist['Spotify ID']
         #returns all concerts for one singer with specified params
-        concert_info_list = query_concert_info_for_one_singer(redis_instance=r, artist_id=artist_spotify_id, artist_name=artist_name)
-        break
-        #lets say we have 6 concert frequency per day, meaning that we should expire the key in 4 hours.
-        #the expiration time = a bit longer than frequency of updates per day, so that we can constantly refresh the keys
-        expiration_time = int((3600*24/CONCERT_UPDATE_FREQUENCY_PER_DAY) + 100)
-        r.set(f"top_listened_artists:concert_info:{artist_spotify_id}", json.dumps(concert_info_list), ex=expiration_time)
+        response_code, concert_info_list = query_concert_info_for_one_singer(redis_instance=r, artist_id=artist_spotify_id, artist_name=artist_name)
+        if response_code == 200:
+            #lets say we have 6 concert frequency per day, meaning that we should expire the key in 4 hours.
+            #the expiration time = a bit longer than frequency of updates per day, so that we can constantly refresh the keys
+            expiration_time = int((3600*24/CONCERT_UPDATE_FREQUENCY_PER_DAY) + 100)
+            r.set(f"top_listened_artists:concert_info:{artist_spotify_id}", json.dumps(concert_info_list), ex=expiration_time)
+        else:
+            #To-do - log errors to something like graylog
+            continue
         
 
 @app.get("/get_concerts")
 def get_concerts(request_model: ConcertsRequest):
+    #important!
+    #artist_id is artists spotify id
     
-    retreived_concert_info = []
+    final_concert_dict_to_be_used_in_response = dict()
     #for followed artists
     if not request_model.get_top_artist_info:
         #get artist name and id supplied from frontend
@@ -194,20 +200,24 @@ def get_concerts(request_model: ConcertsRequest):
             #if the artist was already queried recently, get from redis directly
             if r.exists(f"top_listened_artists:concert_info:{artist_id}"):
                 concert_info = r.get(f"top_listened_artists:concert_info:{artist_id}")
+                concert_info = json.loads(concert_info) if concert_info else []
             #otherwise make a request to ticketmaster
             else:
-                concert_info = query_concert_info_for_one_singer(artist_id=item["artist_id"], artist_name=item["artist_name"])
-                r.set(f"top_listened_artists:concert_info:{artist_id}", concert_info, ex=(3600*24/CONCERT_UPDATE_FREQUENCY_PER_DAY) + 100)
-
+                response_code, concert_info = query_concert_info_for_one_singer(artist_id=artist_id, artist_name=item["artist_name"])
+                if (response_code == 200):
+                    expiration_time = int((3600*24/CONCERT_UPDATE_FREQUENCY_PER_DAY) + 100)
+                    r.set(f"top_listened_artists:concert_info:{artist_id}", json.dumps(concert_info), ex=expiration_time)
+                else:
+                    return JSONResponse(status_code=400, content="Error when trying to fetch concerts")
+            
             #filtering the concerts by provided fields
             #notice that theoretically back-end supports multiple filters (first by country, then by state then by code)
-            if (request_model.countries != []):
-                concert_info = concert_info
-            if (request_model.stateCode != None):
-                concert_info = concert_info
-            if (request_model.geo_latitude != None and request_model.geo_longtitude != None):
-                concert_info = concert_info
-            retreived_concert_info.append(concert_info)
+            final_concert_list_with_filters_applied = [item for item in concert_info if 
+            concerts_sorting(item, countries=request_model.countries, stateCode=request_model.stateCode, 
+            geo_latitude=request_model.geo_latitude, geo_longtitude=request_model.geo_longtitude)]
+            
+            final_concert_dict_to_be_used_in_response[artist_id] = final_concert_list_with_filters_applied
+
         
     #for global artists (default setting)
     else:
@@ -221,13 +231,43 @@ def get_concerts(request_model: ConcertsRequest):
         
         #scan through every global artist, get the info
         for concerts_most_popular in r.scan_iter("top_listened_artists:concert_info:*"):
+            artist_id = concerts_most_popular.split("top_listened_artists:concert_info:")[1]
             concert_info_per_artist = r.get(concerts_most_popular)
-            if (request_model.countries != []):
-                concert_info = concert_info
-            if (request_model.stateCode != None):
-                concert_info = concert_info
-            if (request_model.geo_latitude != None and request_model.geo_longtitude != None):
-                concert_info = concert_info
-            retreived_concert_info.append(concert_info_per_artist)
+            concert_info_per_artist = json.loads(concert_info_per_artist) if concert_info_per_artist else []
+            final_concert_list_with_filters_applied = [item for item in concert_info_per_artist if 
+            concerts_sorting(item, countries=request_model.countries, stateCode=request_model.stateCode, 
+                             geo_latitude=request_model.geo_latitude, geo_longtitude=request_model.geo_longtitude)]
+            final_concert_dict_to_be_used_in_response[artist_id] = final_concert_list_with_filters_applied
+
+    return JSONResponse(final_concert_dict_to_be_used_in_response, status_code=200)
+
+def concerts_sorting(concert_to_sort_through, countries = [], stateCode = None, geo_latitude = None, geo_longtitude = None):
+    #To-do: process more than one venue (if the coordinates/city matches at least one venue)
+    get_the_venues = concert_to_sort_through.get("_embedded", dict()).get("venues", list())
+    venue = None
+    if len(get_the_venues) > 0:
+        venue = get_the_venues[0]
+    else:
+        return False
     
-    return JSONResponse({"concerts": retreived_concert_info, "is_followed": request_model.get_top_artist_info}, status_code=200)
+    if (countries != []):
+        country_of_concert = venue.get("country", dict()).get("countryCode", None)
+        if not country_of_concert in countries:
+            return False
+    if (stateCode != None):
+        state_code_of_concert = venue.get("state", dict()).get("stateCode", None)
+        if state_code_of_concert != stateCode:
+            return False
+    if (geo_latitude != None and geo_longtitude != None):
+        #the radius in which we search for conerts if coordinates are provided
+        allowed_distance_threshold_km = 100
+        concert_coords_lat = venue.get("location", dict()).get("longtitude", None)
+        concert_coords_lng = venue.get("location", dict()).get("latitude", None)
+        if concert_coords_lat and concert_coords_lng:
+            distance = geodesic((geo_latitude, geo_longtitude), (concert_coords_lat, concert_coords_lng)).km
+            if distance > allowed_distance_threshold_km:
+                return False
+        else:
+            return False
+    
+    return True

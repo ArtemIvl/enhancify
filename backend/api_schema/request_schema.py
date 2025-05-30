@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 
 class ConcertsRequest(BaseModel):
     get_top_artist_info: bool
@@ -10,5 +10,8 @@ class ConcertsRequest(BaseModel):
     geo_longtitude: Optional[float] = None
     stateCode: Optional[str] = None
     countries: Optional[List[str]] = ['US']
-
     
+class ConcertsResponseSchema(BaseModel):
+    #example response
+    #{"artist_id": ["concert1", "concert2"]}
+    __root__: Dict[str, List[Any]]
