@@ -3,8 +3,9 @@
   background-color: #D3CFCE;
   color: #2e2e2e;
   border-radius: 12px;
-  width: 190px;
+  width: 180px;
   height: 50px;
+  font-size: 15px;
   text-align: center;
   border: none;
   cursor: pointer;
@@ -30,7 +31,7 @@ body {
 }
 
 .move-down {
-  margin-top: 130px;
+  margin-top: 150px;
 }
 
 .icons-tweaked {
@@ -40,6 +41,13 @@ body {
     margin-right: 8px;
 }
 
+.icons-tweaked-search {   /* aligns icon with text middle */
+    font-size: 1.2em;       
+    margin-top: -5px;
+    margin-left: -10px;
+    position: absolute;
+}
+
 .search-bar-container {
     margin-left: 80px;
     margin-top: -2px;
@@ -47,25 +55,25 @@ body {
 }
 
 .search-bar {
-    height: 50px;
+    height: 45px;
     background-color: white;
     color: black;
     width: 500px;
     padding-left: 40px;
-    letter-spacing: 0.5px;
-    font-size: 19px;
+    letter-spacing: 0.35px;
+    font-size: 18px;
     border-radius: 27px 0px 0px 27px;
 }
 
 .search-bar::placeholder {
     color: #4c4a4a;
-    font-size: 16px;
+    font-size: 15px;
 }
 
 .search-bar-button {
     background-color: #141313;
     cursor: pointer;
-    height: 50px;
+    height: 45px;
     border-radius: 0px 27px 27px 0px;
     color: white;
     width: 55px;
@@ -79,12 +87,12 @@ body {
 .filters-button {
     transition: background-color 0.1s, color 0.1s;
     border-radius: 15px;
-    width: 60px;
+    width: 50px;
     padding-left: 10px;
     background-color: white;
     color: #2e2e2e;
-    font-size: 20px;
-    height: 50px;
+    font-size: 18px;
+    height: 45px;
     border: 1.3px solid #141313;
     cursor: pointer;
 }
@@ -94,18 +102,71 @@ body {
     border: 0px;
 }
 
+.big-title {
+    margin-left: 80px;
+    margin-bottom: 50px;
+    font-size: 40px;
+    color: #141313;
+}
 .filters-detailed-container {
     position: absolute;
-    margin-top: 15px;
-    height: 300px;
+    margin-top: 20px;
+    height: 270px;
     background-color: white;
     padding-left: 30px;
     padding-top: 15px;
     color: #2e2e2e;
-    width: 300px;
+    width: 270px;
+    font-size: 15px;
     border-radius: 20px;
 }
 
+.search-contents-container {
+    position: absolute;
+    margin-top: 70px;
+    height: 320px;
+    background-color: white;
+    padding-left: 30px;
+    padding-top: 15px;
+    color: #2e2e2e;
+    width: 400px;
+    font-size: 15px;
+    border-radius: 12px;
+    overflow-y: auto;
+}
+
+
 .filters-setting {
     margin-top: 10px;
+}
+
+.concerts-search-option {
+    padding: 10px 16px;
+    cursor: pointer;
+}
+
+.concerts-search-option {
+    padding: 14px 16px;
+    margin-left: -10px;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.concerts-search-option:hover {
+    transition: background-color 0.1s, color 0.1s;
+    background-color: #2e2e2e;
+    color: #D3CFCE;
+}
+
+.margin-left-search {
+    margin-left: 20px;
+}
+.concerts-search-secondary-text {
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+.icon-search-contents {
+    position: absolute;
+    
 }

@@ -1,12 +1,17 @@
 import { useState } from "react";
 import "../Concerts.css";
+import ConcertsSearch from "../components/ConcertSearchContent";
+import countriesArr from "../components/countryList";
 
 export default function Concerts() {
   const [active, setActive] = useState("global");
   const [filters, setFilters] = useState("unclicked")
+  const [focused, setFocused] = useState(false);
   return (
-    <div>
-      <div className="button-row move-down">
+    <div className="move-down">
+    <div className="big-title">Find concerts in your area</div>
+
+      <div className="button-row">
         <button
           className={`button-concerts-search${active === "global" ? " active" : ""}`}
           onClick={() => setActive("global")}
@@ -21,14 +26,7 @@ export default function Concerts() {
           <span className="material-icons-outlined icons-tweaked">star</span>
           My Artists
         </button>
-        <div className="search-bar-container">
-          <input className="search-bar" placeholder="Search by region, country or city..." />
-          <button
-          className="search-bar-button"
-        >
-          <span className="material-icons-outlined icons-tweaked">search</span>
-        </button>
-        </div>
+        <div><ConcertsSearch countries={countriesArr}></ConcertsSearch></div>
         <div className="filters_container">  
             <button className={`filters-button${filters === "clicked" ? " active" : ""}`} 
             onClick={() => filters === "clicked" ? setFilters("unclicked") : setFilters("clicked")}>
