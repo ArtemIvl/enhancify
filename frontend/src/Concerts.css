@@ -1,0 +1,111 @@
+.button-concerts-search {
+  transition: background-color 0.1s, color 0.1s;
+  background-color: #D3CFCE;
+  color: #2e2e2e;
+  border-radius: 12px;
+  width: 190px;
+  height: 50px;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+}
+
+body {
+    background-color: #D3CFCE;
+}
+
+.button-concerts-search.active {
+  background-color: #2e2e2e;
+  color: white;
+}
+
+.button-row {
+  margin-left: 70px;
+  display: flex;
+  align-items: center;
+}
+
+.button-row .button-concerts-search + .button-concerts-search {
+  margin-left: 10px;
+}
+
+.move-down {
+  margin-top: 130px;
+}
+
+.icons-tweaked {
+    vertical-align: middle;   /* aligns icon with text middle */
+    font-size: 1.2em;       
+    margin-bottom: 4px;
+    margin-right: 8px;
+}
+
+.search-bar-container {
+    margin-left: 80px;
+    margin-top: -2px;
+    display: flex;
+}
+
+.search-bar {
+    height: 50px;
+    background-color: white;
+    color: black;
+    width: 500px;
+    padding-left: 40px;
+    letter-spacing: 0.5px;
+    font-size: 19px;
+    border-radius: 27px 0px 0px 27px;
+}
+
+.search-bar::placeholder {
+    color: #4c4a4a;
+    font-size: 16px;
+}
+
+.search-bar-button {
+    background-color: #141313;
+    cursor: pointer;
+    height: 50px;
+    border-radius: 0px 27px 27px 0px;
+    color: white;
+    width: 55px;
+}
+
+.filters_container {
+    margin-left: 80px;
+    margin-top: -2px;
+}
+
+.filters-button {
+    transition: background-color 0.1s, color 0.1s;
+    border-radius: 15px;
+    width: 60px;
+    padding-left: 10px;
+    background-color: white;
+    color: #2e2e2e;
+    font-size: 20px;
+    height: 50px;
+    border: 1.3px solid #141313;
+    cursor: pointer;
+}
+.filters-button.active {
+    background-color: #141313;
+    color: white;
+    border: 0px;
+}
+
+.filters-detailed-container {
+    position: absolute;
+    margin-top: 15px;
+    height: 300px;
+    background-color: white;
+    padding-left: 30px;
+    padding-top: 15px;
+    color: #2e2e2e;
+    width: 300px;
+    border-radius: 20px;
+}
+
+.filters-setting {
+    margin-top: 10px;
+}

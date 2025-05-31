@@ -13,6 +13,7 @@ export default function FollowedArtists() {
   }, [token]);
 
   return (
+    <body>
     <div className="p-4">
       <h2 className="text-xl font-bold mb-4">Followed Artists</h2>
       {artists.length === 0 ? (
@@ -28,5 +29,6 @@ export default function FollowedArtists() {
         </div>
       )}
     </div>
+    </body>
   );
 }

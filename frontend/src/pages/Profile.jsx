@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 export default function Profile() {
-  const [profile, setProfile] = useState(null);
+  const [profile, setParofile] = useState(null);
   const token = localStorage.getItem("spotify_token");
 
   useEffect(() => {
