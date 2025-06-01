@@ -140,7 +140,7 @@ def get_top_artists():
 
 @scheduler.scheduled_job(
         id="update_concerts_for_top_global_singers",
-        trigger=CronTrigger(hour='*', minute='*/10', timezone=pytz.UTC, jitter=0))
+        trigger=CronTrigger(hour='*', minute='*/59', timezone=pytz.UTC, jitter=0))
 def update_concerts_for_top_global_singers(n = 100):
     #n - how much top artists we want to select from top 500? (narrowing the scope)
     #if 100 - we select top 100
@@ -177,8 +177,6 @@ def update_concerts_for_top_global_singers(n = 100):
         if concert_info_list == {}:
             continue
         
-        with open("response_v3.txt", "w", encoding="utf-8") as f:
-            f.write(str(concert_info_list))
             
         if response_code == 200:
             #lets say we have 6 concert frequency per day, meaning that we should expire the key in 4 hours.
@@ -188,12 +186,13 @@ def update_concerts_for_top_global_singers(n = 100):
         else:
             #To-do - log errors to something like graylog
             continue
+    print("Finished")
         
 @app.get("/")
 def goodbye_world():
     return JSONResponse(status_code=200, content={"Hello": "World"})
 
-@app.get("/get_concerts")
+@app.post("/get_concerts")
 def get_concerts(request_model: ConcertsRequest):
     #important!
     #artist_id is artists spotify id

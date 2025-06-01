@@ -61,7 +61,19 @@ def query_concert_info_for_one_singer(redis_instance: redis.Redis, artist_id = N
         return response.status_code, {}
 
     if (response.status_code == 200):
-        return response.status_code, response_filtered["_embedded"]["events"]
+        final_response = response_filtered["_embedded"]["events"]
+        for item in final_response:
+            item.pop("seatmap", None)
+            item.pop("promoters", None)
+            item.pop("promoter", None)
+            item.pop("info", None)
+            item.pop("ticketing", None)
+            item.pop("_links", None)
+            item.pop("products", None)
+            item.pop("images", None)
+            item["_embedded"].pop("attractions", None)
+
+        return response.status_code, final_response
     else:
         return 401, response["fault"]
     

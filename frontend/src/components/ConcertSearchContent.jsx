@@ -1,5 +1,7 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import "../Concerts.css"
+import axios from "axios";
+
 const HARDCODED = [
   { label: "My location", code: "LOC", icon: "pin_drop", description: "Within 100km radius" },
   { label: "European Union", code: "EU", icon: "language", description: "Region" },
@@ -8,23 +10,33 @@ const HARDCODED = [
 ];
 
 export default function ConcertsSearch({ countries = [] }) {
-  const [concerts, setConcerts] = useState(null)
+  const [concerts, setConcerts] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedCode, setSelectedCode] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
   const menuRef = useRef();
 
-  function handleClick() {
-    axios.get('https://localhost:8000/get_concerts')
-      .then(response => {
-        setPosts(response.data);
-      })
-      .catch(error => {
-        console.error(error);
-      });
-    console.log();
-  };
+useEffect(() => {
+  if (concerts !== null) {
+    localStorage.setItem("concerts", JSON.stringify(concerts));
+  }
+}, [concerts]);
+
+function handleClick() {
+  axios.post('http://localhost:8000/get_concerts', {
+    get_top_artist_info: 1,
+    countries: [selectedCode]
+  })
+    .then(response => {
+      setConcerts(response.data);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  // If you want to log the just-saved value, do it in useEffect after update
+}
+
   // Detect click outside to close dropdown
   // (optional: you can add a useEffect here if needed)
 
