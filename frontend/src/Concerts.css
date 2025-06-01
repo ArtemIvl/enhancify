@@ -1,0 +1,321 @@
+.button-concerts-search {
+  transition: background-color 0.1s, color 0.1s;
+  background-color: #D3CFCE;
+  color: #2e2e2e;
+  border-radius: 12px;
+  width: 180px;
+  height: 50px;
+  font-size: 15px;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+}
+
+body {
+    background-color: #D3CFCE;
+}
+
+.button-concerts-search.active {
+  background-color: #2e2e2e;
+  color: white;
+}
+
+.button-row {
+  margin-left: 70px;
+  display: flex;
+  align-items: center;
+}
+
+.button-row .button-concerts-search + .button-concerts-search {
+  margin-left: 10px;
+}
+
+.move-down {
+  margin-top: 130px;
+}
+
+.icons-tweaked {
+    vertical-align: middle;   /* aligns icon with text middle */
+    font-size: 1.2em;       
+    margin-bottom: 4px;
+    margin-right: 8px;
+}
+
+.icons-tweaked-search {   /* aligns icon with text middle */
+    font-size: 1.2em;       
+    margin-top: -5px;
+    margin-left: -10px;
+    position: absolute;
+}
+
+.search-bar-container {
+    margin-left: 80px;
+    margin-top: -2px;
+    display: flex;
+    z-index: 1000; 
+}
+
+.search-bar {
+    height: 45px;
+    background-color: white;
+    color: black;
+    width: 500px;
+    padding-left: 40px;
+    letter-spacing: 0.35px;
+    font-size: 18px;
+    border-radius: 27px 0px 0px 27px;
+}
+
+.search-bar::placeholder {
+    color: #4c4a4a;
+    font-size: 15px;
+}
+
+.search-bar-button {
+    background-color: #141313;
+    cursor: pointer;
+    height: 45px;
+    border-radius: 0px 27px 27px 0px;
+    color: white;
+    width: 55px;
+}
+
+.filters_container {
+    margin-left: 80px;
+    margin-top: -2px;
+}
+
+.filters-button {
+    transition: background-color 0.1s, color 0.1s;
+    border-radius: 15px;
+    width: 50px;
+    padding-left: 10px;
+    background-color: white;
+    color: #2e2e2e;
+    font-size: 18px;
+    height: 45px;
+    border: 1.3px solid #141313;
+    cursor: pointer;
+}
+.filters-button.active {
+    background-color: #141313;
+    color: white;
+    border: 0px;
+}
+
+.big-title {
+    margin-left: 80px;
+    margin-bottom: 45px;
+    font-size: 35px;
+    color: #141313;
+}
+.filters-detailed-container {
+    position: absolute;
+    margin-top: 20px;
+    height: 270px;
+    background-color: white;
+    padding-left: 30px;
+    padding-top: 15px;
+    color: #2e2e2e;
+    width: 270px;
+    border: 0.5px solid #2e2e2e;
+    z-index: 1000;
+    font-size: 15px;
+    border-radius: 20px;
+}
+
+.search-contents-container {
+    position: absolute;
+    margin-top: 70px;
+    height: 320px;
+    background-color: white;
+    padding-left: 30px;
+    padding-top: 15px;
+    color: #2e2e2e;
+    width: 400px;
+    font-size: 15px;
+    border-radius: 12px;
+    border: 0.5px solid #2e2e2e;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+@keyframes skeleton {
+  0% { background-color: #4c4a4a; }
+  50% { background-color: #2e2e2e; }
+  100% { background-color: #4c4a4a; }
+}
+.animate-skeleton {
+  animation: skeleton 1.2s ease-in-out infinite;
+}
+
+.filters-setting {
+    margin-top: 10px;
+}
+
+.concerts-search-option {
+    padding: 10px 16px;
+    cursor: pointer;
+}
+
+.concerts-search-option {
+    padding: 14px 16px;
+    margin-left: -10px;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.concerts-search-option:hover {
+    transition: background-color 0.1s, color 0.1s;
+    background-color: #2e2e2e;
+    color: #D3CFCE;
+}
+
+.margin-left-search {
+    margin-left: 20px;
+}
+.concerts-search-secondary-text {
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+.icon-search-contents {
+    position: absolute;
+    
+}
+
+.horizontal-line {
+  height: 0.4px;
+  background: #2e2e2e;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 45px;
+  width: calc(100.5%);
+}
+
+.concerts-content-container {
+    position: fixed;
+    height: 67%;
+    background-color: #D3CFCE;
+    margin-top: 30px;
+    width: 100%;
+    border: 0.5px solid #2e2e2e;
+    z-index: 0;
+    overflow-y: auto;
+}
+
+.main-concert-card {
+    margin-left: 100px;
+    margin-top: 35px;
+    height: 120px;
+    width: 75%;
+    display: flex;
+    z-index: 1000px;
+    color: #141313;
+    background-color: #E0E0E0;
+    border-radius: 11px;
+}
+
+.main-concert-card.active {
+  background: #141313;
+  color: #d1d5db;
+  transition: background-color 0.5s, color 0.5s;
+}
+
+.main-concert-card.active .genre-button{
+  background: #D3CFCE;
+  color: #141313;
+  transition: background-color 0.5s, color 0.5s;
+}
+.slight-margin-top {
+    padding-top: 30px;
+}
+
+.artists-name-main {
+    font-size: 30px;
+    font-weight: 200;
+    margin-left: 30px;
+    display: flex;
+    margin-top: 3.5%;
+}
+.artists-image {
+    padding-left: 20px;
+    padding-top: 15px;
+    height: 85%;
+    display: flex;
+}
+/*
+.main-concert-card:hover {
+    cursor: pointer;
+}
+    */
+
+
+.small-horizontal-divisive-line {
+
+    font-size: 27px ;
+    margin-left: 25px;
+    font-weight: 200;
+    margin-right: 10px;
+    margin-top: 39px;
+    margin-bottom: 10px;
+}
+
+.shows-available-text {
+    font-size: 18px;
+    margin-top: 48px;
+    margin-left: 8px;
+}
+
+.genre-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0px 12px;          /* 0 px vertically, 12 px horizontally */
+  margin-top: 20px;
+  margin-left: 10px;
+  width: 170px;
+  justify-content: center;
+}
+
+.genre-button {
+  /* let content decide the height; use padding instead of fixed height */
+  padding: 1px 15px;    /* ⬅ tweak top/bottom to shrink the row height */
+  background: #2e2e2e;
+  color: #d1d5db;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  height: 25px;
+  margin: 0;            /* be certain no extra margins sneak in */
+  line-height: 0;       /* keeps text compact */
+}
+
+.genre-text {           /* no vertical margins */
+  margin: 0;
+  font-size: 15px;
+}
+
+
+.concert-details-button {
+    background-color: #2e2e2e;
+    color: #D3CFCE;
+    margin-left: auto;
+    margin-right: 35px;
+    height: 65%;
+    width: 220px;
+    margin-top: 22px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 20px;
+
+}
+
+.concert-details-button:hover {
+  background: #2e2e2e;   /* white background */
+  color: #D3CFCE; 
+  transition: background-color 0.1s, color 0.1s;
+       /* black text – inherited by .genre-text */
+}
+

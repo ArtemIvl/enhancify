@@ -32,9 +32,25 @@ def get_info_on_top_singers():
 
     data = requests.post(AJAX, data=payload,
                         timeout=15).json()["data"]
-
+    data = [extract_artist_name(item) for item in data]
     return(data) 
 
 #debugging purposes
 # info = get_info_on_top_singers()[1]
 # print(info)
+
+#extra script for removing html elements from artists name
+def extract_artist_name(item):
+    s = item[3]
+    if '<a ' in s and '</a>' in s:  # crude HTML check
+        try:
+            # Try BeautifulSoup first (robust)
+            soup = BeautifulSoup(s, "html.parser")
+            item[3] = soup.a.text.strip()
+        except Exception:
+            # fallback to regex if something goes wrong
+            match = re.search(r'>(.*?)</a>', s)
+            item[3] = match.group(1).strip() if match else s.strip()
+    else:
+        item[3] = s.strip()
+    return item
