@@ -3,33 +3,54 @@ import "../Concerts.css"
 import axios from "axios";
 
 const HARDCODED = [
-  { label: "My location", code: "LOC", icon: "pin_drop", description: "Within 100km radius" },
-  { label: "European Union", code: "EU", icon: "language", description: "Region" },
-  { label: "United States", code: "US", icon: "flag_circle", description: "Country"},
-  { label: "New York", code: "NY", icon: "location_city", description: "City"}
+  { label: "My location", code: "LOC", icon: "pin_drop", description: "Within 100km radius", input_type: "location" },
+  { label: "European Union", code: "EU", icon: "language", description: "Region", input_type: "region"},
+  { label: "United States", code: "US", icon: "flag_circle", description: "Country", input_type: "country"},
+  { label: "New York", code: "NY", icon: "location_city", description: "City", input_type: "city"}
 ];
 
-export default function ConcertsSearch({ countries = [] }) {
-  const [concerts, setConcerts] = useState(null);
+export default function ConcertsSearch({ countries = [], setConcerts, setLoading}) {
   const [inputValue, setInputValue] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedCode, setSelectedCode] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
+  const [inputCodeType, setInputCodeType] = useState(null)
   const menuRef = useRef();
 
-useEffect(() => {
-  if (concerts !== null) {
-    localStorage.setItem("concerts", JSON.stringify(concerts));
-  }
-}, [concerts]);
 
 function handleClick() {
-  axios.post('http://localhost:8000/get_concerts', {
-    get_top_artist_info: 1,
-    countries: [selectedCode]
-  })
+  setLoading(true)
+  const params = {
+      get_top_artist_info: 1,
+      countries: []
+  }
+
+  if (inputCodeType === "country") {
+    params["countries"] = [selectedCode]
+  }
+  else if (inputCodeType === "state") {
+    params["stateCode"] = selectedCode 
+  }
+  else if (inputCodeType === "city") {
+    console.log(selectedCode)
+    let lat = 0;
+    let lng = 0;
+
+    const parts = selectedCode.slice(1, -1).split(",");
+    if (parts.length === 2) {
+      const parsedLat = parseFloat(parts[0].trim());
+      const parsedLng = parseFloat(parts[1].trim());
+      lat = isNaN(parsedLat) ? 0 : parsedLat;
+      lng = isNaN(parsedLng) ? 0 : parsedLng;
+    }
+    params["geo_latitude"] = lat;
+    params["geo_longitude"] = lng;
+  }
+  console.log(params)
+  axios.post('http://localhost:8000/get_concerts', params)
     .then(response => {
       setConcerts(response.data);
+      setLoading(false);
     })
     .catch(error => {
       console.error(error);
@@ -65,6 +86,7 @@ function handleClick() {
   const handleOptionClick = option => {
     setInputValue(option.label === "My Location" ? "" : option.label);
     setSelectedCode(option.code);
+    setInputCodeType(option.input_type)
     setDropdownOpen(false);
     // If needed, trigger any further logic here
   };
