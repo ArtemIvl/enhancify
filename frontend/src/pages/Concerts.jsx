@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "../Concerts.css";
 import ConcertsSearch from "../components/ConcertSearchContent";
-import countriesArr from "../components/countryList";
+import statesCitiesCountriesArr from "../load_regions/loadPlaces";
 import { fetchTopArtists } from "../services/api";
 import axios from "axios";
 import SearchBar from "../components/SearchBar"
@@ -99,7 +99,7 @@ export default function Concerts() {
           <span className="material-icons-outlined icons-tweaked">star</span>
           My Artists
         </button>
-        <div><ConcertsSearch countries={countriesArr}></ConcertsSearch></div>
+        <div><ConcertsSearch countries={statesCitiesCountriesArr}></ConcertsSearch></div>
         <div className="filters_container">  
             <button className={`filters-button${filters === "clicked" ? " active" : ""}`} 
             onClick={() => filters === "clicked" ? setFilters("unclicked") : setFilters("clicked")}>
