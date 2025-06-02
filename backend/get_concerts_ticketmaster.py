@@ -71,8 +71,7 @@ def query_concert_info_for_one_singer(redis_instance: redis.Redis, artist_id = N
             item.pop("_links", None)
             item.pop("products", None)
             item.pop("images", None)
-            item["_embedded"].pop("attractions", None)
-
+            
         return response.status_code, final_response
     else:
         return 401, response["fault"]

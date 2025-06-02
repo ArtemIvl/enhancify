@@ -30,6 +30,7 @@ SPOTIFY_CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
 SPOTIFY_CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
 SPOTIFY_REDIRECT_URI = os.getenv("SPOTIFY_REDIRECT_URI")
 
+print(SPOTIFY_REDIRECT_URI)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],  # your React dev URL
