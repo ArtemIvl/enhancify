@@ -4,7 +4,8 @@ import ConcertsSearch from "../components/ConcertSearchContent";
 import statesCitiesCountriesArr from "../load_regions/loadPlaces";
 import { fetchTopArtists } from "../services/api";
 import axios from "axios";
-
+import ScrollContainer from "../components/ScrollComponent";
+import CrispConcertDetails from "../components/CrispConcertDetails";
 
 export default function Concerts() {
 const HARDCODED_COUNTRIES = [
@@ -57,12 +58,15 @@ const HARDCODED_COUNTRIES = [
       return "1 show available"
     }
   }
-  const concertsToDisplayPerPage = 4
-  var amountOfConcertsAlreadyShown = 0
+  const [concertsToDisplayPerPage, setConcertsToDisplayPerPage] = useState(6)
+  const [loadMoreItems, setLoadMoreItems] = useState(false)
   const [concerts, setConcerts] = useState(null)
   const [topArtists, setTopArtists] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [playLoadingAnimation, setPlayLoadingAnination] = useState(false)
+  
   useEffect(() => {
+    setConcertsToDisplayPerPage(5)
     fetchTopArtists()
           .then((data) => {
               const top = data["Top 500"] || [];
@@ -74,10 +78,20 @@ const HARDCODED_COUNTRIES = [
   }, []);
 
   useEffect(() => {
-    if (topArtists !== null) {
-      console.log(topArtists)
+    if (loadMoreItems === true) {
+      if (Object.keys(concerts).length > concertsToDisplayPerPage) {
+      setPlayLoadingAnination(true)
+      //wait for a second
+      const timer = setTimeout(() => {
+      setPlayLoadingAnination(false)
+      setLoadMoreItems(false)
+      setConcertsToDisplayPerPage(prev => prev + 8)
+
+    }, 1000);
+    return () => clearTimeout(timer);
     }
-  }, [topArtists]);
+  }
+  }, [loadMoreItems]);
 
   useEffect(() => {
     setLoading(true)
@@ -97,12 +111,16 @@ const HARDCODED_COUNTRIES = [
   const [active, setActive] = useState("global");
   const [filters, setFilters] = useState("unclicked")
   const [activeCards, setActiveCards] = useState(new Set());
-
-    function toggleCard(key) {
+    function toggleCard(key, concerts) {
     setActiveCards(prev => {
       const newSet = new Set(prev);
-      if (newSet.has(key)) newSet.delete(key);
-      else newSet.add(key);
+      if (newSet.has(key)) {
+        //create new key in myDict (setMyDict[key] = concerts)
+        newSet.delete(key);}
+      else {
+        //delete the key in mydict (delete myDict[key])
+        newSet.add(key);
+      }
       return newSet;
     });
   }
@@ -158,7 +176,7 @@ const HARDCODED_COUNTRIES = [
               <div className="w-3/4 h-1/4 animate-skeleton rounded-xl ml-[60px]" />
             </div>
           ) : (
-            <div className="concerts-content-container slight-margin-top">
+            <ScrollContainer setLoadMoreItems={setLoadMoreItems}>
             {Object.keys(concerts).length === 0 ? (
               <div>
                 <div className="nothing-found-title big-title">Whoops! We didn't find any concerts in this area... Try again with a different location?</div>
@@ -168,14 +186,10 @@ const HARDCODED_COUNTRIES = [
                 <button className="alternative-search-choice"><span className={`fi fi-${HARDCODED_COUNTRIES[2].flag} increase-size brightness-80 contrast-110 ml-[10px] mr-[12px] `}></span>{HARDCODED_COUNTRIES[2].label}</button>
                 <button className="alternative-search-choice"><span className={`fi fi-${HARDCODED_COUNTRIES[3].flag} increase-size brightness-80 contrast-110 ml-[10px] mr-[12px] `}></span>{HARDCODED_COUNTRIES[3].label}</button>
                 <button className="alternative-search-choice"><span className={`fi fi-${HARDCODED_COUNTRIES[4].flag} increase-size brightness-80 contrast-110 ml-[10px] mr-[12px] `}></span>{HARDCODED_COUNTRIES[4].label}</button>
-
-              
-
-
                 </div>
               </div>
             ) : (
-              Object.entries(concerts).slice(0, 4).map(([key, concert]) => (
+              Object.entries(concerts).slice(0, concertsToDisplayPerPage).map(([key, concert]) => (
                 <div
                  key={key}
                 >
@@ -191,14 +205,22 @@ const HARDCODED_COUNTRIES = [
                   <div className="genre-button"><div className="genre-text">#1 in the world</div></div>
                   </div>
                   <div className="small-horizontal-divisive-line">│</div>
-                  <button className="concert-details-button" onClick={() => toggleCard(key)}>
+                  <button className="concert-details-button" onClick={() => toggleCard(key, concert)}>
                   <span className="material-icons-outlined icons-tweaked">expand_circle_down</span>
                     {activeCards.has(key) ? "Hide details" : "View details"}</button>
                   </div>
+                 <div>
+                  {activeCards.has(key)
+                    ? (<CrispConcertDetails concerts={concert}></CrispConcertDetails>)
+                    : null}
+                </div>
                 </div>
               ))
             )}
-            </div>
+            {playLoadingAnimation && (
+              <div className="loading-bottom"><div className="w-5/6 h-3/4 animate-skeleton rounded-xl ml-[100px]"></div></div>
+            )}
+            </ScrollContainer>
           )}
         </div>
 

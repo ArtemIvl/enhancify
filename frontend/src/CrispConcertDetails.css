@@ -1,0 +1,90 @@
+.crisp-card {
+color: whitesmoke;
+width: 75%;
+border: 1px solid black;
+border-radius: 5px;
+display: flex;
+margin-bottom: 20px;
+background-size: cover;
+image-rendering: crisp-edges;
+border-radius: 35px;  /* or pixelated */
+margin-top: 15px;
+margin-left: 100px;
+}
+
+.festival-name-container {
+  width: 330px;
+  height: 50px;
+  margin-top: 15px;
+  margin-left: 40px;
+  z-index: 1200;
+  display: flex;
+  justify-content: center;     /* Horizontal centering */
+  align-items: center;         /* Vertical centering */
+  text-align: center;
+}
+
+.text-festival {
+  font-size: 18px;
+  line-height: 1.2;
+  display: inline-block;       /* Required for proper centering of multiline */
+  max-width: 100%;
+  word-break: break-word;
+}
+
+.crisp-horizontal-line {
+    margin-left: 20px;
+    margin-right: 20px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: 15px;
+    font-size: 32px;
+}
+
+.dates-container {
+  width: 300px;
+  height: 50px;
+  margin-top: 15px;
+  z-index: 1200;
+  display: flex;
+  font-weight: bold;
+  font-size: 20px;
+  justify-content: center;     /* Horizontal centering */
+  align-items: center;         /* Vertical centering */
+  text-align: center;
+}
+.dates-crisp {
+    font-size: 25px;
+    line-height: 1.2;
+    display: inline-block;       /* Required for proper centering of multiline */
+    max-width: 100%;
+    word-break: break-word;
+    font-size: 20px;
+}
+
+.dates-icon-large {
+    margin-right: 12px;
+    font-size: 25px;
+}
+
+.locations-container {
+  width: 300px;
+  height: 50px;
+  margin-top: 15px;
+  z-index: 1200;
+  display: flex;
+  font-size: 18px;
+  justify-content: center;     /* Horizontal centering */
+  align-items: center;         /* Vertical centering */
+  text-align: center;
+}
+
+.locations-crisp {
+    font-size: 20px;
+    line-height: 1.2;
+    display: inline-block;       /* Required for proper centering of multiline */
+    max-width: 100%;
+    word-break: break-word;
+    font-size: 20px;
+}

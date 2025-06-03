@@ -49,7 +49,7 @@ scheduler.start()
 
 @scheduler.scheduled_job(
         id="update_artist_leaderboard",
-        trigger=CronTrigger(hour='*', minute='*', second='*/10', timezone=pytz.UTC, jitter=0))
+        trigger=CronTrigger(hour='*', minute='*/20', timezone=pytz.UTC, jitter=0))
 def update_artist_leaderboard():
     #average execution time - 1.6 - 2 seconds
     info_on_top_singers = get_info_on_top_singers()
@@ -141,7 +141,7 @@ def get_top_artists():
 
 @scheduler.scheduled_job(
         id="update_concerts_for_top_global_singers",
-        trigger=CronTrigger(hour='*', minute='*/59', timezone=pytz.UTC, jitter=0))
+        trigger=CronTrigger(hour='*', minute='*/30', timezone=pytz.UTC, jitter=0))
 def update_concerts_for_top_global_singers(n = 100):
     #n - how much top artists we want to select from top 500? (narrowing the scope)
     #if 100 - we select top 100
@@ -185,7 +185,7 @@ def update_concerts_for_top_global_singers(n = 100):
             expiration_time = int((3600*24/CONCERT_UPDATE_FREQUENCY_PER_DAY) + 100)
             r.set(f"top_listened_artists:concert_info:{artist_spotify_id}", json.dumps(concert_info_list), ex=expiration_time)
         else:
-            #To-do - log errors to something like graylog
+            print(concert_info_list)
             continue
     print("Finished")
         

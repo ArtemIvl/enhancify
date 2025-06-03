@@ -205,6 +205,17 @@ body {
     overflow-y: auto;
 }
 
+.loading-bottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 90%;
+    height: 70px;
+    background-color: #D3CFCE;           /* or match your existing “animate-skeleton” look */
+    z-index: 1000;                        /* stay on top of content */
+    }
+
+
 .main-concert-card {
     margin-left: 100px;
     margin-top: 35px;
@@ -215,6 +226,38 @@ body {
     color: #141313;
     background-color: #E0E0E0;
     border-radius: 11px;
+}
+
+
+.subconcert-card {
+    margin-left: 100px;
+    margin-top: 5px;
+    height: 70px;
+    width: 75%;
+    display: flex;
+    z-index: 1000px;
+    color: #141313;
+    background-color: #d9d9d9;
+    border-radius: 5px;
+    border: 1px solid #2e2e2e;
+}
+
+.text-container-concert {
+  width: 600px;       /* adjust as needed */
+  height: 70px;      /* adjust as needed */
+  display: flex;/* horizontal centering */
+  align-items: center;       /* vertical centering */
+  margin: 0 auto;      /* optional padding to give breathing room */
+}
+
+.text-item-concert {
+  font-size: 16px;
+  margin-left: 20px;   /* center container itself if desired */
+
+  font-weight: 300;
+  text-align: center;
+  margin: 0;
+  overflow-wrap: break-word; /* wrap long words */
 }
 
 .main-concert-card.active {
@@ -230,6 +273,10 @@ body {
 }
 .slight-margin-top {
     padding-top: 30px;
+}
+
+.slight-margin-bottom {
+    padding-bottom: 130px;
 }
 
 .artists-name-main {

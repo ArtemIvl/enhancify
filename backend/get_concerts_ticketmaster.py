@@ -6,18 +6,19 @@ from dateutil.relativedelta import relativedelta
 import redis
 import time
 
-TICKETMASTER_API = os.getenv("TICKETMASTER_API_KEY")
+#TO-DO implement switching to a backup api key when/if quota is exceeded
+#TICKETMASTER_API = os.getenv("TICKETMASTER_API_KEY")
+TICKETMASTER_API = "NrvIaCsR0hamAEiuWTVOU7NeWyLNW1AL"
 TICKETMASTER_SECRET = os.getenv("TICKETMASTER_SECRET")
 
-print(TICKETMASTER_API)
 
 #it would make sense to start returning concerts a bit more in the future, like in 2 upcoming days. 
 # Going to a concert is a big event, it is usually planned in advance
 DEFAULT_START_DATE_TIME = (datetime.now(timezone.utc) + timedelta(days=2)).strftime("%Y-%m-%dT%H:%M:%SZ")
 
-#same logic - what's the point of planning a concert more than 2 years in advance
-DEFAULT_END_DATE_TIME =  (datetime.now(timezone.utc) + relativedelta(years=2)).strftime("%Y-%m-%dT%H:%M:%SZ")
+DEFAULT_END_DATE_TIME = (datetime.now(timezone.utc) + relativedelta(years=2)).strftime("%Y-%m-%dT%H:%M:%SZ")
 
+#same logic - what's the point of planning a concert more than 2 years in advance
 def query_concert_info_for_one_singer(redis_instance: redis.Redis, artist_id = None, artist_name = None):
     
     #params - request parameters that we want to see in our reuquest
@@ -31,12 +32,12 @@ def query_concert_info_for_one_singer(redis_instance: redis.Redis, artist_id = N
     
     #default values are initialized first, so it's possible to override them with values from a dictionary (params)
     request_params["startDateTime"] = DEFAULT_START_DATE_TIME
-    request_params["endDateTime"] = DEFAULT_END_DATE_TIME
     #more relevant events come first
     request_params["sort"] = "relevance,desc"
     request_params["classificationName"] = "music" #self-explanatory
-    
+    request_params["size"] = "100"
     request_params["apikey"] = TICKETMASTER_API
+    request_params["endDateTime"] = DEFAULT_END_DATE_TIME
     #Every time we loop we search for redis - artists spotidy id is there? we get the attraction id
     #Not? We create a new redis entry
     

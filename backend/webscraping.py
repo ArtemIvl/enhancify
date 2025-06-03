@@ -29,10 +29,11 @@ def get_info_on_top_singers():
         "wdtNonce": nonce,
         "sRangeSeparator":"|"
     }
-
+    
     data = requests.post(AJAX, data=payload,
                         timeout=15).json()["data"]
     data = [extract_artist_name(item) for item in data]
+    
     return(data) 
 
 #debugging purposes
