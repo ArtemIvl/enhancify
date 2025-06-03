@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import ArtistCard from "../components/ArtistCard";
 import SearchBar from "../components/SearchBar";
 import { fetchTopArtists } from "../services/api";
-import { LoginButton } from "../components/LoginButton";
 
 export default function Home() {
   const [artists, setArtists] = useState([]);
@@ -14,19 +13,6 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const artistsPerPage = 100;
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const tokenFromUrl = params.get("token");
-    if (tokenFromUrl) {
-      setToken(tokenFromUrl);
-      localStorage.setItem("spotify_token", tokenFromUrl);
-      window.history.replaceState({}, document.title, "/");
-    } else {
-      const tokenFromStorage = localStorage.getItem("spotify_token");
-      if (tokenFromStorage) setToken(tokenFromStorage);
-    }
-  }, []);
 
   useEffect(() => {
     fetchTopArtists()
@@ -61,14 +47,6 @@ export default function Home() {
     );
     setCurrentPage(1); // reset page on filters change
   }, [search, countryFilter, genreFilter, artists]);
-
-  if (!token) {
-    return (
-      <div className="flex justify-center p-4">
-        <LoginButton />
-      </div>
-    );
-  }
 
   // Extract unique countries and genre for filter dropdowns
   const uniqueCountries = Array.from(new Set(artists.map((a) => a.Country))).filter(Boolean).sort();

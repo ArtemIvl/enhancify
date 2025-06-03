@@ -7,7 +7,7 @@ router = APIRouter()
 
 @router.get("/login")
 def login():
-    scopes = "user-read-private user-read-email user-follow-read"
+    scopes = "user-read-private user-read-email user-follow-read user-top-read"
     url = (
         "https://accounts.spotify.com/authorize"
         f"?response_type=code&client_id={SPOTIFY_CLIENT_ID}"

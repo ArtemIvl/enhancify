@@ -9,6 +9,15 @@ function extractImageSrc(html) {
   return img ? img.src : null;
 }
 
+function getChangeColor(value) {
+  return parseInt(value.replace(/,/g, ""), 10) >= 0 ? "text-green-600" : "text-red-600";
+}
+
+function formatNumber(value) {
+  const num = parseInt(value.replace(/,/g, ""), 10);
+  return num.toLocaleString();
+}
+
 export default function ArtistCard({ artist }) {
   const artistName = stripHTML(artist["Artist"]);
   const imageUrl = extractImageSrc(artist["Image"]);
@@ -18,6 +27,10 @@ export default function ArtistCard({ artist }) {
   const genre = artist["Genre"];
   const language = artist["Language"];
   const groupType = artist["Group type"];
+  const change24h = artist["Change vs yesterday"];
+  const changeMonthly = artist["Change vs last month"];
+  const spotifyID = artist["Spotify ID"];
+  const spotifyLink = `https://open.spotify.com/artist/${spotifyID}`;
 
   return (
     <div className="w-full border border-gray-900 rounded-md shadow-sm hover:shadow-md transition flex items-center gap-4 p-4">
@@ -37,41 +50,30 @@ export default function ArtistCard({ artist }) {
           {(listeners / 1_000_000).toFixed(1)}M listeners
         </p>
 
-        <div className="mt-1 text-sm text-gray-600 space-y-0.5">
+        <div className="mt-1 text-sm space-y-0.5">
           <div><span className="font-semibold">Country:</span> {country}</div>
           <div><span className="font-semibold">Genre:</span> {genre}</div>
           <div><span className="font-semibold">Language:</span> {language}</div>
           <div><span className="font-semibold">Group type:</span> {groupType}</div>
+          <div>
+            <span className="font-semibold">Change (24h): </span>
+            <span className={getChangeColor(change24h)}>{formatNumber(change24h)}</span>
+          </div>
+          <div>
+            <span className="font-semibold">Change (Monthly): </span>
+            <span className={getChangeColor(changeMonthly)}>{formatNumber(changeMonthly)}</span>
+          </div>
+          <div>
+            <a
+              href={spotifyLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 underline font-medium"
+            >
+              Open on Spotify
+            </a>
+          </div>
         </div>
-      </div>
-    </div>
-  );
-}
-function stripHTML(html) {
-  const doc = new DOMParser().parseFromString(html, 'text/html');
-  return doc.body.textContent || "";
-}
-
-function extractImageSrc(html) {
-  const doc = new DOMParser().parseFromString(html, 'text/html');
-  const img = doc.querySelector('img');
-  return img ? img.src : null;
-}
-
-export default function ArtistCard({ artist }) {
-  const artistName = stripHTML(artist["Artist"]);
-  const imageUrl = extractImageSrc(artist["Image"]);
-  const listeners = parseInt(artist["Monthly listeners (millions)"].replace(/,/g, ""), 10);
-
-  return (
-    <div className="w-full border p-4 rounded-md shadow-sm hover:shadow-md transition flex items-center gap-4">
-      {imageUrl && <img src={imageUrl} alt={artistName} className="w-16 h-16 rounded-full object-cover" />}
-      <div>
-        <div className="font-semibold text-lg">{artistName}</div>
-        <div className="text-sm text-gray-600">
-          {(listeners / 1_000_000).toFixed(1)}M listeners
-        </div>
-        <div className="text-sm text-gray-500">{artist["Country"]} · {artist["Genre"]} · {artist["Group type"]}</div>
       </div>
     </div>
   );

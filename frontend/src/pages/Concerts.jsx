@@ -24,7 +24,7 @@ export default function Concerts() {
   const concertsToDisplayPerPage = 4
   var amountOfConcertsAlreadyShown = 0
   const [concerts, setConcerts] = useState(null)
-  const [topArtists, setTopArtists] = useState(null)
+  const [topArtists, setTopArtists] = useState([])
   const [loading, setLoading] = useState(true)
   useEffect(() => {
     fetchTopArtists()
@@ -39,7 +39,7 @@ export default function Concerts() {
 
   useEffect(() => {
     if (topArtists !== null) {
-      console.log(topArtists)
+      // console.log(topArtists)
     }
   }, [topArtists]);
 
@@ -133,7 +133,12 @@ export default function Concerts() {
                  key={key}
                 >
                   <div className={activeCards.has(key) ? "main-concert-card active" : "main-concert-card"}>
-                  <img src={extractImageSrc(getArtistsNameBySpotifyId(key)["Image"])} className="artists-image constrast-70 brightness-80"></img>
+                  {getArtistsNameBySpotifyId(key) && (
+                    <img
+                      src={extractImageSrc(getArtistsNameBySpotifyId(key)["Image"])}
+                      className="artists-image constrast-70 brightness-80"
+                    />
+                  )}
                   <div className="artists-name-main">{getArtistsNameBySpotifyId(key)["Artist"]}</div>
                   <div className="small-horizontal-divisive-line">│</div>
                   <div className="shows-available-text">{calculateShowsAvailable(concert)}</div>

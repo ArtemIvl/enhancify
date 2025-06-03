@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
+import { useAuth } from "../services/AuthContext";
 
 export default function Profile() {
   const [profile, setProfile] = useState(null);
-  const token = localStorage.getItem("spotify_token");
+  const { token, logout } = useAuth();
 
   useEffect(() => {
     if (!token) return;
@@ -11,6 +12,8 @@ export default function Profile() {
       .then(setProfile)
       .catch(console.error);
   }, [token]);
+
+  if (!token) return <div className="p-4">Login to view info please.</div>;
 
   if (!profile) return <div className="p-4">Loading profile...</div>;
 
@@ -52,16 +55,14 @@ export default function Profile() {
           <div>
             <strong>Spotify ID:</strong> {profile.id}
           </div>
-
-          <div className="col-span-2">
-            <strong>Explicit Content Filter Enabled:</strong>{" "}
-            {profile.explicit_content.filter_enabled ? "Yes" : "No"}
-          </div>
-          <div className="col-span-2">
-            <strong>Explicit Content Filter Locked:</strong>{" "}
-            {profile.explicit_content.filter_locked ? "Yes" : "No"}
-          </div>
         </div>
+
+        <button
+          onClick={logout}
+          className="mt-6 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded"
+        >
+          Logout
+        </button>
       </div>
     </div>
   );

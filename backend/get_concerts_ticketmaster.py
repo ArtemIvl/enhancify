@@ -5,11 +5,16 @@ from datetime import datetime, timedelta, timezone
 from dateutil.relativedelta import relativedelta
 import redis
 import time
+from dotenv import load_dotenv
+# from config import TICKETMASTER_API_KEY
 
-TICKETMASTER_API = os.getenv("TICKETMASTER_API_KEY")
+
+load_dotenv()
+
+TICKETMASTER_API_KEY = os.getenv("TICKETMASTER_API_KEY")
 TICKETMASTER_SECRET = os.getenv("TICKETMASTER_SECRET")
 
-print(TICKETMASTER_API)
+print(TICKETMASTER_API_KEY)
 
 #it would make sense to start returning concerts a bit more in the future, like in 2 upcoming days. 
 # Going to a concert is a big event, it is usually planned in advance
@@ -36,7 +41,7 @@ def query_concert_info_for_one_singer(redis_instance: redis.Redis, artist_id = N
     request_params["sort"] = "relevance,desc"
     request_params["classificationName"] = "music" #self-explanatory
     
-    request_params["apikey"] = TICKETMASTER_API
+    request_params["apikey"] = TICKETMASTER_API_KEY
     #Every time we loop we search for redis - artists spotidy id is there? we get the attraction id
     #Not? We create a new redis entry
     
@@ -85,7 +90,7 @@ def look_up_artists_attraction_id(redis: redis.Redis, artist_name = None, artist
     if (attraction_id == None):
         
         request_parameters = {}
-        request_parameters["apikey"] = TICKETMASTER_API
+        request_parameters["apikey"] = TICKETMASTER_API_KEY
         #we search by artists name
         request_parameters["keyword"] = artist_name
         

@@ -1,66 +1,78 @@
 import { useEffect, useState } from "react";
+import { useAuth } from "../services/AuthContext";
+import SpotifyArtistCard from "../components/SpotifyArtistCard";
+import SpotifyTrackCard from "../components/SpotifyTrackCard";
 
-export default function FollowedArtists() {
+export default function TopContent() {
+  const [tab, setTab] = useState("tracks");
+  const [timeRange, setTimeRange] = useState("medium_term");
+  const [tracks, setTracks] = useState([]);
   const [artists, setArtists] = useState([]);
-  const token = localStorage.getItem("spotify_token");
+  const { token } = useAuth();
 
   useEffect(() => {
     if (!token) return;
-    fetch(`http://localhost:8000/followed_artists?token=${token}`)
+
+    const url =
+      tab === "tracks"
+        ? `https://api.spotify.com/v1/me/top/tracks?limit=50&time_range=${timeRange}`
+        : `https://api.spotify.com/v1/me/top/artists?limit=50&time_range=${timeRange}`;
+
+    fetch(url, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((res) => res.json())
-      .then((data) => setArtists(data))
+      .then((data) => {
+        if (tab === "tracks") setTracks(data.items || []);
+        else setArtists(data.items || []);
+      })
       .catch(console.error);
-  }, [token]);
+  }, [token, tab, timeRange]);
+
+  if (!token) return <div className="p-4">Login to view info please.</div>;
 
   return (
     <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Followed Artists</h2>
-      {artists.length === 0 ? (
-        <div>No followed artists found.</div>
-      ) : (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {artists.map((artist) => (
-            <div key={artist.id} className="bg-gray-800 p-4 rounded">
-              <img src={artist.images?.[0]?.url} alt={artist.name} className="w-full h-auto rounded" />
-              <div className="mt-2 text-center">{artist.name}</div>
-            </div>
+      <div className="flex gap-4 mb-4">
+        <button
+          className={`px-4 py-2 rounded cursor-pointer ${tab === "tracks" ? "bg-[#2e2e2e] text-white" : "bg-[#d3cfce]"}`}
+          onClick={() => setTab("tracks")}
+        >
+          Top Songs
+        </button>
+        <button
+          className={`px-4 py-2 rounded cursor-pointer ${tab === "artists" ? "bg-[#2e2e2e] text-white" : "bg-[#d3cfce]"}`}
+          onClick={() => setTab("artists")}
+        >
+          Top Artists
+        </button>
+
+        <select
+          className="ml-auto bg-gray-700 text-white px-3 py-2 rounded"
+          value={timeRange}
+          onChange={(e) => setTimeRange(e.target.value)}
+        >
+          <option value="short_term">Last 4 weeks</option>
+          <option value="medium_term">Last 6 months</option>
+          <option value="long_term">All time</option>
+        </select>
+      </div>
+
+      {tab === "tracks" && (
+        <div className="space-y-4">
+          {tracks.map((track, index) => (
+            <SpotifyTrackCard key={track.id} track={track} index={index} />
+          ))}
+        </div>
+      )}
+
+      {tab === "artists" && (
+        <div className="space-y-4">
+          {artists.map((artist, index) => (
+            <SpotifyArtistCard key={artist.id} artist={artist} index={index} />
           ))}
         </div>
       )}
     </div>
-  );
-}
-import { useEffect, useState } from "react";
-
-export default function FollowedArtists() {
-  const [artists, setArtists] = useState([]);
-  const token = localStorage.getItem("spotify_token");
-
-  useEffect(() => {
-    if (!token) return;
-    fetch(`http://localhost:8000/followed_artists?token=${token}`)
-      .then((res) => res.json())
-      .then((data) => setArtists(data))
-      .catch(console.error);
-  }, [token]);
-
-  return (
-    <body>
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Followed Artists</h2>
-      {artists.length === 0 ? (
-        <div>No followed artists found.</div>
-      ) : (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {artists.map((artist) => (
-            <div key={artist.id} className="bg-gray-800 p-4 rounded">
-              <img src={artist.images?.[0]?.url} alt={artist.name} className="w-full h-auto rounded" />
-              <div className="mt-2 text-center">{artist.name}</div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-    </body>
   );
 }
