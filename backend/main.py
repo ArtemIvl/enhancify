@@ -121,7 +121,6 @@ def get_followed_artists(token: str):
         return JSONResponse({"error": "Failed to fetch followed artists"}, status_code=400)
     return res.json()["artists"]["items"]
 
-
 @app.get("/get_top_artists")
 def get_top_artists():
     exec_start = time.time()

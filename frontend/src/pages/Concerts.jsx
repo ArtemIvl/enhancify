@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import "../Concerts.css";
 import ConcertsSearch from "../components/ConcertSearchContent";
 import statesCitiesCountriesArr from "../load_regions/loadPlaces";
-import { fetchTopArtists } from "../services/api";
+import { fetchMostListenedArtists, fetchTopArtists } from "../services/api";
 import axios from "axios";
 import ScrollContainer from "../components/ScrollComponent";
 import CrispConcertDetails from "../components/CrispConcertDetails";
@@ -45,6 +45,7 @@ const HARDCODED_COUNTRIES = [
     return HARDCODED_COUNTRIES;
   }
   shuffleCountries();
+  
   function extractImageSrc(html) {
   const doc = new DOMParser().parseFromString(html, 'text/html');
   const img = doc.querySelector('img');
@@ -62,8 +63,11 @@ const HARDCODED_COUNTRIES = [
   const [loadMoreItems, setLoadMoreItems] = useState(false)
   const [concerts, setConcerts] = useState(null)
   const [topArtists, setTopArtists] = useState(null)
+  const [favouriteArtists, setFavoriteArtists] = useState(null)
   const [loading, setLoading] = useState(true)
   const [playLoadingAnimation, setPlayLoadingAnination] = useState(false)
+  const [favoriteConcerts, setFavoriteConcerts] = useState(null)
+
   useEffect(() => {
     setConcertsToDisplayPerPage(5)
     fetchTopArtists()
@@ -76,6 +80,13 @@ const HARDCODED_COUNTRIES = [
     // Your code here (e.g., read from localStorage, fetch data)
   }, []);
 
+  // for the followed artists: 1) On load fetch followed artists using the spotify API. using Spotify API.
+  // 
+  useEffect (() => {
+    if (topArtists !== null) {
+      console.log(topArtists);
+    }
+  }, [topArtists])
   useEffect(() => {
     if (loadMoreItems === true) {
       if (Object.keys(concerts).length > concertsToDisplayPerPage) {
@@ -92,6 +103,9 @@ const HARDCODED_COUNTRIES = [
   }
   }, [loadMoreItems]);
 
+
+  const token = localStorage.getItem("spotify_token");
+
   useEffect(() => {
     setLoading(true)
     axios.post('http://localhost:8000/get_concerts', {
@@ -106,6 +120,20 @@ const HARDCODED_COUNTRIES = [
       console.error(error);
     });
   }, []);
+
+
+  /* Uncomment after merge
+  useEffect(() => {
+    setLoading(true)
+    fetchMostListenedArtists(token)
+    .then(response => {
+      setFavoriteArtists(response.data)
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  }, []);
+*/
 
   const [active, setActive] = useState("global");
   const [filters, setFilters] = useState("unclicked")

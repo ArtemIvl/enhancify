@@ -15,6 +15,7 @@ const countriesArr = Object.entries(countryObj).map(
     input_type: "country"
   })
 );
+
 const usStates = [
   { code: "AL", label: "Alabama", description: "State", icon: "cottage", input_type: "state" },
   { code: "AK", label: "Alaska", description: "State", icon: "cottage", input_type: "state" },

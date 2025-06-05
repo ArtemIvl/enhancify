@@ -96,11 +96,11 @@ const CrispConcertDetails = ({ concerts }) => {
           dateText = `${formatDate(item.startDate)} - ${formatDate(item.endDate)}`;
           const { countries, cities, locations } = item;
           if (countries > 1) {
-            locationText = `${countries} countries, ${locations} locations`;
+            locationText = `${countries} countries, ${locations} concerts`;
           } else if (cities > 1) {
-            locationText = `${cities} cities, ${locations} locations`;
+            locationText = `${cities} cities, ${locations} concerts`;
           } else {
-            locationText = `${locations} locations`;
+            locationText = `${locations} concerts`;
           }
         }
 
@@ -187,7 +187,7 @@ const CrispConcertDetails = ({ concerts }) => {
                 </div>
                 <div className='get-tickets-fade get-tickets-tour-size'  onClick={() => window.open(e.url, '_blank')}>
                   <a href={e.url} target="_blank" rel="noopener noreferrer">
-                  <div className='font-semibold center-buy-tickets-text mt-[10px] '> Buy tickets <span className="material-icons-outlined dates-icon-large ml-[10px]">arrow_outward</span></div>
+                  <div className='font-semibold center-buy-tickets-text mt-[10px] '> Buy tickets <span className="material-icons-outlined dates-icon-large ml-[10tyhpx]">arrow_outward</span></div>
                   </a>
                 </div>
 
