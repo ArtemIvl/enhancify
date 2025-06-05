@@ -64,7 +64,6 @@ const HARDCODED_COUNTRIES = [
   const [topArtists, setTopArtists] = useState(null)
   const [loading, setLoading] = useState(true)
   const [playLoadingAnimation, setPlayLoadingAnination] = useState(false)
-  
   useEffect(() => {
     setConcertsToDisplayPerPage(5)
     fetchTopArtists()
@@ -157,7 +156,7 @@ const HARDCODED_COUNTRIES = [
         <div className="filters_container">  
             <button className={`filters-button${filters === "clicked" ? " active" : ""}`} 
             onClick={() => filters === "clicked" ? setFilters("unclicked") : setFilters("clicked")}>
-                <span className="material-icons-outlined icons-tweaked">tune</span></button>
+                <span className="material-icons-outlined icons-tweaked">tune</span>Filters</button>
              {filters === "clicked" && (
                 <div className="filters-detailed-container">
                 <div className="filters-setting">Menu Item 1</div>
@@ -169,6 +168,7 @@ const HARDCODED_COUNTRIES = [
         </div>
       </div>
         <div>
+          <div className="cool-concert-line"></div>
           {loading ? (
             <div className="concerts-content-container p-6 flex flex-col justify-center mx-auto space-y-8">
               <div className="w-3/4 h-1/4 animate-skeleton rounded-xl ml-[60px]" />
@@ -200,8 +200,9 @@ const HARDCODED_COUNTRIES = [
                   <div className="shows-available-text">{calculateShowsAvailable(concert)}</div>
                   <div className="small-horizontal-divisive-line">│</div>
                   <div className="genre-container">
-                  <div className="genre-button"><div className="genre-text">Pop</div></div>
-                  <div className="genre-button"><div className="genre-text">Hiphop</div></div>
+                  <div className="genre-button"><div className="genre-text">English</div></div>
+                  <div className="genre-button"><div className="genre-text">Afrobeats</div></div>
+
                   <div className="genre-button"><div className="genre-text">#1 in the world</div></div>
                   </div>
                   <div className="small-horizontal-divisive-line">│</div>

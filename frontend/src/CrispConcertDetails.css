@@ -1,6 +1,6 @@
 .crisp-card {
 color: whitesmoke;
-width: 75%;
+width: 84%;
 border: 1px solid black;
 border-radius: 5px;
 display: flex;
@@ -9,12 +9,12 @@ background-size: cover;
 image-rendering: crisp-edges;
 border-radius: 35px;  /* or pixelated */
 margin-top: 15px;
-margin-left: 100px;
+margin-left: 110px;
 }
 
 .festival-name-container {
-  width: 330px;
-  height: 50px;
+  width: 33%;
+  height: 55px;
   margin-top: 15px;
   margin-left: 40px;
   z-index: 1200;
@@ -25,7 +25,7 @@ margin-left: 100px;
 }
 
 .text-festival {
-  font-size: 18px;
+  font-size: 20px;
   line-height: 1.2;
   display: inline-block;       /* Required for proper centering of multiline */
   max-width: 100%;
@@ -42,8 +42,24 @@ margin-left: 100px;
     font-size: 32px;
 }
 
+.tour-concert-info-container {
+    width: 80%;
+    margin-left: 8%;
+    height: 50px;
+    display: flex;
+    background-color: #DDDDDD;
+    margin-top: 10px;
+    border-radius: 20px;
+    border: 1px solid #2e2e2e;
+}
+
+.get-prices {
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
 .dates-container {
-  width: 300px;
+  width: 28%;
   height: 50px;
   margin-top: 15px;
   z-index: 1200;
@@ -68,6 +84,17 @@ margin-left: 100px;
     font-size: 25px;
 }
 
+.get-tickets-fade {
+   background: linear-gradient(to right, #EF745C 0%, #34073D 100%);
+   cursor: pointer;
+}
+
+.get-tickets-tour-size {
+  height: 49px;
+  margin-left: 2.5%;
+  width: 20%;
+  border-radius: 0px 20px 20px 0px;
+}
 .locations-container {
   width: 300px;
   height: 50px;
@@ -87,4 +114,30 @@ margin-left: 100px;
     max-width: 100%;
     word-break: break-word;
     font-size: 20px;
+}
+
+.universal-subconcert-container {
+  height: 45px;
+  justify-content: center;     /* Horizontal centering */
+  align-items: center;         /* Vertical centering */
+  text-align: center;
+  z-index: 1200;
+  display: flex;
+}
+
+.mini-horizontal-line {
+  height: 60%;
+  margin-top: 8px;
+  width: 2px;
+  background-color: #2e2e2e;
+  margin-right: 1%;
+  margin-left: 1%;
+}
+
+.center-buy-tickets-text {
+  justify-content: center;     /* Horizontal centering */
+  align-items: center;         /* Vertical centering */
+  text-align: center;
+  font-size: 18px;
+  color: #DDDDDD;
 }

@@ -21,7 +21,7 @@ body {
 }
 
 .button-row {
-  margin-left: 70px;
+  margin-left: 80px;
   display: flex;
   align-items: center;
 }
@@ -81,18 +81,18 @@ body {
 }
 
 .filters_container {
-    margin-left: 80px;
+    margin-left: 95px;
     margin-top: -10px;
 }
 
 .filters-button {
     transition: background-color 0.1s, color 0.1s;
     border-radius: 15px;
-    width: 50px;
+    width: 110px;
     padding-left: 10px;
     background-color: white;
     color: #2e2e2e;
-    font-size: 18px;
+    font-size: 17px;
     height: 45px;
     border: 1.3px solid #141313;
     cursor: pointer;
@@ -104,9 +104,12 @@ body {
 }
 
 .big-title {
-    margin-left: 80px;
+    margin-left: 90px;
     margin-bottom: 45px;
     font-size: 35px;
+    display: inline-block; /* or inline-block if you want to control padding/margin */
+    padding: 8px 15px;
+    border-radius: 10px; /* optional rounded corners */
     color: #141313;
 }
 .filters-detailed-container {
@@ -200,11 +203,18 @@ body {
     margin-top: 30px;
     width: 100%;
     margin-left: -9px;
-    border: 0.5px solid #2e2e2e;
     z-index: 0;
     overflow-y: auto;
 }
 
+.cool-concert-line {
+    margin-top: 35px;
+    height: 1px;
+    margin-left: 4%;
+    margin-bottom: -1.5%;
+    width: 92%;
+    background: linear-gradient(to right, transparent 0%, #676363 10%, #676363 90%, transparent 100%);
+}
 .loading-bottom {
     position: fixed;
     bottom: 0;
@@ -217,10 +227,10 @@ body {
 
 
 .main-concert-card {
-    margin-left: 100px;
+    margin-left: 110px;
     margin-top: 35px;
     height: 120px;
-    width: 75%;
+    width: 84%;
     display: flex;
     z-index: 1000px;
     color: #141313;
@@ -280,11 +290,14 @@ body {
 }
 
 .artists-name-main {
-    font-size: 30px;
+    font-size: 32px;
+    width: 17%;
     font-weight: 200;
     margin-left: 30px;
     display: flex;
-    margin-top: 3.5%;
+    justify-content: center;     /* Horizontal centering */
+    align-items: center;         /* Vertical centering */
+    text-align: center;
 }
 .artists-image {
     padding-left: 20px;
@@ -310,37 +323,41 @@ body {
 }
 
 .shows-available-text {
-    font-size: 18px;
+    font-size: 20px;
+    width: 16%;
     margin-top: 48px;
     margin-left: 8px;
+    justify-content: center;     /* Horizontal centering */
+    align-items: center;         /* Vertical centering */
+    text-align: center;
 }
 
 .genre-container {
   display: flex;
   flex-wrap: wrap;
   gap: 0px 12px;          /* 0 px vertically, 12 px horizontally */
-  margin-top: 20px;
-  margin-left: 10px;
-  width: 170px;
+  margin-top: 30px;
+  margin-left: 5px;
+  width: 20%;
   justify-content: center;
 }
 
 .genre-button {
   /* let content decide the height; use padding instead of fixed height */
-  padding: 1px 15px;    /* ⬅ tweak top/bottom to shrink the row height */
+  padding: 0px 18px;    /* ⬅ tweak top/bottom to shrink the row height */
   background: #2e2e2e;
   color: #d1d5db;
   border-radius: 5px;
   display: flex;
   align-items: center;
-  height: 25px;
+  height: 26px;
   margin: 0;            /* be certain no extra margins sneak in */
   line-height: 0;       /* keeps text compact */
 }
 
 .genre-text {           /* no vertical margins */
   margin: 0;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 
@@ -350,16 +367,18 @@ body {
     margin-left: auto;
     margin-right: 35px;
     height: 65%;
-    width: 220px;
+    width: 230px;
     margin-top: 22px;
     margin-bottom: 10px;
     cursor: pointer;
-    border-radius: 20px;
+    border-radius: 35px;
     font-weight: 500;
-    border: 1px solid #2e2e2e;
+    border: 0.75px solid #2e2e2e;
     font-size: 20px;
 
 }
+
+
 
 .concert-details-button:hover {
   background: #2e2e2e;   /* white background */

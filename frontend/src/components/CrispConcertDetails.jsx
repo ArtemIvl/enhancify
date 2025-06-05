@@ -21,6 +21,16 @@ const formatDate = (isoString) => {
   });
 };
 
+const format_date_2 = (isoString) => {
+  const date = new Date(isoString);
+  const day = date.getDate();
+  const month = date.toLocaleString('en-GB', { month: 'short' });
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  return `${day} ${month}, ${hours}:${minutes}`;
+};
+
+
 const CrispConcertDetails = ({ concerts }) => {
   const [filteredCrispData, setFilteredCrispData] = useState([]);
 
@@ -77,7 +87,7 @@ const CrispConcertDetails = ({ concerts }) => {
     <div>
       {filteredCrispData.map((item, idx) => {
         const imageUrl = get_random_image(item.type);
-        const height = item.type === 'festival' ? '76px' : '70px';
+        const height = item.type === 'festival' ? '80px' : '70px';
 
         // Only compute date and location strings for festivals
         let dateText = '';
@@ -95,6 +105,7 @@ const CrispConcertDetails = ({ concerts }) => {
         }
 
         return (
+          <div>
           <div
             key={idx}
             className={`crisp-card brightness-90 ${item.type}-card`}
@@ -120,9 +131,71 @@ const CrispConcertDetails = ({ concerts }) => {
                   </div>
                   {locationText}
                 </div>
+              </>
+            )}
+            {item.type === 'concert' && (
+              <>
+                <div className='crisp-horizontal-line'>|</div>
+                <div className='dates-container'>
+                  <div className='dates-crisp'>
+                    <span className="material-icons-outlined dates-icon-large">event</span>
+                  </div>
+                  {dateText}
+                </div>
+                <div className='crisp-horizontal-line'>|</div>
+                <div className='locations-container'>
+                  <div className='locations-crisp'>
+                    <span className="material-icons-outlined dates-icon-large">pin_drop</span>
+                  </div>
+                  {locationText}
+                </div>
                
               </>
             )}
+          </div>
+        {item.type === 'festival' && (
+          <div>
+            {item.elements.map((e, i) => {
+              const city = e._embedded.venues[0].city.name;
+              return (
+                <div className = "tour-concert-info-container" key={i} style={{ fontSize: '12px' }}>
+                  <div className='universal-subconcert-container w-[25%]'>
+                    <span className={`fi fi-${e._embedded.venues[0].country.countryCode.toLowerCase()} increase-size brightness-80 contrast-110 ml-[30px] mr-[12px] rounded-lg`}></span>
+                    <div className = 'font-semibold'>
+                  {city}
+                  </div>
+                  </div>
+                <div className="mini-horizontal-line"></div>
+                 <div className='universal-subconcert-container w-[17%]'>
+                   <span className="material-icons-outlined dates-icon-large">schedule</span>
+                  <div className = 'font-semibold'>
+                  {format_date_2(e.dates.start.dateTime)}
+                  </div>
+                </div>
+                <div className="mini-horizontal-line"></div>
+
+                <div className='universal-subconcert-container w-[17%]'>
+                  <div className = 'font-semibold'>
+                  {e._embedded.venues[0].name == null ? "----" : e._embedded.venues[0].name}
+                  </div>
+                </div>
+                <div className="mini-horizontal-line"></div>
+                
+                <div className='universal-subconcert-container w-[13%]'>
+                   <span className="material-icons-outlined dates-icon-large">info</span>
+                   <div className='get-prices'>Get prices</div>
+                </div>
+                <div className='get-tickets-fade get-tickets-tour-size'  onClick={() => window.open(e.url, '_blank')}>
+                  <a href={e.url} target="_blank" rel="noopener noreferrer">
+                  <div className='font-semibold center-buy-tickets-text mt-[10px] '> Buy tickets <span className="material-icons-outlined dates-icon-large ml-[10px]">arrow_outward</span></div>
+                  </a>
+                </div>
+
+                </div>
+              );
+            })}
+          </div>
+        )}
           </div>
         );
       })}
