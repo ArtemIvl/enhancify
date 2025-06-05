@@ -50,8 +50,8 @@ def query_concert_info_for_one_singer(redis_instance: redis.Redis, artist_id = N
     response = requests.get("https://app.ticketmaster.com/discovery/v2/events.json", params=request_params)
     end = time.time()
     #we can afford one request every 280 ms to avoid errors from ticketmaster API related to spike rate 
-    if (end - start) < 0.28:
-        time.sleep(0.28 - (end - start))
+    if (end - start) < 0.33:
+        time.sleep(0.33 - (end - start))
     
     
     response_filtered = response.json()

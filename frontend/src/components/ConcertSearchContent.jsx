@@ -9,7 +9,8 @@ const HARDCODED = [
   { label: "New York", code: "NY", icon: "location_city", description: "City", input_type: "city"}
 ];
 
-export default function ConcertsSearch({ countries = [], setConcerts, setLoading}) {
+export default function ConcertsSearch({ countries = [], setConcerts, setGlobalConcerts, 
+  setMostListenedConcerts, setGlobalLoading, setFollowedLoading, toggleMode, followedArtistsToQuery}) {
   const [inputValue, setInputValue] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedCode, setSelectedCode] = useState(null);
@@ -19,7 +20,8 @@ export default function ConcertsSearch({ countries = [], setConcerts, setLoading
 
 
 function handleClick() {
-  setLoading(true)
+  setGlobalLoading(true)
+  setFollowedLoading(true)
   const params = {
       get_top_artist_info: 1,
       countries: []
@@ -47,10 +49,30 @@ function handleClick() {
     params["geo_longitude"] = lng;
   }
   console.log(params)
+  //GLOBAL
   axios.post('http://localhost:8000/get_concerts', params)
     .then(response => {
-      setConcerts(response.data);
-      setLoading(false);
+      if (toggleMode === "global") {
+        setConcerts(response.data);
+      }
+      setGlobalConcerts(response.data)
+      setGlobalLoading(false);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  
+// input example for artist lists [{"artist_id": "a1b2c3", "artist_name": "21 savage"}]
+  //FOR FOLLOWERS
+  params["get_top_artist_info"] = 0;
+  params["artists"] = [{"artist_id": "1URnnhqYAYcrqrcwql10ft", "artist_name": "21 Savage"}, {"artist_id": "0epOFNiUfyON9EYx7Tpr6V", "artist_name": "The Strokes"}]
+  axios.post('http://localhost:8000/get_concerts', params)
+    .then(response => {
+      if (toggleMode === "followed") {
+        setConcerts(response.data)
+      }
+      setMostListenedConcerts(response.data);
+      setFollowedLoading(false);
     })
     .catch(error => {
       console.error(error);

@@ -174,7 +174,7 @@ def update_concerts_for_top_global_singers(n = 100):
         #returns all concerts for one singer with specified params
         response_code, concert_info_list = query_concert_info_for_one_singer(redis_instance=r, artist_id=artist_spotify_id, artist_name=artist_name)
         #if no concerts for that artist
-        if concert_info_list == {}:
+        if concert_info_list == [] or concert_info_list == {}:
             continue
         
             
@@ -207,17 +207,18 @@ def get_concerts(request_model: ConcertsRequest):
             concert_info = None
             artist_id = item["artist_id"]
             #if the artist was already queried recently, get from redis directly
-            if r.exists(f"top_listened_artists:concert_info:{artist_id}"):
-                concert_info = r.get(f"top_listened_artists:concert_info:{artist_id}")
+            if r.exists(f"most_listened_artists:concert_info:{artist_id}"):
+                concert_info = r.get(f"most_listened_artists:concert_info:{artist_id}")
                 concert_info = json.loads(concert_info) if concert_info else []
             #otherwise make a request to ticketmaster
             else:
-                response_code, concert_info = query_concert_info_for_one_singer(artist_id=artist_id, artist_name=item["artist_name"])
-                if (response_code == 200):
-                    expiration_time = int((3600*24/CONCERT_UPDATE_FREQUENCY_PER_DAY) + 100)
-                    r.set(f"top_listened_artists:concert_info:{artist_id}", json.dumps(concert_info), ex=expiration_time)
-                else:
-                    return JSONResponse(status_code=400, content="Error when trying to fetch concerts")
+                response_code, concert_info = query_concert_info_for_one_singer(redis_instance=r, artist_id=artist_id, artist_name=item["artist_name"])
+                if concert_info != []:
+                    if (response_code == 200):
+                            expiration_time = int((3600*24/CONCERT_UPDATE_FREQUENCY_PER_DAY) + 100)
+                            r.set(f"most_listened_artists:concert_info:{artist_id}", json.dumps(concert_info), ex=expiration_time)
+                    else:
+                        return JSONResponse(status_code=400, content="Error when trying to fetch concerts")
             
             #filtering the concerts by provided fields
             #notice that theoretically back-end supports multiple filters (first by country, then by state then by code)
@@ -225,8 +226,9 @@ def get_concerts(request_model: ConcertsRequest):
             concerts_sorting(item, countries=request_model.countries, stateCode=request_model.stateCode, 
             geo_latitude=request_model.geo_latitude, geo_longitude=request_model.geo_longitude)]
             
-            final_concert_dict_to_be_used_in_response[artist_id] = final_concert_list_with_filters_applied
-
+            if final_concert_list_with_filters_applied != []:
+                final_concert_dict_to_be_used_in_response[artist_id] = final_concert_list_with_filters_applied
+            
         
     #for global artists (default setting)
     else:
@@ -282,3 +284,11 @@ def concerts_sorting(concert_to_sort_through, countries = [], stateCode = None, 
             return False
     
     return True
+
+### if we need to flush keys (debug purposes, REMOVE before production)
+
+"""
+for key in r.scan_iter("most_listened_artists:concert_info:*"):
+    r.delete(key)
+    print("Deleted")
+"""
