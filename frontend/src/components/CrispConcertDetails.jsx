@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import "../CrispConcertDetails.css";
 import "../Concerts.css";
+import { formatDate, format_date_2 } from '../utils/concert_utils';
+
 // Use Vite’s import.meta.glob to load images
 const concertImages = import.meta.glob('../images/concert/*.{png,jpg,jpeg,svg}', { eager: true, import: 'default' });
 const festivalImages = import.meta.glob('../images/festival/*.{png,jpg,jpeg,svg}', { eager: true, import: 'default' });
@@ -10,26 +12,6 @@ const get_random_image = (type) => {
   if (images.length === 0) return '';
   return images[Math.floor(Math.random() * images.length)];
 };
-
-// Format a single ISO date string to "DD MMM YYYY"
-const formatDate = (isoString) => {
-  const date = new Date(isoString);
-  return date.toLocaleDateString('en-GB', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-  });
-};
-
-const format_date_2 = (isoString) => {
-  const date = new Date(isoString);
-  const day = date.getDate();
-  const month = date.toLocaleString('en-GB', { month: 'short' });
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  return `${day} ${month}, ${hours}:${minutes}`;
-};
-
 
 const CrispConcertDetails = ({ concerts }) => {
   const [filteredCrispData, setFilteredCrispData] = useState([]);

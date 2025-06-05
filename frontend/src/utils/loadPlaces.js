@@ -1,7 +1,7 @@
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import worldCities from "worldcities";
-import cities from "../load_regions/cities500.json"
+import cities from "../utils/cities500.json"
 
 countries.registerLocale(enLocale);
 

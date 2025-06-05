@@ -113,5 +113,6 @@ const GetArtistTags = ({artistInfo = null, is_webscraped, tagsToCalculate, topAr
     }
   return dict_with_tags_to_return;
 };
+}
 
 export default GetArtistTags;
