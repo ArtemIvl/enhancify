@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../services/AuthContext";
 import SpotifyArtistCard from "../components/SpotifyArtistCard";
 import SpotifyTrackCard from "../components/SpotifyTrackCard";
+import { fetchMySongs, fetchMyArtists } from "../services/api";
 
 export default function TopContent() {
   const [tab, setTab] = useState("tracks");
@@ -13,20 +14,21 @@ export default function TopContent() {
   useEffect(() => {
     if (!token) return;
 
-    const url =
-      tab === "tracks"
-        ? `https://api.spotify.com/v1/me/top/tracks?limit=50&time_range=${timeRange}`
-        : `https://api.spotify.com/v1/me/top/artists?limit=50&time_range=${timeRange}`;
+    const fetchData = async () => {
+      try {
+        if (tab === "tracks") {
+          const songs = await fetchMySongs(timeRange, token);
+          setTracks(songs);
+        } else {
+          const artists = await fetchMyArtists(timeRange, token);
+          setArtists(artists);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
 
-    fetch(url, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (tab === "tracks") setTracks(data.items || []);
-        else setArtists(data.items || []);
-      })
-      .catch(console.error);
+    fetchData();
   }, [token, tab, timeRange]);
 
   if (!token) return <div className="p-4">Login to view info please.</div>;

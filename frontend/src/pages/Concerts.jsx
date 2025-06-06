@@ -4,7 +4,6 @@ import ConcertsSearch from "../components/ConcertSearchContent";
 import countriesArr from "../components/countryList";
 import { fetchTopArtists } from "../services/api";
 import axios from "axios";
-import SearchBar from "../components/SearchBar"
 
 export default function Concerts() {
 

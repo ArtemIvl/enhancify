@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ArtistCard from "../components/ArtistCard";
-import SearchBar from "../components/SearchBar";
+import { FiSearch, FiChevronDown } from "react-icons/fi";
 import { fetchTopArtists } from "../services/api";
 
 export default function Home() {
@@ -9,7 +9,6 @@ export default function Home() {
   const [search, setSearch] = useState("");
   const [countryFilter, setCountryFilter] = useState("");
   const [genreFilter, setGenreFilter] = useState("");
-  const [token, setToken] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
 
   const artistsPerPage = 100;
@@ -62,34 +61,73 @@ export default function Home() {
 
   return (
     <>
-      <div className="flex justify-center mb-6 gap-4 flex-wrap">
-        <SearchBar value={search} onChange={setSearch} />
+    <div className="w-full flex justify-between items-center mb-6 gap-4 flex-wrap">
+        {/* Search bar */}
+      <div className="flex items-center w-full md:w-1/2 relative">
+        <input
+          type="text"
+          placeholder="Search artists..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full px-4 py-2 pr-12 rounded-md bg-white text-black placeholder-gray-500 focus:outline-none"
+        />
+        <div className="absolute right-0 top-0 h-full w-16 bg-black rounded-r-md flex items-center justify-center cursor-pointer">
+          <FiSearch className="text-white text-sm" />
+        </div>
+      </div>
 
-        <select
-          className="border rounded p-2"
-          value={countryFilter}
-          onChange={(e) => setCountryFilter(e.target.value)}
-        >
-          <option value="">All Countries</option>
-          {uniqueCountries.map((country) => (
-            <option key={country} value={country}>
-              {country}
-            </option>
-          ))}
-        </select>
+        {/* Filters */}
+        <div className="flex gap-3 w-full md:w-auto">
+          {/* Country Filter */}
+          <div className="relative">
+            <select
+              className="appearance-none bg-white border border-gray-300 rounded-md px-4 py-3 pr-8 text-black text-sm focus:outline-none"
+              value={countryFilter}
+              onChange={(e) => setCountryFilter(e.target.value)}
+            >
+              <option value="">All Countries</option>
+              {uniqueCountries.map((country) => (
+                <option key={country} value={country}>{country}</option>
+              ))}
+            </select>
+            <FiChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-600 pointer-events-none" />
+          </div>
 
-        <select
-          className="border rounded p-2"
-          value={genreFilter}
-          onChange={(e) => setGenreFilter(e.target.value)}
-        >
-          <option value="">All Genres</option>
-          {uniqueGenres.map((genre) => (
-            <option key={genre} value={genre}>
-              {genre}
-            </option>
-          ))}
-        </select>
+          {/* Genre Filter */}
+          <div className="relative">
+            <select
+              className="appearance-none bg-white border border-gray-300 rounded-md px-4 py-3 pr-8 text-black text-sm focus:outline-none"
+              value={genreFilter}
+              onChange={(e) => setGenreFilter(e.target.value)}
+            >
+              <option value="">All Genres</option>
+              {uniqueGenres.map((genre) => (
+                <option key={genre} value={genre}>{genre}</option>
+              ))}
+            </select>
+            <FiChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-600 pointer-events-none" />
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full sticky top-0 z-10 grid grid-cols-[26%_74%] px-4 py-3 text-[12px] bg-[#d3cfce]">
+        {/* Left Column Header */}
+        <div className="flex items-center gap-4">
+          <div className="w-6 text-center">#</div>
+          <div className="w-22" /> {/* Empty space for image */}
+          <div>Name</div>
+        </div>
+
+        {/* Right Column Headers */}
+        <div className="grid grid-cols-7 items-center gap-2 text-center">
+          <div>Listeners</div>
+          <div>Genre</div>
+          <div>Language</div>
+          <div>24h Change</div>
+          <div>Monthly Change</div>
+          <div>Type</div>
+          <div>Spotify Page</div>
+        </div>
       </div>
 
       {filtered.length === 0 ? (
