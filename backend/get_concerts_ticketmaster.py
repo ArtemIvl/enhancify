@@ -90,7 +90,7 @@ def look_up_artists_attraction_id(redis: redis.Redis, artist_name = None, artist
     if (attraction_id == None):
         
         request_parameters = {}
-        request_parameters["apikey"] = TICKETMASTER_API_KEY
+        request_parameters["apikey"] = TICKETMASTER_API
         #we search by artists name
         request_parameters["keyword"] = artist_name
         

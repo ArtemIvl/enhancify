@@ -15,78 +15,101 @@ router = APIRouter()
 
 @router.post("/get_concerts")
 def get_concerts(request_model: ConcertsRequest):
-    final_concert_dict = {}
-
+    #important!
+    #artist_id is artists spotify id
+    
+    final_concert_dict_to_be_used_in_response = dict()
+    #for followed artists
     if not request_model.get_top_artist_info:
+        #get artist name and id supplied from frontend
+        
         for item in request_model.artists:
-            artist_id = item["artist_id"]
+            
             concert_info = None
-
-            cache_key = f"top_listened_artists:concert_info:{artist_id}"
-            if r.exists(cache_key):
-                concert_info = json.loads(r.get(cache_key) or "[]")
+            artist_id = item["artist_id"]
+            #if the artist was already queried recently, get from redis directly
+            if r.exists(f"most_listened_artists:concert_info:{artist_id}"):
+                concert_info = r.get(f"most_listened_artists:concert_info:{artist_id}")
+                concert_info = json.loads(concert_info) if concert_info else []
+            #otherwise make a request to ticketmaster
             else:
-                response_code, concert_info = query_concert_info_for_one_singer(
-                    artist_id=artist_id, artist_name=item["artist_name"]
-                )
-                if response_code == 200:
-                    expiration_time = int((3600 * 24 / CONCERT_UPDATE_FREQUENCY_PER_DAY) + 100)
-                    r.set(cache_key, json.dumps(concert_info), ex=expiration_time)
-                else:
-                    return JSONResponse(status_code=400, content="Error when trying to fetch concerts")
-
-            filtered = [c for c in concert_info if concerts_sorting(
-                c,
-                countries=request_model.countries,
-                stateCode=request_model.stateCode,
-                geo_latitude=request_model.geo_latitude,
-                geo_longitude=request_model.geo_longitude
-            )]
-            final_concert_dict[artist_id] = filtered
-
+                response_code, concert_info = query_concert_info_for_one_singer(redis_instance=r, artist_id=artist_id, artist_name=item["artist_name"])
+                if concert_info != []:
+                    if (response_code == 200):
+                            expiration_time = int((3600*24/CONCERT_UPDATE_FREQUENCY_PER_DAY) + 100)
+                            r.set(f"most_listened_artists:concert_info:{artist_id}", json.dumps(concert_info), ex=expiration_time)
+                    else:
+                        return JSONResponse(status_code=400, content="Error when trying to fetch concerts")
+            
+            #filtering the concerts by provided fields
+            #notice that theoretically back-end supports multiple filters (first by country, then by state then by code)
+            final_concert_list_with_filters_applied = [item for item in concert_info if 
+            concerts_sorting(item, countries=request_model.countries, stateCode=request_model.stateCode, 
+            geo_latitude=request_model.geo_latitude, geo_longitude=request_model.geo_longitude)]
+            
+            if final_concert_list_with_filters_applied != []:
+                final_concert_dict_to_be_used_in_response[artist_id] = final_concert_list_with_filters_applied
+            
+        
+    #for global artists (default setting)
     else:
+        
+        #check if global artists were updated (there's at least one artist)
         any_keys_exist = any(r.scan_iter("top_listened_artists:concert_info:*"))
+        
+        #can take a lot of time to execute, avoid this at all cost
         if not any_keys_exist:
             update_concerts_for_top_global_singers(n=100)
+        
+        #scan through every global artist, get the info
+        for concerts_most_popular in r.scan_iter("top_listened_artists:concert_info:*"):
+            artist_id = concerts_most_popular.split("top_listened_artists:concert_info:")[1]
+            concert_info_per_artist = r.get(concerts_most_popular)
+            concert_info_per_artist = json.loads(concert_info_per_artist) if concert_info_per_artist else []
+            final_concert_list_with_filters_applied = [item for item in concert_info_per_artist if 
+            concerts_sorting(item, countries=request_model.countries, stateCode=request_model.stateCode, 
+                             geo_latitude=request_model.geo_latitude, geo_longitude=request_model.geo_longitude)]
+            if final_concert_list_with_filters_applied != []:
+                final_concert_dict_to_be_used_in_response[artist_id] = final_concert_list_with_filters_applied
 
-        for key in r.scan_iter("top_listened_artists:concert_info:*"):
-            artist_id = key.decode().split(":")[-1]
-            concert_info = json.loads(r.get(key) or "[]")
-            filtered = [c for c in concert_info if concerts_sorting(
-                c,
-                countries=request_model.countries,
-                stateCode=request_model.stateCode,
-                geo_latitude=request_model.geo_latitude,
-                geo_longitude=request_model.geo_longitude
-            )]
-            if filtered:
-                final_concert_dict[artist_id] = filtered
+    return JSONResponse(final_concert_dict_to_be_used_in_response, status_code=200)
 
-    return JSONResponse(final_concert_dict, status_code=200)
-
-
-def concerts_sorting(concert, countries=[], stateCode=None, geo_latitude=None, geo_longitude=None):
-    venues = concert.get("_embedded", {}).get("venues", [])
-    if not venues:
+def concerts_sorting(concert_to_sort_through, countries = [], stateCode = None, geo_latitude = None, geo_longitude = None):
+    #To-do: process more than one venue (if the coordinates/city matches at least one venue)
+    get_the_venues = concert_to_sort_through.get("_embedded", dict()).get("venues", list())
+    venue = None
+    if len(get_the_venues) > 0:
+        venue = get_the_venues[0]
+    else:
         return False
-
-    venue = venues[0]
-
-    if countries:
-        if venue.get("country", {}).get("countryCode") not in countries:
+    if (countries != []):
+        country_of_concert = venue.get("country", dict()).get("countryCode", None)
+        if not country_of_concert in countries:
             return False
-
-    if stateCode:
-        if venue.get("state", {}).get("stateCode") != stateCode:
+    if (stateCode != None):
+        state_code_of_concert = venue.get("state", dict()).get("stateCode", None)
+        if state_code_of_concert != stateCode:
             return False
-
-    if geo_latitude is not None and geo_longitude is not None:
-        lat = venue.get("location", {}).get("latitude")
-        lng = venue.get("location", {}).get("longitude")
-        if not lat or not lng:
+    if (geo_latitude != None and geo_longitude != None):
+        #the radius in which we search for conerts if coordinates are provided
+        allowed_distance_threshold_km = 100
+        concert_coords_lat = venue.get("location", dict()).get("latitude", None)
+        concert_coords_lng = venue.get("location", dict()).get("longitude", None)
+        if concert_coords_lat and concert_coords_lng:
+            distance = geodesic((geo_latitude, geo_longitude), (concert_coords_lat, concert_coords_lng)).km
+            if distance > allowed_distance_threshold_km:
+                return False
+            
+        else:
+            print("not found")
             return False
-        dist = geodesic((geo_latitude, geo_longitude), (lat, lng)).km
-        if dist > 100:
-            return False
-
+    
     return True
+
+### if we need to flush keys (debug purposes, REMOVE before production)
+
+"""
+for key in r.scan_iter("most_listened_artists:concert_info:*"):
+    r.delete(key)
+    print("Deleted")
+"""

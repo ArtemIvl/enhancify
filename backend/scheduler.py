@@ -15,7 +15,7 @@ CONCERT_UPDATE_FREQUENCY_PER_DAY = 6
 
 @scheduler.scheduled_job(
         id="update_concerts_for_top_global_singers",
-        trigger=CronTrigger(hour='*', minute='*/59', timezone=pytz.UTC, jitter=0))
+        trigger=CronTrigger(hour='*', minute='*/30', timezone=pytz.UTC, jitter=0))
 def update_concerts_for_top_global_singers(n = 100):
     #n - how much top artists we want to select from top 500? (narrowing the scope)
     #if 100 - we select top 100
@@ -49,7 +49,7 @@ def update_concerts_for_top_global_singers(n = 100):
         #returns all concerts for one singer with specified params
         response_code, concert_info_list = query_concert_info_for_one_singer(redis_instance=r, artist_id=artist_spotify_id, artist_name=artist_name)
         #if no concerts for that artist
-        if concert_info_list == {}:
+        if concert_info_list == [] or concert_info_list == {}:
             continue
         
             
@@ -59,7 +59,7 @@ def update_concerts_for_top_global_singers(n = 100):
             expiration_time = int((3600*24/CONCERT_UPDATE_FREQUENCY_PER_DAY) + 100)
             r.set(f"top_listened_artists:concert_info:{artist_spotify_id}", json.dumps(concert_info_list), ex=expiration_time)
         else:
-            #To-do - log errors to something like graylog
+            print(concert_info_list)
             continue
     print("Finished")
 
