@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import "../Concerts.css";
 import ConcertsSearch from "../components/ConcertSearchContent";
 import statesCitiesCountriesArr from "../utils/loadPlaces";
-import { fetchMostListenedArtists, fetchTopArtists } from "../services/api";
+import { fetchTopArtists } from "../services/api";
 import axios from "axios";
 import ScrollContainer from "../components/ScrollComponent";
 import CrispConcertDetails from "../components/CrispConcertDetails";

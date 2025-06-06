@@ -27,7 +27,7 @@ export default function NavigationMenu() {
         </NavLink>
 
         <NavLink
-          to="/followed_artists"
+          to="/my-artists"
           className={({ isActive }) =>
             baseClass + (isActive ? ` ${activeClass}` : "")
           }

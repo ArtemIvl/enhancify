@@ -6,10 +6,7 @@ from geopy.distance import geodesic
 from get_concerts_ticketmaster import query_concert_info_for_one_singer
 from api_schema.request_schema import ConcertsRequest
 from scheduler import update_concerts_for_top_global_singers
-
-import redis
-r = redis.Redis()
-
+from redis_client import r
 CONCERT_UPDATE_FREQUENCY_PER_DAY = 6
 router = APIRouter()
 

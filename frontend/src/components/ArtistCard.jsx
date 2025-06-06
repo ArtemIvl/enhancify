@@ -54,7 +54,7 @@ export default function ArtistCard({ artist }) {
       <div className="flex items-center max-w-[160px] overflow-hidden gap-2">
         <span className="font-semibold truncate">{artistName}</span>
       </div>
-      <span className={`fi fi-${getCountryCode(country)} mt-1`} />
+      <span className={`fi fi-${getCountryCode(country)} mt-1 rounded`} />
     </div>
 
     {/* RIGHT COLUMN */}
