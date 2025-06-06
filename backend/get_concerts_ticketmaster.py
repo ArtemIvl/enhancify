@@ -5,6 +5,11 @@ from datetime import datetime, timedelta, timezone
 from dateutil.relativedelta import relativedelta
 import redis
 import time
+from dotenv import load_dotenv
+# from config import TICKETMASTER_API_KEY
+
+
+load_dotenv()
 
 #TO-DO implement switching to a backup api key when/if quota is exceeded
 #TICKETMASTER_API = os.getenv("TICKETMASTER_API_KEY")
@@ -85,7 +90,7 @@ def look_up_artists_attraction_id(redis: redis.Redis, artist_name = None, artist
     if (attraction_id == None):
         
         request_parameters = {}
-        request_parameters["apikey"] = TICKETMASTER_API
+        request_parameters["apikey"] = TICKETMASTER_API_KEY
         #we search by artists name
         request_parameters["keyword"] = artist_name
         

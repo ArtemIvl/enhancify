@@ -1,6 +1,10 @@
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../services/AuthContext";
+import { LoginButton } from "./LoginButton";
 
 export default function NavigationMenu() {
+  const { token } = useAuth()
+
   const baseClass =
     "py-4 px-8 rounded-md font-light cursor-pointer select-none transition-transform duration-150 ease-in-out";
   const activeClass = "bg-[#2e2e2e] text-white";
@@ -47,6 +51,9 @@ export default function NavigationMenu() {
         </NavLink>
       </div>
 
+      {!token ? (
+        <LoginButton />
+      ) : 
       <NavLink
         to="/profile"
         className={({ isActive }) =>
@@ -58,6 +65,7 @@ export default function NavigationMenu() {
       >
         Profile
       </NavLink>
+      }
     </nav>
   );
 }
