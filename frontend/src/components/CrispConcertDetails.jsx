@@ -69,7 +69,7 @@ const CrispConcertDetails = ({ concerts }) => {
     <div>
       {filteredCrispData.map((item, idx) => {
         const imageUrl = get_random_image(item.type);
-        const height = item.type === 'festival' ? '70px' : '60px';
+        const height = item.type === 'festival' ? '65px' : '60px';
 
         // Only compute date and location strings for festivals
         let dateText = '';
@@ -169,7 +169,7 @@ const CrispConcertDetails = ({ concerts }) => {
                 </div>
                 <div className='get-tickets-fade get-tickets-tour-size'  onClick={() => window.open(e.url, '_blank')}>
                   <a href={e.url} target="_blank" rel="noopener noreferrer">
-                  <div className='font-semibold center-buy-tickets-text mt-[10px] '> Buy tickets <span className="material-icons-outlined dates-icon-large ml-[10tyhpx]">arrow_outward</span></div>
+                  <div className='font-semibold center-buy-tickets-text mt-[10px] '> Buy tickets <span className="material-icons-outlined dates-icon-large ml-[5px] pt-[5px]">arrow_outward</span></div>
                   </a>
                 </div>
 

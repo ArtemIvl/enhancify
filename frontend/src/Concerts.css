@@ -144,9 +144,9 @@ body {
 }
 
 @keyframes skeleton {
-  0% { background-color: #4c4a4a; }
-  50% { background-color: #2e2e2e; }
-  100% { background-color: #4c4a4a; }
+  0% { background-color: #616060; }
+  50% { background-color: #464646; }
+  100% { background-color: #616060; }
 }
 .animate-skeleton {
   animation: skeleton 1.2s ease-in-out infinite;
