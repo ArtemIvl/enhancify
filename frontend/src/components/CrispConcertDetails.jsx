@@ -69,7 +69,7 @@ const CrispConcertDetails = ({ concerts }) => {
     <div>
       {filteredCrispData.map((item, idx) => {
         const imageUrl = get_random_image(item.type);
-        const height = item.type === 'festival' ? '80px' : '70px';
+        const height = item.type === 'festival' ? '70px' : '60px';
 
         // Only compute date and location strings for festivals
         let dateText = '';

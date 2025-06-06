@@ -2,12 +2,11 @@
 color: whitesmoke;
 width: 84%;
 border: 1px solid black;
-border-radius: 5px;
 display: flex;
-margin-bottom: 20px;
+margin-bottom: 10px;
 background-size: cover;
 image-rendering: crisp-edges;
-border-radius: 35px;  /* or pixelated */
+border-radius: 35vh;  /* or pixelated */
 margin-top: 15px;
 margin-left: 110px;
 }
@@ -25,7 +24,7 @@ margin-left: 110px;
 }
 
 .text-festival {
-  font-size: 20px;
+  font-size: 18px;
   line-height: 1.2;
   display: inline-block;       /* Required for proper centering of multiline */
   max-width: 100%;
@@ -39,13 +38,13 @@ margin-left: 110px;
     align-items: center;
     text-align: center;
     margin-top: 15px;
-    font-size: 32px;
+    font-size: 28px;
 }
 
 .tour-concert-info-container {
     width: 80%;
     margin-left: 8%;
-    height: 50px;
+    height: 5vh;
     display: flex;
     background-color: #DDDDDD;
     margin-top: 10px;
@@ -65,18 +64,17 @@ margin-left: 110px;
   z-index: 1200;
   display: flex;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 1.15vw;
   justify-content: center;     /* Horizontal centering */
   align-items: center;         /* Vertical centering */
   text-align: center;
 }
 .dates-crisp {
-    font-size: 25px;
     line-height: 1.2;
     display: inline-block;       /* Required for proper centering of multiline */
     max-width: 100%;
     word-break: break-word;
-    font-size: 20px;
+    font-size: 1.1vwpx;
 }
 
 .dates-icon-large {
@@ -90,25 +88,28 @@ margin-left: 110px;
 }
 
 .get-tickets-tour-size {
-  height: 49px;
+  height: 4.9vh;
   margin-left: 2.5%;
   width: 20%;
-  border-radius: 0px 20px 20px 0px;
+  border-radius: 0px 2vh 2vh 0px;
 }
 .locations-container {
   width: 300px;
-  height: 50px;
+  height: 1.2vh;
   margin-top: 15px;
   z-index: 1200;
   display: flex;
-  font-size: 18px;
+  font-size: 1.2vw;
   justify-content: center;     /* Horizontal centering */
   align-items: center;         /* Vertical centering */
   text-align: center;
 }
 
+div {
+  font-size: 0.95vw;
+}
 .locations-crisp {
-    font-size: 20px;
+    font-size: 12px;
     line-height: 1.2;
     display: inline-block;       /* Required for proper centering of multiline */
     max-width: 100%;
@@ -117,7 +118,7 @@ margin-left: 110px;
 }
 
 .universal-subconcert-container {
-  height: 45px;
+  height: 5vh;
   justify-content: center;     /* Horizontal centering */
   align-items: center;         /* Vertical centering */
   text-align: center;
@@ -138,6 +139,6 @@ margin-left: 110px;
   justify-content: center;     /* Horizontal centering */
   align-items: center;         /* Vertical centering */
   text-align: center;
-  font-size: 18px;
+  font-size: 1.05vw;
   color: #DDDDDD;
 }
