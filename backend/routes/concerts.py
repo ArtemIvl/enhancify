@@ -28,6 +28,10 @@ def get_concerts(request_model: ConcertsRequest):
             if r.exists(f"most_listened_artists:concert_info:{artist_id}"):
                 concert_info = r.get(f"most_listened_artists:concert_info:{artist_id}")
                 concert_info = json.loads(concert_info) if concert_info else []
+            #if an artist is in top-100, we fetch it directly from cache for faster processing
+            elif r.exists(f"top_listened_artists:concert_info:{artist_id}"):
+                concert_info = r.get(f"top_listened_artists:concert_info:{artist_id}")
+                concert_info = json.loads(concert_info) if concert_info else []
             #otherwise make a request to ticketmaster
             else:
                 response_code, concert_info = query_concert_info_for_one_singer(redis_instance=r, artist_id=artist_id, artist_name=item["artist_name"])
@@ -110,3 +114,6 @@ for key in r.scan_iter("most_listened_artists:concert_info:*"):
     r.delete(key)
     print("Deleted")
 """
+
+def get_global_artist_rank_by_id(spotify_id = None):
+    r.get("top_listened_artists:content")

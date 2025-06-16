@@ -346,10 +346,11 @@ body {
 
 .genre-button {
   /* let content decide the height; use padding instead of fixed height */
-  padding: 0px 15px;    /* ⬅ tweak top/bottom to shrink the row height */
+  padding: 0px 13px;    /* ⬅ tweak top/bottom to shrink the row height */
   background: #2e2e2e;
   margin-top: 0.5vh;
   color: #d1d5db;
+  padding-top: 2px;
   border-radius: 5px;
   display: flex;
   align-items: center;
@@ -360,7 +361,7 @@ body {
 
 .genre-text {           /* no vertical margins */
   margin: 0;
-  font-size: 1vw;
+  font-size: 0.95vw;
 }
 
 

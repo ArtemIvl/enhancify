@@ -5,7 +5,7 @@ import "../Concerts.css";
 // artistInfo - all information on the artist
 // is_webscraped - if yes, then this is a global artist, we have access to more info
 // if not this is the followed artist, we have access to kinda different info
-const GetArtistTags = ({artistInfo = null, is_webscraped, tagsToCalculate, topArtist = null}) => {
+export default function GetArtistTags({artistInfo = null, is_webscraped, tagsToCalculate, topArtist = null}) {
   
   // for any artist - it is possible to get this info
   //possible options so far: artists main genre, artists main language, if the artist is "rising", position on worlds leaderboard
@@ -44,10 +44,10 @@ const GetArtistTags = ({artistInfo = null, is_webscraped, tagsToCalculate, topAr
     for (var item of tagsToCalculate) {
         if (is_webscraped) {
         if (item == "genre") {
-            dict_with_tags_to_return["genre"] = artistInfo['Genre']
+            dict_with_tags_to_return["music_note"] = artistInfo['Genre']
         }
         if (item == "amount_listeners") {
-            dict_with_tags_to_return["amount_listeners"] = formatMillions(artistInfo["Monthly listeners (millions)"]).toString().concat("M");
+            dict_with_tags_to_return["person"] = formatMillions(artistInfo["Monthly listeners (millions)"]).toString().concat("M");
         }
         if (item == "rising") {
             const artists_monthly_listeners = artistInfo["Monthly listeners (millions)"].replace(/,/g, '');
@@ -61,18 +61,18 @@ const GetArtistTags = ({artistInfo = null, is_webscraped, tagsToCalculate, topAr
 
             if ((artists_daily_change_to_num > (artists_monthly_listeners_to_num * 0.01 * thresholdToCountAsRisingPercent / 10) && artists_daily_change_to_num > (thresholdToCountAsRisingMillions / 10)) ||
              (artists_monthly_change_to_num > (artists_monthly_listeners_to_num * 0.01 * thresholdToCountAsRisingPercent) && artists_daily_change_to_num > thresholdToCountAsRisingMillions)) {
-                dict_with_tags_to_return["rising"] = true;
+                dict_with_tags_to_return["local_fire_department"] = "Rising";
              }
-            else if ((artists_daily_change_to_num < (artists_monthly_listeners_to_num * 0.01 * thresholdToCountAsRisingPercent / 10) && artists_daily_change_to_num < (thresholdToCountAsRisingMillions / 10)) ||
-             (artists_monthly_change_to_num < (artists_monthly_listeners_to_num * 0.01 * thresholdToCountAsRisingPercent) && artists_daily_change_to_num < thresholdToCountAsRisingMillions)){
-                dict_with_tags_to_return["rising"] = false;
+            else if ((artists_daily_change_to_num < -(artists_monthly_listeners_to_num * 0.01 * thresholdToCountAsRisingPercent / 10) && artists_daily_change_to_num < -(thresholdToCountAsRisingMillions / 10)) ||
+             (artists_monthly_change_to_num < -(artists_monthly_listeners_to_num * 0.01 * thresholdToCountAsRisingPercent) && artists_daily_change_to_num < -(thresholdToCountAsRisingMillions))){
+                dict_with_tags_to_return["arrow_downward"] = "Falling";
             }
         }
         if (item == "main_language") {
-            dict_with_tags_to_return["main_language"] = artistInfo["Language"];
+            dict_with_tags_to_return["language"] = artistInfo["Language"];
         } 
         if (item == "world_rank") {
-            dict_with_tags_to_return["world_rank"] = artistInfo["Rank"];
+            dict_with_tags_to_return["workspace_premium"] = "World's #".concat(artistInfo["Rank"]);
         }
 
 
@@ -103,16 +103,21 @@ const GetArtistTags = ({artistInfo = null, is_webscraped, tagsToCalculate, topAr
              (artists_monthly_change_to_num > (artists_monthly_listeners_to_num * 0.01 * thresholdToCountAsRisingPercent) && artists_daily_change_to_num > thresholdToCountAsRisingMillions)) {
                 dict_with_tags_to_return["rising"] = true;
              }
-            else if ((artists_daily_change_to_num < (artists_monthly_listeners_to_num * 0.01 * thresholdToCountAsRisingPercent / 10) && artists_daily_change_to_num < (thresholdToCountAsRisingMillions / 10)) ||
-             (artists_monthly_change_to_num < (artists_monthly_listeners_to_num * 0.01 * thresholdToCountAsRisingPercent) && artists_daily_change_to_num < thresholdToCountAsRisingMillions)){
+            else if ((artists_daily_change_to_num < -(artists_monthly_listeners_to_num * 0.01 * thresholdToCountAsRisingPercent / 10) && artists_daily_change_to_num < -(thresholdToCountAsRisingMillions / 10)) ||
+             (artists_monthly_change_to_num < -(artists_monthly_listeners_to_num * 0.01 * thresholdToCountAsRisingPercent) && artists_daily_change_to_num < -(thresholdToCountAsRisingMillions))){
                 dict_with_tags_to_return["rising"] = false;
         }
       }
     }
   }
     }
-  return dict_with_tags_to_return;
-};
+  }
+  return (
+    <div className="genre-container">
+      {Object.entries(dict_with_tags_to_return).map(([key, value]) => (
+        <div className="genre-button" key={key}><div className="genre-text"><span className="material-icons-outlined icons-tweaked">{key}</span>{value}</div></div>
+      ))}
+      </div> 
+          );
 }
 
-export default GetArtistTags;

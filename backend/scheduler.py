@@ -52,7 +52,7 @@ def update_concerts_for_top_global_singers(n = 100):
         if concert_info_list == [] or concert_info_list == {}:
             continue
         
-            
+        
         if response_code == 200:
             #lets say we have 6 concert frequency per day, meaning that we should expire the key in 4 hours.
             #the expiration time = a bit longer than frequency of updates per day, so that we can constantly refresh the keys

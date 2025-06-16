@@ -8,7 +8,7 @@ import ScrollContainer from "../components/ScrollComponent";
 import CrispConcertDetails from "../components/CrispConcertDetails";
 import NothingFoundCardConcerts from "../components/NothingFoundCardConcerts";
 import {calculateShowsAvailable, extractImageSrc} from "../utils/concert_utils.js";
-
+import GetArtistTags from "../components/GetArtistTags.jsx";
 
 export default function Concerts() {
 
@@ -213,7 +213,7 @@ export default function Concerts() {
             {Object.keys(concerts).length === 0 ? (
               <NothingFoundCardConcerts></NothingFoundCardConcerts>
             ) : (
-              Object.entries(concerts).slice(0, concertsToDisplayPerPage).map(([key, concert]) => (
+              Object.entries(concerts).slice(0, concertsToDisplayPerPage).map(([key, concert], index) => (
                 <div
                  key={key}
                 >
@@ -223,12 +223,7 @@ export default function Concerts() {
                   <div className="small-horizontal-divisive-line">│</div>
                   <div className="shows-available-text">{calculateShowsAvailable(concert)}</div>
                   <div className="small-horizontal-divisive-line">│</div>
-                  <div className="genre-container">
-                  <div className="genre-button"><div className="genre-text">English</div></div>
-                  <div className="genre-button"><div className="genre-text">Afrobeats</div></div>
-
-                  <div className="genre-button"><div className="genre-text">#1 in the world</div></div>
-                  </div>
+                  <GetArtistTags artistInfo={active === "global" ? globalTop100ArtistList[index] : null} tagsToCalculate={["genre", "rising", "main_language", "world_rank"]} is_webscraped={true} ></GetArtistTags>
                   <div className="small-horizontal-divisive-line">│</div>
                   <button className="concert-details-button" onClick={() => toggleCard(key, concert)}>
                   <span className="material-icons-outlined icons-tweaked">expand_circle_down</span>
