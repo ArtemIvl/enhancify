@@ -105,11 +105,12 @@ body {
 
 .big-title {
     margin-left: 5vw;
-    margin-bottom: 3vh;
+    margin-bottom: 2vh;
     font-size: 1.9vw;
     display: inline-block; /* or inline-block if you want to control padding/margin */
     padding: 8px 15px;
     border-radius: 10px; /* optional rounded corners */
+    font-weight: 300;
     color: #141313;
 }
 .filters-detailed-container {
@@ -209,12 +210,12 @@ body {
 
 .cool-concert-line {
     margin-top: 35px;
-    height: 1px;
-    margin-left: 4%;
-    margin-bottom: -1.5%;
-    width: 92%;
-    background: linear-gradient(to right, transparent 0%, #676363 10%, #676363 90%, transparent 100%);
+    height: 0.5px;
+    margin-bottom: -1%;
+    width: 100%;
+    background: #464646;
 }
+
 .loading-bottom {
     position: fixed;
     bottom: 0;

@@ -165,8 +165,8 @@ export default function Concerts() {
 // if user searches for something but then decides to switch tabs? Ideally - user can come back to their stuff later. Update two separate concert arrays
   return (
     <div className="move-down">
-    <div className="big-title">Find concerts in your area</div>
-
+    <div className="big-title"><span className="material-icons-outlined pr-4">celebration</span>Find concerts in your area<span className="material-icons-outlined pl-4">celebration</span>
+</div>
       <div className="button-row">
         <button
           className={`button-concerts-search${active === "global" ? " active" : ""}`}
