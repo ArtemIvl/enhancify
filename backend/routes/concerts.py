@@ -72,8 +72,15 @@ def get_concerts(request_model: ConcertsRequest):
                              geo_latitude=request_model.geo_latitude, geo_longitude=request_model.geo_longitude)]
             if final_concert_list_with_filters_applied != []:
                 final_concert_dict_to_be_used_in_response[artist_id] = final_concert_list_with_filters_applied
-
+        
     return JSONResponse(final_concert_dict_to_be_used_in_response, status_code=200)
+
+
+@router.get("/get_rankings")
+def get_numerical_rankings():
+    numerical_rankings = r.hgetall("top_listened_artists:numerical_rankings")      
+    return JSONResponse(numerical_rankings, status_code=200)
+
 
 def concerts_sorting(concert_to_sort_through, countries = [], stateCode = None, geo_latitude = None, geo_longitude = None):
     #To-do: process more than one venue (if the coordinates/city matches at least one venue)
@@ -109,11 +116,10 @@ def concerts_sorting(concert_to_sort_through, countries = [], stateCode = None, 
 
 ### if we need to flush keys (debug purposes, REMOVE before production)
 
-"""
-for key in r.scan_iter("most_listened_artists:concert_info:*"):
-    r.delete(key)
-    print("Deleted")
-"""
-
+#save the artist ranks and id's after updating top leaderboard
+#separate endpoint and list for storing ranks 
+#separate method for retreiving this information
 def get_global_artist_rank_by_id(spotify_id = None):
-    r.get("top_listened_artists:content")
+    numerical_rank = r.hget("top_listened_artists:numerical_rankings", spotify_id)
+    print(numerical_rank)
+    return numerical_rank

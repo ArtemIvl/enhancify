@@ -42,6 +42,9 @@ export default function GetArtistTags({artistInfo = null, is_webscraped, tagsToC
   // the list order matters!!!
 
     for (var item of tagsToCalculate) {
+        if (Object.keys(dict_with_tags_to_return).length > 3) {
+          break;
+        }
         if (is_webscraped) {
         if (item == "genre") {
             dict_with_tags_to_return["music_note"] = artistInfo['Genre']

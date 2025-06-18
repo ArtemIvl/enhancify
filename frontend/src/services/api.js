@@ -25,3 +25,11 @@ export async function fetchMyArtists(timeRange, token) {
   const data = await res.json();
   return data.items || [];
 }
+
+export async function getNumericalRankings() {
+  const res = await fetch(`http://localhost:8000/get_rankings`);
+
+  if (!res.ok) throw new Error("Failed to fetch top artists");
+  return res.json() || {};
+}
+

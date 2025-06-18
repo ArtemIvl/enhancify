@@ -52,7 +52,6 @@ def update_concerts_for_top_global_singers(n = 100):
         if concert_info_list == [] or concert_info_list == {}:
             continue
         
-        
         if response_code == 200:
             #lets say we have 6 concert frequency per day, meaning that we should expire the key in 4 hours.
             #the expiration time = a bit longer than frequency of updates per day, so that we can constantly refresh the keys
@@ -65,7 +64,7 @@ def update_concerts_for_top_global_singers(n = 100):
 
 @scheduler.scheduled_job(
     id="update_artist_leaderboard",
-    trigger=CronTrigger(hour='*', minute='*', second='*/10', timezone=pytz.UTC, jitter=0)
+    trigger=CronTrigger(hour='*', minute='*', second='*/50', timezone=pytz.UTC, jitter=0)
 )
 def update_artist_leaderboard():
     info_on_top_singers = get_info_on_top_singers()
@@ -80,3 +79,15 @@ def update_artist_leaderboard():
     current_date = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
     r.set("top_listened_artists:content", json.dumps(info_on_top_singers_dicts))
     r.set("top_listened_artists:last_updated_at", current_date)
+    set_global_artist_ranks_as_separate_keys(top_artist_leaderboard=info_on_top_singers_dicts)
+
+#we need to do sorting by ranks and we need to easily fetch ranks by spotify id's
+def set_global_artist_ranks_as_separate_keys(top_artist_leaderboard):
+    try:
+        for item in top_artist_leaderboard:
+            r.hset(f"top_listened_artists:numerical_rankings", item["Spotify ID"], item["Rank"])
+        print("It's over")
+    except Exception as e:
+        print(e)
+        
+    

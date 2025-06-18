@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import "../Concerts.css";
 import ConcertsSearch from "../components/ConcertSearchContent";
 import statesCitiesCountriesArr from "../utils/loadPlaces";
-import { fetchTopArtists } from "../services/api";
+import { fetchTopArtists, getNumericalRankings } from "../services/api";
 import axios from "axios";
 import ScrollContainer from "../components/ScrollComponent";
 import CrispConcertDetails from "../components/CrispConcertDetails";
 import NothingFoundCardConcerts from "../components/NothingFoundCardConcerts";
-import {calculateShowsAvailable, extractImageSrc} from "../utils/concert_utils.js";
+import {calculateShowsAvailable, extractImageSrc, sort_concerts_descending, sort_num_rankings} from "../utils/concert_utils.js";
 import GetArtistTags from "../components/GetArtistTags.jsx";
 
 export default function Concerts() {
@@ -21,7 +21,7 @@ export default function Concerts() {
   const [globalTop100ArtistList, setGlobalTop100ArtistList] = useState(null)
   //what we get from get_top_items Spotify API
   const [mostListenedArtistList, setMostListenedArtistList] = useState([])
-
+  const [numericalRankingsDict, setNumericalRankingsDict] = useState(null)
   //when global top 100 concerts are loading
   //loading animation plays when this two variables are true or false
   const [globalLoading, setGlobalLoading] = useState(true)
@@ -47,6 +47,22 @@ export default function Concerts() {
     // Your code here (e.g., read from localStorage, fetch data)
   }, []);
 
+  useEffect(() => {
+    getNumericalRankings()
+          .then((data) => {
+              setNumericalRankingsDict(sort_num_rankings(data));
+          })
+          .catch(console.error);
+    // Your code here (e.g., read from localStorage, fetch data)
+  }, []);
+
+  useEffect(() => {
+    if (numericalRankingsDict) {
+      console.log(numericalRankingsDict)
+      console.log("aaaaa")
+    }
+  }, numericalRankingsDict);
+
   // for the followed artists: 1) On load fetch followed artists using the spotify API. using Spotify API.
   // 
   useEffect (() => {
@@ -63,7 +79,7 @@ export default function Concerts() {
       setPlayLoadingAnination(false)
       setLoadMoreItems(false)
       setConcertsToDisplayPerPage(prev => prev + 8)
-
+      
     }, 1000);
     return () => clearTimeout(timer);
     }
@@ -213,7 +229,7 @@ export default function Concerts() {
             {Object.keys(concerts).length === 0 ? (
               <NothingFoundCardConcerts></NothingFoundCardConcerts>
             ) : (
-              Object.entries(concerts).slice(0, concertsToDisplayPerPage).map(([key, concert], index) => (
+              Object.entries(sort_concerts_descending(concerts, numericalRankingsDict)).slice(0, concertsToDisplayPerPage).map(([key, concert], index) => (
                 <div
                  key={key}
                 >
