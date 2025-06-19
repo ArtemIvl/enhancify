@@ -180,6 +180,8 @@ export default function Concerts() {
 // pass two loading states to the search component
 // if user searches for something but then decides to switch tabs? Ideally - user can come back to their stuff later. Update two separate concert arrays
   return (
+    <div>
+      <div className="gradient-div">
     <div className="move-down">
     <div className="big-title"><span className="material-icons-outlined pr-4">celebration</span>Find concerts in your area<span className="material-icons-outlined pl-4">celebration</span>
 </div>
@@ -214,6 +216,7 @@ export default function Concerts() {
                 </div>
             )}
         </div>
+      </div>
       </div>
         <div>
           <div className="cool-concert-line"></div>
@@ -260,6 +263,7 @@ export default function Concerts() {
           )}
         </div>
 
+    </div>
     </div>
   );
 }

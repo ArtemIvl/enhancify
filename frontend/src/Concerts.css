@@ -200,7 +200,12 @@ body {
 .concerts-content-container {
     position: fixed;
     height: 67%;
-    background-color: #D3CFCE;
+    background-image: linear-gradient(
+        to bottom,
+        #d3cfce 0%,
+        #d3cfce 30%,
+        #d2cfbd 100%
+        );
     margin-top: 30px;
     width: 100%;
     margin-left: -9px;
@@ -235,7 +240,7 @@ body {
     display: flex;
     z-index: 1000;
     color: #141313;
-    background-color: #E0E0E0;
+    background-color: #ececec;
     border-radius: 11px;
 }
 
@@ -273,12 +278,12 @@ body {
 
 .main-concert-card.active {
   background: #141313;
-  color: #d1d5db;
+  color: #eeeff0;
   transition: background-color 0.5s, color 0.5s;
 }
 
 .main-concert-card.active .genre-button{
-  background: #D3CFCE;
+  background: #f0efef;
   color: #141313;
   transition: background-color 0.5s, color 0.5s;
 }
@@ -349,7 +354,7 @@ body {
   padding: 0px 13px;    /* ⬅ tweak top/bottom to shrink the row height */
   background: #2e2e2e;
   margin-top: 0.5vh;
-  color: #d1d5db;
+  color: #e6e8ec;
   padding-top: 2px;
   border-radius: 5px;
   display: flex;
@@ -366,7 +371,7 @@ body {
 
 
 .concert-details-button {
-    background-color: #E0E0E0;
+    background-color: #f1f1f1;
     color: #2e2e2e;
     margin-left: auto;
     margin-right: 3vw;
@@ -392,29 +397,32 @@ body {
 }
 
 .nothing-found-title {
-    margin-top: 60px;
-    padding-left: 450px;
-    padding-right: 450px;
+    margin-top: 10vh;
+    padding-left: 33vw;
+    padding-right: 30vw;
+    margin-bottom: 3vh;
+    font-size: 3.35vh;
     text-align: center;
+    font-weight: 300;
 }
 
 .alternative-search-choice {
-    font-size: 20px;
+    font-size: 2.2vh;
     line-height: 0;       /* keeps text compact */
     border-radius: 10px;
     border: 1px solid #2e2e2e;
-    height: 45px;
+    height: 5.25vh;
     padding-top: 0px;
-    background-color: #d1d5db;
+    background-color: #dde0e6;
     padding-right: 12px;
 }
 
 .alternative-search-choice + .alternative-search-choice {
-    margin-left: 30px;
+    margin-left: 1.8vw;
 }
 
 .alternative-search-choice:hover {
-    background-color: #E0E0E0;
+    background-color: #f2f0f0;
     cursor: pointer;
 }
 

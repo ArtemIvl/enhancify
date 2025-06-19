@@ -42,13 +42,15 @@ shuffleCountries();
 
 return (
     <div>
-    <div className="nothing-found-title big-title">Whoops! We didn't find any concerts in this area... Try again with a different location?</div>
+        <div className="background-rectangle-nothing">
+    <div className="nothing-found-title">Whoops! We didn't find any concerts in this area... Try again with a different location?</div>
     <div className="alternative-search-choice-container">
-    <button className="alternative-search-choice"><span className={`fi fi-${HARDCODED_COUNTRIES[0].flag} increase-size brightness-80 contrast-110 ml-[10px] mr-[12px] `}></span>{HARDCODED_COUNTRIES[0].label}</button>
-    <button className="alternative-search-choice"><span className={`fi fi-${HARDCODED_COUNTRIES[1].flag} increase-size brightness-80 contrast-110 ml-[10px] mr-[12px] `}></span>{HARDCODED_COUNTRIES[1].label}</button>
-    <button className="alternative-search-choice"><span className={`fi fi-${HARDCODED_COUNTRIES[2].flag} increase-size brightness-80 contrast-110 ml-[10px] mr-[12px] `}></span>{HARDCODED_COUNTRIES[2].label}</button>
-    <button className="alternative-search-choice"><span className={`fi fi-${HARDCODED_COUNTRIES[3].flag} increase-size brightness-80 contrast-110 ml-[10px] mr-[12px] `}></span>{HARDCODED_COUNTRIES[3].label}</button>
-    <button className="alternative-search-choice"><span className={`fi fi-${HARDCODED_COUNTRIES[4].flag} increase-size brightness-80 contrast-110 ml-[10px] mr-[12px] `}></span>{HARDCODED_COUNTRIES[4].label}</button>
+    <button className="alternative-search-choice"><span className={`fi fi-${HARDCODED_COUNTRIES[0].flag} increase-size brightness-90 contrast-110 ml-[10px] mr-[12px] `}></span>{HARDCODED_COUNTRIES[0].label}</button>
+    <button className="alternative-search-choice"><span className={`fi fi-${HARDCODED_COUNTRIES[1].flag} increase-size brightness-90 contrast-110 ml-[10px] mr-[12px] `}></span>{HARDCODED_COUNTRIES[1].label}</button>
+    <button className="alternative-search-choice"><span className={`fi fi-${HARDCODED_COUNTRIES[2].flag} increase-size brightness-90 contrast-110 ml-[10px] mr-[12px] `}></span>{HARDCODED_COUNTRIES[2].label}</button>
+    <button className="alternative-search-choice"><span className={`fi fi-${HARDCODED_COUNTRIES[3].flag} increase-size brightness-90 contrast-110 ml-[10px] mr-[12px] `}></span>{HARDCODED_COUNTRIES[3].label}</button>
+    <button className="alternative-search-choice"><span className={`fi fi-${HARDCODED_COUNTRIES[4].flag} increase-size brightness-90 contrast-110 ml-[10px] mr-[12px] `}></span>{HARDCODED_COUNTRIES[4].label}</button>
+    </div>
     </div>
     </div>
 )

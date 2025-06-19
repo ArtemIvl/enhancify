@@ -90,7 +90,7 @@ const CrispConcertDetails = ({ concerts }) => {
           <div>
           <div
             key={idx}
-            className={`crisp-card brightness-90 ${item.type}-card`}
+            className={`crisp-card brightness-100 ${item.type}-card`}
             style={{ height, backgroundImage: `url(${imageUrl})` }}
           >
             <div className='festival-name-container'>
