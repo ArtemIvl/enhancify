@@ -90,15 +90,15 @@ const CrispConcertDetails = ({ concerts }) => {
           <div>
           <div
             key={idx}
-            className={`crisp-card brightness-100 ${item.type}-card`}
+            className={`crisp-card brightness-90 ${item.type}-card`}
             style={{ height, backgroundImage: `url(${imageUrl})` }}
           >
-            <div className='festival-name-container'>
-              <div className='text-festival'>{item.name}</div>
-            </div>
 
             {item.type === 'festival' && (
               <>
+              <div className='festival-name-container'>
+              <div className='text-festival'>{item.name}</div>
+              </div>
                 <div className='crisp-horizontal-line'>|</div>
                 <div className='dates-container'>
                   <div className='dates-crisp'>
@@ -117,7 +117,10 @@ const CrispConcertDetails = ({ concerts }) => {
             )}
             {item.type === 'concert' && (
               <>
-                <div className='crisp-horizontal-line'>|</div>
+                <div className='concert-name-container'>
+                <div className='text-concert'>{item.name}</div>
+                </div>
+                <div className='crisp-horizontal-line-2'>|</div>
                 <div className='dates-container'>
                   <div className='dates-crisp'>
                     <span className="material-icons-outlined dates-icon-large">event</span>
@@ -142,7 +145,7 @@ const CrispConcertDetails = ({ concerts }) => {
               return (
                 <div className = "tour-concert-info-container" key={i} style={{ fontSize: '12px' }}>
                   <div className='universal-subconcert-container w-[25%]'>
-                    <span className={`fi fi-${e._embedded.venues[0].country.countryCode.toLowerCase()} increase-size brightness-80 contrast-110 ml-[30px] mr-[12px] rounded-lg`}></span>
+                    <span className={`fi fi-${e._embedded.venues[0].country.countryCode.toLowerCase()} increase-size brightness-85 contrast-110 ml-[30px] mr-[12px] rounded-lg`}></span>
                     <div className = 'font-semibold'>
                   {city}
                   </div>

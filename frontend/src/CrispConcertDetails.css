@@ -1,5 +1,5 @@
 .crisp-card {
-color: whitesmoke;
+color: rgb(255, 255, 255);
 width: 84%;
 border: 1px solid black;
 display: flex;
@@ -21,6 +21,16 @@ margin-left: 110px;
   text-align: center;
 }
 
+.concert-name-container {
+  width: 25%;
+  margin-left: 40px;
+  z-index: 1200;
+  display: flex;
+  justify-content: center;     /* Horizontal centering */
+  align-items: center;         /* Vertical centering */
+  text-align: center;
+}
+
 .text-festival {
   font-size: 1.1vw;
   line-height: 1.2;
@@ -28,6 +38,15 @@ margin-left: 110px;
   max-width: 100%;
   word-break: break-word;
 }
+
+.text-concert {
+  font-size: 1vw;
+  line-height: 1.2;
+  display: inline-block;       /* Required for proper centering of multiline */
+  max-width: 100%;
+  word-break: break-word;
+}
+
 
 .crisp-horizontal-line {
     margin-left: 20px;
@@ -37,6 +56,16 @@ margin-left: 110px;
     text-align: center;
     margin-top: 15px;
     font-size: 28px;
+}
+
+.crisp-horizontal-line-2 {
+    margin-left: 1vw;
+    margin-right: 1vw;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: 1vh;
+    font-size: 3.2vh;
 }
 
 .tour-concert-info-container {
