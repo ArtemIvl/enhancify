@@ -16,7 +16,7 @@ def get_top_artists():
     info_on_top_singers = json.loads(data_raw) if data_raw else []
     exec_end = time.time()
     print(exec_end - exec_start)
-    return {"Last updated": last_updated_at, "Top 500": info_on_top_singers}
+    return {"Last updated": last_updated_at, "Top 10000": info_on_top_singers}
 
 @router.get("/top-content")
 async def get_top_content(

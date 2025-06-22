@@ -8,6 +8,7 @@ import Concerts from "./pages/Concerts.jsx"
 function App() {
   return (
     <BrowserRouter>
+      {/* <Loading /> */}
       <NavMenu />
       <Routes>
         <Route path="/" element={<Home />} />

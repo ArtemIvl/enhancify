@@ -1,69 +1,87 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../services/AuthContext";
+import Loading from "../components/Loading";
+import { FaSpotify, FaArrowRightFromBracket } from "react-icons/fa6";
 
 export default function Profile() {
   const [profile, setProfile] = useState(null);
   const { token, logout } = useAuth();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!token) return;
+    if (!token) {
+      setIsLoading(false);
+      return;
+    }
     fetch(`http://localhost:8000/profile?token=${token}`)
-      .then((res) => res.json())
-      .then(setProfile)
-      .catch(console.error);
+      .then((res) => {
+        if (res.status === 401 || res.status === 400) {
+          logout();
+          setIsLoading(false);
+          return null;
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (data) {
+          setProfile(data);
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        console.error("Profile fetch error:", err);
+        setIsLoading(false);
+      });
   }, [token]);
 
-  if (!token) return <div className="p-4">Login to view info please.</div>;
-
-  if (!profile) return <div className="p-4">Loading profile...</div>;
-
   return (
-    <div className="p-4 w-full">
-      <h2 className="text-xl font-semibold mb-6">Your Spotify Profile</h2>
-
-      <div className="flex flex-col gap-6 text-black select-none">
-        <div className="flex items-center gap-5">
-          {profile.images?.[0]?.url && (
-            <img
-              src={profile.images[0].url}
-              alt="Profile"
-              className="w-24 h-24 rounded-full border-2 border-[#d3cfce]"
-            />
-          )}
-          <div className="flex flex-col gap-1">
-            <div className="font-light">{profile.display_name}</div>
-            <div className="text-gray-700">{profile.email}</div>
-            <div className="">Followers: {profile.followers.total}</div>
-            <a
-              href={profile.external_urls.spotify}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-[#2e2e2e] font-light p-2 rounded-md text-white hover:cursor-pointer"
-            >
-              Open Spotify Profile
-            </a>
+    <>
+    {isLoading ? (
+      <Loading />
+    ) : !token ? (
+      <div className="text-center py-10">To view profile info you need to login first.</div>
+    ) : (
+    <div className="px-8">
+      <div className="text-2xl font-bold py-4">Profile</div>
+      <div className="flex flex-col gap-4">
+        <div className="text-2xl">{profile.display_name} {profile.product == 'premium' ? "👑" : ""}</div>
+        <div className="flex gap-8">
+        {profile.images?.[0]?.url && (
+          <img
+            src={profile.images[0].url}
+            alt="Profile"
+            className="w-46 h-46 rounded-2xl object-cover"
+          />
+        )}
+          <div className="flex text-sm flex-col gap-3">
+            <div>Followers: {profile.followers.total}</div>
+            <div>Country: <span className={`fi fi-${profile.country.toLowerCase()} rounded`} />
+        </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 font-light text-gray-800">
-          <div>
-            <strong>Country:</strong> {profile.country}
-          </div>
-          <div>
-            <strong>Product:</strong> {profile.product}
-          </div>
-          <div>
-            <strong>Spotify ID:</strong> {profile.id}
-          </div>
-        </div>
+        <div className="flex items-center gap-8 text-white text-sm">
+          <a
+            href={profile.external_urls.spotify}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 p-4 bg-black w-46 h-14 rounded-md cursor-pointer hover:bg-[#2e2e2e] hover:scale-95 active:scale-95 transition-transform duration-150 ease-in-out"
+          >
+            <span>Open in Spotify</span>
+            <FaSpotify className="text-green-500 text-4xl" />
+          </a>
 
-        <button
-          onClick={logout}
-          className="mt-6 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded"
-        >
-          Logout
-        </button>
+          <button
+            onClick={logout}
+            className="bg-black p-4 h-14 rounded-md flex items-center gap-3 cursor-pointer hover:bg-[#2e2e2e] hover:scale-95 active:scale-95 transition-transform duration-150 ease-in-out"
+          >
+            <span>Log out</span>
+            <FaArrowRightFromBracket className="text-xl"/>
+          </button>
+        </div>
       </div>
     </div>
+    )}
+  </>
   );
 }

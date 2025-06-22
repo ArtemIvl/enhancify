@@ -9,6 +9,12 @@
 body {
   font-family: 'Inter', sans-serif;
   background-color: #d3cfce; /* main background */
+  /* background-image: linear-gradient(
+    to bottom,
+    #d3cfce 0%,
+    #d3cfce 40%,
+    #d3cfb8 100%
+  ); */
   color: #000000; /* default font color */
   padding: 8px;
 }
