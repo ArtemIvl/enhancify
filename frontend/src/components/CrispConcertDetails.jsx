@@ -114,27 +114,44 @@ const CrispConcertDetails = ({ concerts }) => {
                   {locationText}
                 </div>
               </>
-            )}
+            ) }
             {item.type === 'concert' && (
               <>
                 <div className='concert-name-container'>
                 <div className='text-concert'>{item.name}</div>
                 </div>
                 <div className='crisp-horizontal-line-2'>|</div>
-                <div className='dates-container'>
-                  <div className='dates-crisp'>
-                    <span className="material-icons-outlined dates-icon-large">event</span>
+                <div className='location-container-concert'>
+                  <div className='concert-crisp'>
+                    <span className={`fi fi-${item.elements[0]._embedded.venues[0].country.countryCode.toLowerCase()} increase-size brightness-90 contrast-110 ml-[0.6vw] mr-[0.8vw] rounded-lg mt-[0.6vh]`}></span>
+                    {item.elements[0]._embedded.venues[0].city.name}
                   </div>
                   {dateText}
                 </div>
-                <div className='crisp-horizontal-line'>|</div>
-                <div className='locations-container'>
-                  <div className='locations-crisp'>
-                    <span className="material-icons-outlined dates-icon-large">pin_drop</span>
+                <div className='crisp-horizontal-line-2'>|</div>
+                <div className='dates-container-concert'>
+                  <div className='concert-dates-crisp'>
+                    <span className='material-icons-outlined contrast-110 ml-[0.6vw] mr-[0.8vw] rounded-lg mt-[0.4vh]'>calendar_month</span>
+                     <span className='mt-[1vh]'>{format_date_2(item.startDate)}</span>
                   </div>
-                  {locationText}
+                  {dateText}
                 </div>
-               
+                <div className='crisp-horizontal-line-2'>|</div>
+                <div className='get-prices-container-concert'>
+                  <div className='get-prices-crisp'>
+                    <span className='material-icons-outlined contrast-110 ml-[0.6vw] mr-[0.8vw] rounded-lg mt-[0.4vh]'>info</span>
+                     <span className='mt-[1vh]'>Get prices</span>
+                  </div>
+                  {dateText}
+                </div>
+                <div className='crisp-horizontal-line-2'>|</div>
+                <div className='universal-subconcert-container w-[20%]'>
+                <div className='get-tickets-concert-fade get-tickets-concert'  onClick={() => window.open(item.elements[0].url, '_blank')}>
+                  <a href={item.elements[0].url} target="_blank" rel="noopener noreferrer">
+                  <div className='font-semibold center-buy-tickets-concert mt-[1vh] '>Buy tickets</div>
+                  </a>
+                </div>
+               </div>
               </>
             )}
           </div>
@@ -170,7 +187,7 @@ const CrispConcertDetails = ({ concerts }) => {
                    <span className="material-icons-outlined dates-icon-large">info</span>
                    <div className='get-prices'>Get prices</div>
                 </div>
-                <div className='get-tickets-fade get-tickets-tour-size'  onClick={() => window.open(e.url, '_blank')}>
+                <div className='get-tickets-concert-fade get-tickets-tour-size'  onClick={() => window.open(e.url, '_blank')}>
                   <a href={e.url} target="_blank" rel="noopener noreferrer">
                   <div className='font-semibold center-buy-tickets-text mt-[10px] '> Buy tickets <span className="material-icons-outlined dates-icon-large ml-[5px] pt-[5px]">arrow_outward</span></div>
                   </a>
