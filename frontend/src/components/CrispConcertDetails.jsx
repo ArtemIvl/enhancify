@@ -7,10 +7,37 @@ import { formatDate, format_date_2 } from '../utils/concert_utils';
 const concertImages = import.meta.glob('../images/concert/*.{png,jpg,jpeg,svg}', { eager: true, import: 'default' });
 const festivalImages = import.meta.glob('../images/festival/*.{png,jpg,jpeg,svg}', { eager: true, import: 'default' });
 
+let previousSelectedConcertImage = null;
+let previousSelectedFestivalImage = null;
+
 const get_random_image = (type) => {
-  const images = type === 'concert' ? Object.values(concertImages) : Object.values(festivalImages);
+  const images = type === 'concert'
+    ? Object.values(concertImages)
+    : Object.values(festivalImages);
+
   if (images.length === 0) return '';
-  return images[Math.floor(Math.random() * images.length)];
+
+  // If there's only one image, just return it
+  if (images.length === 1) {
+    const onlyImage = images[0];
+    if (type === 'concert') previousSelectedConcertImage = onlyImage;
+    else previousSelectedFestivalImage = onlyImage;
+    return onlyImage;
+  }
+
+  const prev = type === 'concert'
+    ? previousSelectedConcertImage
+    : previousSelectedFestivalImage;
+
+  let candidate;
+  do {
+    candidate = images[Math.floor(Math.random() * images.length)];
+  } while (candidate === prev);
+
+  if (type === 'concert') previousSelectedConcertImage = candidate;
+  else previousSelectedFestivalImage = candidate;
+
+  return candidate;
 };
 
 const CrispConcertDetails = ({ concerts }) => {

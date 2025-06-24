@@ -40,8 +40,7 @@ def get_concerts(request_model: ConcertsRequest):
                             expiration_time = int((3600*24/CONCERT_UPDATE_FREQUENCY_PER_DAY) + 100)
                             r.set(f"most_listened_artists:concert_info:{artist_id}", json.dumps(concert_info), ex=expiration_time)
                     else:
-                        return JSONResponse(status_code=400, content="Error when trying to fetch concerts")
-            
+                        continue
             #filtering the concerts by provided fields
             #notice that theoretically back-end supports multiple filters (first by country, then by state then by code)
             final_concert_list_with_filters_applied = [item for item in concert_info if 

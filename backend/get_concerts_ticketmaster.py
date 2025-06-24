@@ -101,8 +101,7 @@ def look_up_artists_attraction_id(redis: redis.Redis, artist_name = None, artist
         if (data.get("_embedded", None)):
             retreived_people = data["_embedded"]["attractions"]
         else:
-            print("Error")
-            print(data)
+            return None
         #search from all matched artists in ticketmaster
         for artist in retreived_people:
             #if the name matches ideally (character by character)

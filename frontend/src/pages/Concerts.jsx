@@ -2,16 +2,18 @@ import { useState, useEffect } from "react";
 import "../Concerts.css";
 import ConcertsSearch from "../components/ConcertSearchContent";
 import statesCitiesCountriesArr from "../utils/loadPlaces";
-import { fetchTopArtists, getNumericalRankings } from "../services/api";
+import { fetchTopArtists, getNumericalRankings, fetchMyArtists } from "../services/api";
 import axios from "axios";
 import ScrollContainer from "../components/ScrollComponent";
 import CrispConcertDetails from "../components/CrispConcertDetails";
 import NothingFoundCardConcerts from "../components/NothingFoundCardConcerts";
-import {calculateShowsAvailable, extractImageSrc, sort_concerts_descending, sort_num_rankings} from "../utils/concert_utils.js";
+import {calculateShowsAvailable, extractImageSrc, sort_concerts_descending, sort_num_rankings, preprocessFavouriteArtistsArray} from "../utils/concert_utils.js";
 import GetArtistTags from "../components/GetArtistTags.jsx";
+import { useAuth } from "../services/AuthContext.jsx";
 
 export default function Concerts() {
 
+  const token = localStorage.getItem("spotify_token");
   const [concertsToDisplayPerPage, setConcertsToDisplayPerPage] = useState(6)
   const [loadMoreItems, setLoadMoreItems] = useState(false)
 
@@ -47,6 +49,8 @@ export default function Concerts() {
     // Your code here (e.g., read from localStorage, fetch data)
   }, []);
 
+  const timeRange = "medium_term";
+  
   useEffect(() => {
     getNumericalRankings()
           .then((data) => {
@@ -57,11 +61,11 @@ export default function Concerts() {
   }, []);
 
   useEffect(() => {
-    if (numericalRankingsDict) {
-      console.log(numericalRankingsDict)
+    if (mostListenedArtistList) {
+      console.log(mostListenedArtistList)
       console.log("aaaaa")
     }
-  }, numericalRankingsDict);
+  }, mostListenedArtistList);
 
   // for the followed artists: 1) On load fetch followed artists using the spotify API. using Spotify API.
   // 
@@ -87,8 +91,6 @@ export default function Concerts() {
   }, [loadMoreItems]);
 
 
-  const token = localStorage.getItem("spotify_token");
-
   useEffect(() => {
     setGlobalLoading(true)
     axios.post('http://localhost:8000/get_concerts', {
@@ -105,21 +107,29 @@ export default function Concerts() {
     });
   }, []);
 
-  useEffect(() => {
-    setFollowedLoading(true)
-    axios.post('http://localhost:8000/get_concerts', {
-    get_top_artist_info: 0,
-    artists: [{"artist_id": "1URnnhqYAYcrqrcwql10ft", "artist_name": "21 Savage"}, {"artist_id": "0epOFNiUfyON9EYx7Tpr6V", "artist_name": "The Strokes"}],
-    countries: []
-  })
-    .then(response => {
-      setMostListenedArtistConcerts(response.data)
-      setFollowedLoading(false)
+
+  //followed artists
+useEffect(() => {
+  setFollowedLoading(true);
+  fetchMyArtists(timeRange, token)
+    .then(artists => {
+      setMostListenedArtistList(artists);
+      // return the axios promise so the next .then waits on it
+      return axios.post('http://localhost:8000/get_concerts', {
+        get_top_artist_info: 0,
+        artists: preprocessFavouriteArtistsArray(artists),
+        countries: []
+      });
+    })
+    .then(({ data }) => {
+      setMostListenedArtistConcerts(data);
+      setFollowedLoading(false);
     })
     .catch(error => {
       console.error(error);
+      setFollowedLoading(false);
     });
-  }, []);
+}, [timeRange, token]);
 
 
   /* Uncomment after merge
@@ -166,6 +176,7 @@ export default function Concerts() {
     });
   }
 
+  //for global artists
   function getArtistsObject(artistSpotifyId) {
     for (const item of globalTop100ArtistList) {
       if (item["Spotify ID"] === artistSpotifyId) {
@@ -174,6 +185,17 @@ export default function Concerts() {
     }
     return null;
   }
+
+  function getArtistsObjectFollowed(artistSpotifyId) {
+    for (const item of mostListenedArtistList) {
+      if (item["id"] === artistSpotifyId) {
+        return item;
+      }
+    }
+    return null;
+  }
+
+
 // on load - get initial versions of concerts both for followed artists and for global artists
 // two separate loading states for followed and global concerts
 // when the user switches between pages, check the loading
@@ -200,7 +222,7 @@ export default function Concerts() {
           <span className="material-icons-outlined icons-tweaked">star</span>
           My Artists
         </button>
-        <div><ConcertsSearch countries={statesCitiesCountriesArr} setConcerts={setConcerts} 
+        <div><ConcertsSearch countries={statesCitiesCountriesArr} setConcerts={setConcerts} followedArtistsToQuery={preprocessFavouriteArtistsArray(mostListenedArtistList)} 
         setGlobalConcerts = {setGlobalTop100Concerts} setMostListenedConcerts = {setMostListenedArtistConcerts} setGlobalLoading={setGlobalLoading} setFollowedLoading = {setFollowedLoading} toggleMode={active}>\
         </ConcertsSearch></div>
         <div className="filters_container">  
@@ -237,12 +259,16 @@ export default function Concerts() {
                  key={key}
                 >
                   <div className={activeCards.has(key) ? "main-concert-card active" : "main-concert-card"}>
-                  <img src={extractImageSrc(getArtistsObject(key)["Image"])} className="artists-image constrast-70 brightness-80"></img>
-                  <div className="artists-name-main">{getArtistsObject(key)["Artist"]}</div>
+                  {active === "global" ? 
+                  (<><img src={extractImageSrc(getArtistsObject(key)["Image"])} className="artists-image constrast-70 brightness-80"></img>
+                  <div className="artists-name-main">{getArtistsObject(key)["Artist"]}</div></>) : 
+
+                  (<><img src={getArtistsObjectFollowed(key) !== null ? getArtistsObjectFollowed(key)["images"][0]["url"] : "https://www.imghippo.com/i/KVJq2555GU.png"} className="artists-image constrast-70 brightness-80"></img>
+                  <div className="artists-name-main">{getArtistsObjectFollowed(key) !== null ? getArtistsObjectFollowed(key)["name"] : "No name"}</div></>)}
+
                   <div className="small-horizontal-divisive-line">│</div>
                   <div className="shows-available-text">{calculateShowsAvailable(concert)}</div>
                   <div className="small-horizontal-divisive-line">│</div>
-                  <GetArtistTags artistInfo={active === "global" ? globalTop100ArtistList[index] : null} tagsToCalculate={["genre", "rising", "main_language", "world_rank"]} is_webscraped={true} ></GetArtistTags>
                   <div className="small-horizontal-divisive-line">│</div>
                   <button className="concert-details-button" onClick={() => toggleCard(key, concert)}>
                   <span className="material-icons-outlined icons-tweaked">expand_circle_down</span>

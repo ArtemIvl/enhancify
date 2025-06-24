@@ -27,6 +27,14 @@ export const formatDate = (isoString) => {
   });
 };
 
+export const preprocessFavouriteArtistsArray = (favouriteArtists) => {
+  const extracted = favouriteArtists.map(({ id, name }) => ({
+    artist_id: id,  
+    artist_name: name, 
+  }));
+  return extracted;
+};
+
 // same to previous function, but the formatting is a bit different
 // Output example: 21 May, 05:00
 export const format_date_2 = (isoString) => {

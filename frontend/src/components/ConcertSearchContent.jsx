@@ -3,7 +3,7 @@ import "../Concerts.css"
 import axios from "axios";
 
 const HARDCODED = [
-  { label: "My location", code: "LOC", icon: "pin_drop", description: "Within 100km radius", input_type: "location" },
+  { label: "My Location", code: "LOC", icon: "pin_drop", description: "Within 100km radius", input_type: "location" },
   { label: "European Union", code: "EU", icon: "language", description: "Region", input_type: "region"},
   { label: "United States", code: "US", icon: "flag_circle", description: "Country", input_type: "country"},
   { label: "New York", code: "NY", icon: "location_city", description: "City", input_type: "city"}
@@ -18,7 +18,8 @@ export default function ConcertsSearch({ countries = [], setConcerts, setGlobalC
   const [inputCodeType, setInputCodeType] = useState(null)
   const menuRef = useRef();
 
-
+  const [myLocationLat, setMyLocationLat] = useState(null)
+  const [myLocationLng, setMyLocationLng] = useState(null)
 function handleClick() {
   setGlobalLoading(true)
   setFollowedLoading(true)
@@ -48,6 +49,12 @@ function handleClick() {
     params["geo_latitude"] = lat;
     params["geo_longitude"] = lng;
   }
+    else if (inputCodeType === "location") {
+    if (myLocationLat && myLocationLng) {
+    params["geo_latitude"] = myLocationLat;
+    params["geo_longitude"] = myLocationLng;
+    }
+  }
   console.log(params)
   //GLOBAL
   axios.post('http://localhost:8000/get_concerts', params)
@@ -65,7 +72,7 @@ function handleClick() {
 // input example for artist lists [{"artist_id": "a1b2c3", "artist_name": "21 savage"}]
   //FOR FOLLOWERS
   params["get_top_artist_info"] = 0;
-  params["artists"] = [{"artist_id": "1URnnhqYAYcrqrcwql10ft", "artist_name": "21 Savage"}, {"artist_id": "0epOFNiUfyON9EYx7Tpr6V", "artist_name": "The Strokes"}]
+  params["artists"] = followedArtistsToQuery;
   axios.post('http://localhost:8000/get_concerts', params)
     .then(response => {
       if (toggleMode === "followed") {
@@ -106,7 +113,13 @@ function handleClick() {
   };
 
   const handleOptionClick = option => {
-    setInputValue(option.label === "My Location" ? "" : option.label);
+    if (option.label === "My Location") {
+          navigator.geolocation.getCurrentPosition((position) => {
+      setMyLocationLat(position.coords.latitude);
+      setMyLocationLng(position.coords.longitude);
+    });
+    }
+    setInputValue(option.label === "My location" ? "" : option.label);
     setSelectedCode(option.code);
     setInputCodeType(option.input_type)
     setDropdownOpen(false);
