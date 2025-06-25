@@ -59,10 +59,11 @@ export const sort_num_rankings = rankings =>
   );
   
 export const sort_concerts_descending = (concerts, ranks = {}) => {
-  if (!concerts) return {};
+  if (!concerts || !ranks) return {};
   return Object.fromEntries(
     Object.entries(concerts)
       .sort(([idA], [idB]) => {
+
         // use +Infinity for missing ranks so they sort to the end
         const rankA = ranks[idA] ?? Number.POSITIVE_INFINITY;
         const rankB = ranks[idB] ?? Number.POSITIVE_INFINITY;

@@ -50,3 +50,17 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 4px;
   margin-bottom: 8px;
 }
+
+.search-icon {
+  position: absolute;
+  font-size: 1.3rem;
+  margin-top: 0.12rem;
+  margin-left: -1.75rem;
+}
+
+.clear-search-bar {
+  position: absolute;
+  cursor: pointer;
+  margin-top: -1.09rem;
+  margin-left: -2.5rem;
+}

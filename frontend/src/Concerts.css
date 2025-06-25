@@ -60,12 +60,19 @@ body {
     background-color: white;
     color: black;
     width: 30vw;
-    padding-left: 2.6vw;
+    padding-left: 3.2vw;
     letter-spacing: 0.35px;
     font-size: 1.1vw;
     border-radius: 27px 0px 0px 27px;
 }
 
+.horiontal-line-search-bar {
+    margin-left: 20%;
+    margin-right: 20%;
+    height: 0.5px;
+    background-color: #4c4a4a;
+    width: 60%;
+}
 .search-bar::placeholder {
     color: #4c4a4a;
     font-size: 1vw;
@@ -195,6 +202,16 @@ body {
   margin-right: 0px;
   margin-top: 45px;
   width: calc(100.5%);
+}
+
+.horizontal-line-search-bar {
+  height: 0.4px;
+  background: #2e2e2e;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 0.3rem;
+  margin-bottom: 0.45rem;
+  width: calc(92.5%);
 }
 
 .concerts-content-container {
@@ -440,3 +457,9 @@ body {
 .increase-size {
     font-size: 20px
 }
+
+.search-wrapper {             /* 1. create positioning context */
+  position: relative;
+  display: inline-block;      /* keeps width = input width */
+}
+
