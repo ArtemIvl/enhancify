@@ -252,7 +252,8 @@ useEffect(() => {
           ) : (
             <ScrollContainer setLoadMoreItems={setLoadMoreItems}>
             {Object.keys(concerts).length === 0 ? (
-              <NothingFoundCardConcerts></NothingFoundCardConcerts>
+              <NothingFoundCardConcerts clearInput={clearInput} setConcerts={setConcerts} followedArtistsToQuery={preprocessFavouriteArtistsArray(mostListenedArtistList)} 
+        setGlobalConcerts = {setGlobalTop100Concerts} setMostListenedConcerts = {setMostListenedArtistConcerts} setGlobalLoading={setGlobalLoading} setFollowedLoading = {setFollowedLoading} toggleMode={active}></NothingFoundCardConcerts>
             ) : (
               Object.entries(sort_concerts_descending(concerts, numericalRankingsDict)).slice(0, concertsToDisplayPerPage).map(([key, concert], index) => (
                 <div

@@ -110,13 +110,8 @@ function handleClick() {
     .catch(error => {
       console.error(error);
     });
-  // If you want to log the just-saved value, do it in useEffect after update
 }
 
-  // Detect click outside to close dropdown
-  // (optional: you can add a useEffect here if needed)
-
-  // Filtered options based on input
   const filtered =
       isSearching && inputValue.length > 0
         ? countries
