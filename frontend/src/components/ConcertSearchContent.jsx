@@ -16,7 +16,7 @@ var SEARCH_HISTORY = [
 ];
 
 export default function ConcertsSearch({ countries = [], setConcerts, setGlobalConcerts, 
-  setMostListenedConcerts, setGlobalLoading, setFollowedLoading, toggleMode, followedArtistsToQuery}) {
+  setMostListenedConcerts, setGlobalLoading, setFollowedLoading, toggleMode, followedArtistsToQuery, searchResultFromNothingFound, setSearchResultFromNothingFound}) {
   const [inputValue, setInputValue] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedCode, setSelectedCode] = useState(null);
@@ -28,6 +28,17 @@ export default function ConcertsSearch({ countries = [], setConcerts, setGlobalC
 
   const [myLocationLat, setMyLocationLat] = useState(null)
   const [myLocationLng, setMyLocationLng] = useState(null)
+
+useEffect(() => {
+   if (searchResultFromNothingFound) {
+    setInputValue(searchResultFromNothingFound.label);
+    setCurrentSelectedIcon(searchResultFromNothingFound.icon)
+    setSelectedCode(searchResultFromNothingFound.code);
+    setInputCodeType(searchResultFromNothingFound.input_type)
+    setSearchResultFromNothingFound(null);
+   }
+}, [searchResultFromNothingFound, setSearchResultFromNothingFound]);
+
 function handleClick() {
   setGlobalLoading(true)
   setFollowedLoading(true)

@@ -29,7 +29,7 @@ export default function Concerts() {
   const [globalLoading, setGlobalLoading] = useState(true)
   //when concerts from followed artists are loading
   const [followedLoading, setFollowedLoading] = useState(true)
-
+  const [forciblyOverrideSearchResult, setForciblyOverrideSearchResult] = useState(null)
   //results (what is displayed in the browser, actual concerts)
   const [globalTop100Concerts, setGlobalTop100Concerts] = useState([])
   const [mostListenedArtistConcerts, setMostListenedArtistConcerts] = useState([])
@@ -223,7 +223,9 @@ useEffect(() => {
           My Artists
         </button>
         <div><ConcertsSearch countries={statesCitiesCountriesArr} setConcerts={setConcerts} followedArtistsToQuery={preprocessFavouriteArtistsArray(mostListenedArtistList)} 
-        setGlobalConcerts = {setGlobalTop100Concerts} setMostListenedConcerts = {setMostListenedArtistConcerts} setGlobalLoading={setGlobalLoading} setFollowedLoading = {setFollowedLoading} toggleMode={active}>\
+        setGlobalConcerts = {setGlobalTop100Concerts} setMostListenedConcerts = {setMostListenedArtistConcerts} setGlobalLoading={setGlobalLoading} setFollowedLoading = {setFollowedLoading} toggleMode={active}
+        searchResultFromNothingFound={forciblyOverrideSearchResult} setSearchResultFromNothingFound={setForciblyOverrideSearchResult}>\
+        
         </ConcertsSearch></div>
         <div className="filters_container">  
             <button className={`filters-button${filters === "clicked" ? " active" : ""}`} 
@@ -252,7 +254,7 @@ useEffect(() => {
           ) : (
             <ScrollContainer setLoadMoreItems={setLoadMoreItems}>
             {Object.keys(concerts).length === 0 ? (
-              <NothingFoundCardConcerts clearInput={clearInput} setConcerts={setConcerts} followedArtistsToQuery={preprocessFavouriteArtistsArray(mostListenedArtistList)} 
+              <NothingFoundCardConcerts setConcerts={setConcerts} followedArtistsToQuery={preprocessFavouriteArtistsArray(mostListenedArtistList)} setItemToPassBack={setForciblyOverrideSearchResult}
         setGlobalConcerts = {setGlobalTop100Concerts} setMostListenedConcerts = {setMostListenedArtistConcerts} setGlobalLoading={setGlobalLoading} setFollowedLoading = {setFollowedLoading} toggleMode={active}></NothingFoundCardConcerts>
             ) : (
               Object.entries(sort_concerts_descending(concerts, numericalRankingsDict)).slice(0, concertsToDisplayPerPage).map(([key, concert], index) => (
