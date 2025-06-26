@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import "../CrispConcertDetails.css";
 import "../Concerts.css";
 import { formatDate, format_date_2 } from '../utils/concert_utils';
@@ -40,7 +40,7 @@ const get_random_image = (type) => {
   return candidate;
 };
 
-const CrispConcertDetails = ({ concerts }) => {
+const CrispConcertDetails = React.memo(({ concerts }) => {
   const [filteredCrispData, setFilteredCrispData] = useState([]);
 
   useEffect(() => {
@@ -92,10 +92,18 @@ const CrispConcertDetails = ({ concerts }) => {
     setFilteredCrispData(result);
   }, [concerts]);
 
+  const [images, setImages] = useState([]);
+
+  useEffect(() => {
+    setImages(filteredCrispData.map(item => get_random_image(item.type)));
+    // run only once on mount (or whenever filteredCrispData changes)
+  }, [filteredCrispData]);
+
   return (
     <div>
+    
       {filteredCrispData.map((item, idx) => {
-        const imageUrl = get_random_image(item.type);
+        const imageUrl = images[idx];
         const height = item.type === 'festival' ? '65px' : '60px';
 
         // Only compute date and location strings for festivals
@@ -230,6 +238,6 @@ const CrispConcertDetails = ({ concerts }) => {
       })}
     </div>
   );
-};
+});
 
 export default CrispConcertDetails;

@@ -20,7 +20,7 @@ export default function Concerts() {
   //main array with concerts - the contents of this array are currently displayed on the page
   const [concerts, setConcerts] = useState(null)
   //what we get as a result of webscraping
-  const [globalTop100ArtistList, setGlobalTop100ArtistList] = useState(null)
+  const [globalTop100ArtistList, setGlobalTop100ArtistList] = useState([])
   //what we get from get_top_items Spotify API
   const [mostListenedArtistList, setMostListenedArtistList] = useState([])
   const [numericalRankingsDict, setNumericalRankingsDict] = useState(null)
@@ -178,20 +178,25 @@ useEffect(() => {
 
   //for global artists
   function getArtistsObject(artistSpotifyId) {
+    if (globalTop100ArtistList) {
     for (const item of globalTop100ArtistList) {
       if (item["Spotify ID"] === artistSpotifyId) {
         return item;
       }
     }
+    }
+
     return null;
   }
 
   function getArtistsObjectFollowed(artistSpotifyId) {
+    if (mostListenedArtistList) {
     for (const item of mostListenedArtistList) {
       if (item["id"] === artistSpotifyId) {
         return item;
       }
     }
+  }
     return null;
   }
 
@@ -253,7 +258,7 @@ useEffect(() => {
             </div>
           ) : (
             <ScrollContainer setLoadMoreItems={setLoadMoreItems}>
-            {Object.keys(concerts).length === 0 ? (
+            {Object.keys(concerts).length === 0 || concerts === null ? (
               <NothingFoundCardConcerts setConcerts={setConcerts} followedArtistsToQuery={preprocessFavouriteArtistsArray(mostListenedArtistList)} setItemToPassBack={setForciblyOverrideSearchResult}
         setGlobalConcerts = {setGlobalTop100Concerts} setMostListenedConcerts = {setMostListenedArtistConcerts} setGlobalLoading={setGlobalLoading} setFollowedLoading = {setFollowedLoading} toggleMode={active}></NothingFoundCardConcerts>
             ) : (
@@ -261,8 +266,11 @@ useEffect(() => {
                 <div
                  key={key}
                 >
+                  {(active === "global" && getArtistsObject(key) !== null) || (active === "followed" && getArtistsObjectFollowed(key) !== null) ?
+                  (
+                  <>
                   <div className={activeCards.has(key) ? "main-concert-card active" : "main-concert-card"}>
-                  {active === "global" ? 
+                  {active === "global" ?
                   (<><img src={extractImageSrc(getArtistsObject(key)["Image"])} className="artists-image constrast-70 brightness-80"></img>
                   <div className="artists-name-main">{getArtistsObject(key)["Artist"]}</div></>) : 
 
@@ -277,11 +285,14 @@ useEffect(() => {
                   <span className="material-icons-outlined icons-tweaked">expand_circle_down</span>
                     {activeCards.has(key) ? "Hide details" : "View details"}</button>
                   </div>
-                 <div>
-                  {activeCards.has(key)
-                    ? (<CrispConcertDetails concerts={concert}></CrispConcertDetails>)
-                    : null}
-                </div>
+                  <div
+                    className={ activeCards.has(key) ? "" : "hidden" }
+                    /* or: style={{ display: activeCards.has(key) ? "block" : "none" }} */
+                  >
+                    <CrispConcertDetails concerts={concert} />
+                  </div>
+                  </>
+                  ) : null };
                 </div>
               ))
             )}
