@@ -361,7 +361,7 @@ body {
   flex-wrap: wrap;
   gap: 0px 12px;          /* 0 px vertically, 12 px horizontally */
   margin-top: 2vh;
-  margin-left: 5px;
+  margin-left: 10px;
   width: 20%;
   justify-content: center;
 }

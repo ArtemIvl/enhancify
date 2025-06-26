@@ -203,8 +203,8 @@ useEffect(() => {
 function checkIfArtistIsFavorite(artistId) {
   if (!Array.isArray(mostListenedArtistList)) return null;
 
-  const first20 = mostListenedArtistList.slice(0, 20);
-  const idx = first20.findIndex(item => item.id === artistId);
+  const first50 = mostListenedArtistList
+  const idx = first50.findIndex(item => item.id === artistId);
   return idx !== -1 ? idx : null;
 }
 // on load - get initial versions of concerts both for followed artists and for global artists
@@ -286,7 +286,8 @@ function checkIfArtistIsFavorite(artistId) {
                   <div className="small-horizontal-divisive-line">│</div>
                   <div className="shows-available-text">{calculateShowsAvailable(concert)}</div>
                   <div className="small-horizontal-divisive-line">│</div>
-                  <GetArtistTags artistInfo={active === "global" ? getArtistsObject(key) : null} tagsToCalculate={["genre", "favorite", "rising", "main_language", "world_rank"]} is_webscraped={true} favoriteRank = {checkIfArtistIsFavorite(getArtistsObject(key)["Spotify ID"])}></GetArtistTags>
+                  <GetArtistTags topArtist={active === "global" ? null : getArtistsObject(key)} artistInfo={active === "global" ? getArtistsObject(key) : getArtistsObjectFollowed(key)} 
+                  tagsToCalculate={["genre", "favorite", "rising", "popular", "fans", "main_language", "world_rank", "your_most_listened"]} is_webscraped={active === "global" ? true : false} favoriteRank = {active === "global" ? checkIfArtistIsFavorite(getArtistsObject(key)["Spotify ID"]) : checkIfArtistIsFavorite(getArtistsObjectFollowed(key)["id"])}></GetArtistTags>
                   <div className="small-horizontal-divisive-line">│</div>
                   <button className="concert-details-button" onClick={() => toggleCard(key, concert)}>
                   <span className="material-icons-outlined icons-tweaked">expand_circle_down</span>
