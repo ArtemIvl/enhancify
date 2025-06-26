@@ -5,7 +5,7 @@ import "../Concerts.css";
 // artistInfo - all information on the artist
 // is_webscraped - if yes, then this is a global artist, we have access to more info
 // if not this is the followed artist, we have access to kinda different info
-export default function GetArtistTags({artistInfo = null, is_webscraped, tagsToCalculate, topArtist = null}) {
+export default function GetArtistTags({artistInfo = null, is_webscraped, tagsToCalculate, topArtist = null, favoriteRank}) {
   
   // for any artist - it is possible to get this info
   //possible options so far: artists main genre, artists main language, if the artist is "rising", position on worlds leaderboard
@@ -42,12 +42,17 @@ export default function GetArtistTags({artistInfo = null, is_webscraped, tagsToC
   // the list order matters!!!
 
     for (var item of tagsToCalculate) {
-        if (Object.keys(dict_with_tags_to_return).length > 3) {
+        if (Object.keys(dict_with_tags_to_return).length >= 3) {
           break;
         }
         if (is_webscraped) {
         if (item == "genre") {
             dict_with_tags_to_return["music_note"] = artistInfo['Genre']
+        }
+        if (item == "favorite") {
+            if (favoriteRank !== null) {
+            dict_with_tags_to_return["star"] = "Your favorite";
+            }
         }
         if (item == "amount_listeners") {
             dict_with_tags_to_return["person"] = formatMillions(artistInfo["Monthly listeners (millions)"]).toString().concat("M");
@@ -62,12 +67,12 @@ export default function GetArtistTags({artistInfo = null, is_webscraped, tagsToC
             const artists_daily_change = artistInfo["Change vs yesterday"].replace(/,/g, '');
             const artists_daily_change_to_num = parseFloat(artists_daily_change);  
 
-            if ((artists_daily_change_to_num > (artists_monthly_listeners_to_num * 0.01 * thresholdToCountAsRisingPercent / 10) && artists_daily_change_to_num > (thresholdToCountAsRisingMillions / 10)) ||
-             (artists_monthly_change_to_num > (artists_monthly_listeners_to_num * 0.01 * thresholdToCountAsRisingPercent) && artists_daily_change_to_num > thresholdToCountAsRisingMillions)) {
+            if ((artists_daily_change_to_num > (artists_monthly_listeners_to_num * 0.008 * thresholdToCountAsRisingPercent / 10) && artists_daily_change_to_num > (thresholdToCountAsRisingMillions / 10)) ||
+             (artists_monthly_change_to_num > (artists_monthly_listeners_to_num * 0.008 * thresholdToCountAsRisingPercent) && (artists_monthly_change_to_num > thresholdToCountAsRisingMillions) * 0.8)) {
                 dict_with_tags_to_return["local_fire_department"] = "Rising";
              }
-            else if ((artists_daily_change_to_num < -(artists_monthly_listeners_to_num * 0.01 * thresholdToCountAsRisingPercent / 10) && artists_daily_change_to_num < -(thresholdToCountAsRisingMillions / 10)) ||
-             (artists_monthly_change_to_num < -(artists_monthly_listeners_to_num * 0.01 * thresholdToCountAsRisingPercent) && artists_daily_change_to_num < -(thresholdToCountAsRisingMillions))){
+            else if ((artists_daily_change_to_num < -(artists_monthly_listeners_to_num * 0.01 * thresholdToCountAsRisingPercent / 8) && artists_daily_change_to_num < -(thresholdToCountAsRisingMillions / 8)) ||
+             (artists_monthly_change_to_num < -(artists_monthly_listeners_to_num * 0.01 * thresholdToCountAsRisingPercent) && artists_monthly_change_to_num < -(thresholdToCountAsRisingMillions))){
                 dict_with_tags_to_return["arrow_downward"] = "Falling";
             }
         }
@@ -102,11 +107,11 @@ export default function GetArtistTags({artistInfo = null, is_webscraped, tagsToC
             const artists_daily_change = artistInfo["Change vs yesterday"].replace(/,/g, '');
             const artists_daily_change_to_num = parseFloat(artists_daily_change);  
 
-            if ((artists_daily_change_to_num > (artists_monthly_listeners_to_num * 0.01 * thresholdToCountAsRisingPercent / 10) && artists_daily_change_to_num > (thresholdToCountAsRisingMillions / 10)) ||
+            if ((artists_daily_change_to_num > (artists_monthly_listeners_to_num * 0.01 * thresholdToCountAsRisingPercent / 10) && artists_monthly_change_to_num > (thresholdToCountAsRisingMillions / 10)) ||
              (artists_monthly_change_to_num > (artists_monthly_listeners_to_num * 0.01 * thresholdToCountAsRisingPercent) && artists_daily_change_to_num > thresholdToCountAsRisingMillions)) {
                 dict_with_tags_to_return["rising"] = true;
              }
-            else if ((artists_daily_change_to_num < -(artists_monthly_listeners_to_num * 0.01 * thresholdToCountAsRisingPercent / 10) && artists_daily_change_to_num < -(thresholdToCountAsRisingMillions / 10)) ||
+            else if ((artists_daily_change_to_num < -(artists_monthly_listeners_to_num * 0.01 * thresholdToCountAsRisingPercent / 10) && artists_monthly_change_to_num < -(thresholdToCountAsRisingMillions / 10)) ||
              (artists_monthly_change_to_num < -(artists_monthly_listeners_to_num * 0.01 * thresholdToCountAsRisingPercent) && artists_daily_change_to_num < -(thresholdToCountAsRisingMillions))){
                 dict_with_tags_to_return["rising"] = false;
         }
@@ -118,7 +123,16 @@ export default function GetArtistTags({artistInfo = null, is_webscraped, tagsToC
   return (
     <div className="genre-container">
       {Object.entries(dict_with_tags_to_return).map(([key, value]) => (
-        <div className="genre-button" key={key}><div className="genre-text"><span className="material-icons-outlined icons-tweaked">{key}</span>{value}</div></div>
+        <div className="genre-button" key={key}><div className="genre-text"><span 
+        className={
+    value === "Rising"
+      ? "material-icons-outlined icons-tweaked rising"
+      : value === "Falling"
+      ? "material-icons-outlined icons-tweaked falling"
+      : value === "Your favorite" 
+      ? "material-icons-outlined icons-tweaked favorite"
+      : "material-icons-outlined icons-tweaked"
+  }>{key}</span>{value}</div></div>
       ))}
       </div> 
           );
