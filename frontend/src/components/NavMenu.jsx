@@ -1,12 +1,13 @@
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../services/AuthContext";
 import { LoginButton } from "./LoginButton";
+import { FaAward, FaRegStar, FaTicket, FaRegUser } from "react-icons/fa6";
 
 export default function NavigationMenu() {
   const { token } = useAuth()
 
   const baseClass =
-    "py-4 px-8 rounded-md font-light cursor-pointer select-none transition-transform duration-150 ease-in-out";
+    "py-3 px-6 rounded-md font-light cursor-pointer select-none transition-transform duration-150 ease-in-out";
   const activeClass = "bg-[#2e2e2e] text-white";
 
   return (
@@ -23,7 +24,10 @@ export default function NavigationMenu() {
           onMouseUp={e => (e.currentTarget.style.transform = "scale(1)")}
           onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
         >
-          Spotify Top-10k
+        <div className="flex items-center gap-3">
+          <FaAward className="w-4 h-4" />
+          Leaderboard
+        </div>
         </NavLink>
 
         <NavLink
@@ -35,7 +39,10 @@ export default function NavigationMenu() {
           onMouseUp={e => (e.currentTarget.style.transform = "scale(1)")}
           onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
         >
+        <div className="flex items-center gap-3">
+          <FaRegStar className="w-4 h-4" />
           My artists
+        </div>
         </NavLink>
 
         <NavLink
@@ -47,7 +54,10 @@ export default function NavigationMenu() {
           onMouseUp={e => (e.currentTarget.style.transform = "scale(1)")}
           onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
         >
+        <div className="flex items-center gap-3">
+          <FaTicket className="w-4 h-4" />
           Concerts
+        </div>
         </NavLink>
       </div>
 
@@ -63,7 +73,10 @@ export default function NavigationMenu() {
         onMouseUp={e => (e.currentTarget.style.transform = "scale(1)")}
         onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
       >
-        Profile
+      <div className="flex items-center gap-3">
+        <FaRegUser className="w-4 h-4" />
+          Profile
+      </div>
       </NavLink>
       }
     </nav>

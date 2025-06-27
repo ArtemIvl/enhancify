@@ -24,10 +24,18 @@ function formatNumber(value) {
   return num.toLocaleString();
 }
 
+function sanitizeValue(value) {
+  if (!value || value === "TBD") return "N/A";
+  return value;
+}
+
 export default function ArtistCard({ artist }) {
   const artistName = stripHTML(artist["Artist"]);
   const imageUrl = extractImageSrc(artist["Image"]);
-  const listeners = parseInt(artist["Monthly listeners (millions)"].replace(/,/g, ""), 10);
+  const listenersRaw = artist["Monthly listeners (millions)"];
+  const listeners = listenersRaw && listenersRaw !== "TBD"
+    ? parseInt(listenersRaw.replace(/,/g, ""), 10)
+    : null;
   const rank = artist["Rank"];
   const country = artist["Country"];
   const genre = artist["Genre"];
@@ -38,60 +46,64 @@ export default function ArtistCard({ artist }) {
   const spotifyID = artist["Spotify ID"];
   const spotifyLink = `https://open.spotify.com/artist/${spotifyID}`;
 
-  return (
-  <div className="w-full grid grid-cols-[25%_75%] items-center bg-[#e0e0e0] rounded-lg px-4 py-4 gap-4">
-    {/* LEFT COLUMN */}
-    <div className="flex items-center gap-8">
-      {/* Rank */}
-      <div className="text-lg font-semibold w-6 text-center">{rank}</div>
+  const bgGradient =
+    rank === "1" ? "linear-gradient(to bottom, #FFDF00, #E9D293)" :
+    rank === "2" ? "linear-gradient(to bottom, #BEC0C2, #EEF2F3)" :
+    rank === "3" ? "linear-gradient(to bottom, #D49B57, #CDA575)" :
+    "#E5E4E2";
 
-      {/* Image */}
-      <div className="w-14 h-14 rounded overflow-hidden">
+  return (
+  <div className="w-full grid grid-cols-[26%_74%] items-center bg-[#E5E4E2] rounded-xl pl-4 py-4">
+    <div className="flex items-center gap-8">
+      <div 
+        className="text-lg font-semibold w-8 text-center rounded-md py-1"
+        style={{ background: bgGradient }}>{rank}</div>
+
+      <div className="w-14 min-w-14 h-14 rounded-md overflow-hidden">
         <img src={imageUrl} alt={artistName} className="w-full h-full object-cover" />
       </div>
 
-      {/* Name + Flag */}
-      <div className="flex items-center max-w-[160px] overflow-hidden gap-2">
+      <div className="flex items-center w-auto overflow-hidden gap-2">
         <span className="font-semibold truncate">{artistName}</span>
       </div>
-      <span className={`fi fi-${getCountryCode(country)} mt-1 rounded`} />
+      <span className={`fi fi-${getCountryCode(country)} rounded min-w-6`} />
     </div>
 
-    {/* RIGHT COLUMN */}
-    <div className="grid grid-cols-7 items-center gap-2">
-      {/* Listeners */}
-      <div className="text-sm text-center">{(listeners / 1_000_000).toFixed(1)}M</div>
+    <div className="grid grid-cols-7 items-center">
+      <div className="flex justify-center">
+        <div className="text-sm text-center bg-black rounded-md p-2">{(listeners / 1_000_000).toFixed(1)}M</div>
+      </div>
 
-      {/* Genre */}
-      <div className="text-sm text-center">{genre}</div>
+      <div className="text-sm text-center">{sanitizeValue(genre)}</div>
 
-      {/* Language */}
-      <div className="text-sm text-center">{language}</div>
+      <div className="text-sm text-center">{sanitizeValue(language)}</div>
 
-      {/* 24h Change */}
       <div className={`text-sm text-center ${getChangeColor(change24h)}`}>
         {formatNumber(change24h)}
       </div>
 
-      {/* Monthly Change */}
       <div className={`text-sm text-center ${getChangeColor(changeMonthly)}`}>
         {formatNumber(changeMonthly)}
       </div>
 
-      {/* Group Type */}
-      <div className="text-sm text-center">{groupType}</div>
+      <div className="text-[12px] text-center font-light">{sanitizeValue(groupType)}</div>
 
-      {/* Spotify */}
-      <div className="flex justify-center">
-        <a
-          href={spotifyLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-center w-20 bg-black rounded-md px-2 py-1.5"
-        >
-          <FaSpotify className="text-green-500 text-2xl" />
-        </a>
-      </div>
+<div className="flex justify-center">
+  <a
+    href={spotifyLink}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group relative flex items-center w-30 h-12 bg-black rounded-md px-4 overflow-hidden"
+  >
+    {/* Text (появляется из-под иконки справа) */}
+    <span className="absolute ml-8 text-white text-sm opacity-0 group-hover:opacity-100 group-hover:translate-x-0 translate-x-4 transition-all duration-500 z-0 whitespace-nowrap">
+      Spotify
+    </span>
+
+    {/* Spotify Icon */}
+    <FaSpotify className="relative text-green-500 text-2xl mx-auto transform transition-all duration-500 group-hover:-translate-x-8 group-hover:-rotate-[360deg]" />
+  </a>
+</div>
     </div>
   </div>
   );
@@ -252,7 +264,7 @@ const countryNameToCodeMap = {
   "Puerto Rico": "PR",
   "Qatar": "QA",
   "Romania": "RO",
-  "Russian Federation": "RU",
+  "Russian Federation": "UA",
   "Rwanda": "RW",
   "Saint Kitts and Nevis": "KN",
   "Saint Lucia": "LC",

@@ -1,37 +1,51 @@
-// SpotifyArtistCard.jsx
-import React from "react";
+import { FaSpotify } from "react-icons/fa";
 
-export default function SpotifyArtistCard({ artist, index }) {
+export default function SpotifyArtistCard({ artist, rank }) {
+  const imageUrl = artist.images?.[0]?.url;
+  const genres =artist.genres.join(", ");
+  const followers = artist.followers.total;
+  const externalUrl = artist.external_urls?.spotify;
+  const popularity = artist.popularity;
+
+  const bgGradient =
+    rank === 1 ? "linear-gradient(to bottom, #FFDF00, #E9D293)" :
+    rank === 2 ? "linear-gradient(to bottom, #BEC0C2, #EEF2F3)" :
+    rank === 3 ? "linear-gradient(to bottom, #D49B57, #CDA575)" :
+    "#E5E4E2";
+
   return (
-    <div className="flex gap-4 p-4 border border-gray-800 rounded items-center">
-      <div className="text-2xl w-8 text-center text-indigo-400">{index + 1}</div>
-      <img
-        src={artist.images?.[0]?.url}
-        alt={artist.name}
-        className="w-16 h-16 rounded-full object-cover"
-      />
-      <div className="flex-1">
-        <div className="font-bold text-lg">{artist.name}</div>
-        {artist.genres.length > 0 && (
-          <div className="text-sm text-gray-400 mb-1">
-            <strong>Genres:</strong> {artist.genres.join(", ")}
-          </div>
-        )}
-        <div className="text-sm text-gray-400">
-          <strong>Popularity:</strong> {artist.popularity}
+    <div className="w-full grid grid-cols-[26%_74%] items-center bg-[#E5E4E2] rounded-xl pl-4 py-4">
+      <div className="flex items-center gap-8">
+        <div className="text-lg font-semibold w-8 text-center rounded-md py-1"
+        style={{ background: bgGradient }}>{rank}</div>
+        <div className="w-14 min-w-14 h-14 rounded-md overflow-hidden">
+          <img src={imageUrl} alt={artist.name} className="w-full h-full object-cover" />
+        </div> 
+        <div className="font-semibold truncate">{artist.name}</div>
+      </div>
+      
+      <div className="grid grid-cols-4 items-center">
+        <div className="text-sm text-center">{artist.genres.length ? genres : "N/A"}</div>
+        <div className="text-sm text-center">{popularity}/100</div>
+        <div className="text-sm text-center">
+          {followers >= 1_000_000
+            ? `${(followers / 1_000_000).toFixed(1)}M`
+            : followers >= 1_000
+            ? `${(followers / 1_000).toFixed(1)}K`
+            : followers.toString()}
         </div>
-        <div className="text-sm text-gray-400">
-          <strong>Followers:</strong> {artist.followers.total.toLocaleString()}
-        </div>
-        <div className="text-sm text-gray-400">
-          <strong>Spotify URL:</strong>{" "}
+
+        <div className="flex justify-center">
           <a
-            href={artist.external_urls.spotify}
+            href={externalUrl}
             target="_blank"
-            rel="noreferrer"
-            className="text-indigo-400 hover:underline"
+            rel="noopener noreferrer"
+            className="group relative flex items-center w-30 h-12 bg-black rounded-md px-4 overflow-hidden"
           >
-            Open in Spotify
+            <span className="absolute ml-8 text-white text-sm opacity-0 group-hover:opacity-100 group-hover:translate-x-0 translate-x-4 transition-all duration-500 z-0 whitespace-nowrap">
+              Spotify
+            </span>
+            <FaSpotify className="relative text-green-500 text-2xl mx-auto transform transition-all duration-500 group-hover:-translate-x-8 group-hover:-rotate-[360deg]" />
           </a>
         </div>
       </div>
