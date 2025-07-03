@@ -7,6 +7,7 @@ import { formatDate, format_date_2 } from '../utils/concert_utils';
 const concertImages = import.meta.glob('../images/concert/*.{png,jpg,jpeg,svg}', { eager: true, import: 'default' });
 const festivalImages = import.meta.glob('../images/festival/*.{png,jpg,jpeg,svg}', { eager: true, import: 'default' });
 
+const howMuchConcertsToDisplayPerTour = 5;
 let previousSelectedConcertImage = null;
 let previousSelectedFestivalImage = null;
 
@@ -93,14 +94,35 @@ const CrispConcertDetails = React.memo(({ concerts }) => {
   }, [concerts]);
 
   const [images, setImages] = useState([]);
+  const [seeAllStates, setSeeAllStates] = useState({});
+  
+  // to update:
+  const updateEntry = (k, v) => {
+    setSeeAllStates(prev => ({ 
+      ...prev,      // copy existing entries
+      [k]: v        // overwrite or add the key
+    }));
+  };
 
+  function activateSeeAll(idx) {
+    updateEntry(idx, true);
+  }
+
+  function slicingHandler(idx) {
+    if (seeAllStates !== null) {
+      if (idx in seeAllStates) {
+      return 10000;
+      }
+    }
+    return howMuchConcertsToDisplayPerTour;
+  }
   useEffect(() => {
     setImages(filteredCrispData.map(item => get_random_image(item.type)));
     // run only once on mount (or whenever filteredCrispData changes)
   }, [filteredCrispData]);
 
   return (
-    <div>
+    <div className='font-size-crisp-main'>
     
       {filteredCrispData.map((item, idx) => {
         const imageUrl = images[idx];
@@ -192,7 +214,8 @@ const CrispConcertDetails = React.memo(({ concerts }) => {
           </div>
         {item.type === 'festival' && (
           <div>
-            {item.elements.map((e, i) => {
+            
+            {item.elements.slice(0, slicingHandler(idx)).map((e, i) => {
               const city = e._embedded.venues[0].city.name;
               return (
                 <div className = "tour-concert-info-container" key={i} style={{ fontSize: '12px' }}>
@@ -231,6 +254,9 @@ const CrispConcertDetails = React.memo(({ concerts }) => {
                 </div>
               );
             })}
+            { (idx in seeAllStates || item.elements.length <= howMuchConcertsToDisplayPerTour) ? null : 
+            <button onClick={() => activateSeeAll(idx)} className='see-all-button'>{"...and ".concat((item.elements.length - howMuchConcertsToDisplayPerTour).toString()).concat(" more shows")}</button>
+      }
           </div>
         )}
           </div>

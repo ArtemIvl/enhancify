@@ -41,7 +41,7 @@ export default function Concerts() {
     setConcertsToDisplayPerPage(5)
     fetchTopArtists()
           .then((data) => {
-              const top = data["Top 500"] || [];
+              const top = data["Top 10000"] || [];
               const first_hundred = top.slice(0, 1000)
               setGlobalTop100ArtistList(first_hundred)
           })

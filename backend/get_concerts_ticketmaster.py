@@ -12,8 +12,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 #TO-DO implement switching to a backup api key when/if quota is exceeded
-#TICKETMASTER_API = os.getenv("TICKETMASTER_API_KEY")
-TICKETMASTER_API = "NrvIaCsR0hamAEiuWTVOU7NeWyLNW1AL"
+TICKETMASTER_API = os.getenv("TICKETMASTER_API_KEY")
 TICKETMASTER_SECRET = os.getenv("TICKETMASTER_SECRET")
 
 
