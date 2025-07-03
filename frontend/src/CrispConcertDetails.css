@@ -74,7 +74,7 @@ margin-left: 110px;
     height: 5vh;
     display: flex;
     background-color: #f1f1f1;
-f    margin-top: 10px;
+    margin-top: 0.32rem;
     border-radius: 20px;
     border: 1px solid #2e2e2e;
 }
@@ -157,6 +157,12 @@ f    margin-top: 10px;
     font-size: 0.95vw;
 }
 
+.helper-text-concerts {
+  text-decoration: underline dashed;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
 .concert-dates-crisp {
     color: #2e2e2e;
     line-height: 1.2;
@@ -232,6 +238,20 @@ div {
     max-width: 100%;
     word-break: break-word;
     font-size: 20px;
+}
+
+.see-all-button {
+  cursor: pointer;
+  color: #141313;
+  font-size: 1.1rem;
+  margin-left: 9.5%;
+  font-weight: bold;
+  margin-top: 1.1%;
+}
+
+.see-all-button:hover {
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 .universal-subconcert-container {

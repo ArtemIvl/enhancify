@@ -200,7 +200,7 @@ body {
   background: #2e2e2e;
   margin-left: 0px;
   margin-right: 0px;
-  margin-top: 45px;
+  margin-top: 0.99rem;
   width: calc(100.5%);
 }
 
@@ -216,14 +216,14 @@ body {
 
 .concerts-content-container {
     position: fixed;
-    height: 67%;
+    height: 70%;
     background-image: linear-gradient(
         to bottom,
         #d3cfce 0%,
         #d3cfce 30%,
         #d3cfb8 100%
         );
-    margin-top: 30px;
+    margin-top: 0.99rem;
     width: 100%;
     margin-left: -9px;
     z-index: 0;
@@ -231,7 +231,7 @@ body {
 }
 
 .cool-concert-line {
-    margin-top: 35px;
+    margin-top: 1.4rem;
     height: 0.5px;
     margin-bottom: -1%;
     width: 100%;
@@ -251,7 +251,7 @@ body {
 
 .main-concert-card {
     margin-left: 110px;
-    margin-top: 2.75vh;
+    margin-top: 0.6rem;
     height: 12.75vh;
     width: 84%;
     display: flex;
@@ -366,19 +366,6 @@ body {
   justify-content: center;
 }
 
-.see-all-button {
-  cursor: pointer;
-  color: #141313;
-  font-size: 1.1rem;
-  margin-left: 9.5%;
-  font-weight: bold;
-  margin-top: 1.1%;
-}
-
-.see-all-button:hover {
-    text-decoration: underline;
-    cursor: pointer;
-}
 .genre-button {
   /* let content decide the height; use padding instead of fixed height */
   padding: 0px 13px;    /* ⬅ tweak top/bottom to shrink the row height */

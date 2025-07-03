@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import "../CrispConcertDetails.css";
 import "../Concerts.css";
-import { formatDate, format_date_2 } from '../utils/concert_utils';
+import { formatDate, format_date_2, truncate_text } from '../utils/concert_utils';
 
 // Use Vite’s import.meta.glob to load images
 const concertImages = import.meta.glob('../images/concert/*.{png,jpg,jpeg,svg}', { eager: true, import: 'default' });
@@ -10,6 +10,24 @@ const festivalImages = import.meta.glob('../images/festival/*.{png,jpg,jpeg,svg}
 const howMuchConcertsToDisplayPerTour = 5;
 let previousSelectedConcertImage = null;
 let previousSelectedFestivalImage = null;
+
+export const format_date_with_helper = (isoString) => {
+  const date = new Date(isoString);
+  if (isNaN(date.getTime())) {
+    // handle invalid input however you like:
+    return (
+      <div title='The exact dates for this event are yet to be decided' className='helper-text-concerts'>TBD</div>
+    )
+    // or throw new Error(`Bad date: ${isoString}`);
+  }
+
+  const day     = date.getDate();
+  const month   = date.toLocaleString('en-GB', { month: 'short' });
+  const hours   = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  
+  return `${day} ${month}, ${hours}:${minutes}`;
+};
 
 const get_random_image = (type) => {
   const images = type === 'concert'
@@ -108,6 +126,22 @@ const CrispConcertDetails = React.memo(({ concerts }) => {
     updateEntry(idx, true);
   }
 
+  function handleArenaName(e) {
+    if (e._embedded.venues[0].name != null) {
+    return (
+      <div className = 'font-semibold'>
+      {truncate_text(e._embedded.venues[0].name, 45)}
+      </div>
+    )
+    }
+    else {
+      return (
+      <span className = 'font-semibold helper-text-concerts' title='The concert venue is yet to be announced'>
+      TBA
+      </span>
+      )
+    }
+  }
   function slicingHandler(idx) {
     if (seeAllStates !== null) {
       if (idx in seeAllStates) {
@@ -154,7 +188,7 @@ const CrispConcertDetails = React.memo(({ concerts }) => {
             {item.type === 'festival' && (
               <>
               <div className='festival-name-container'>
-              <div className='text-festival'>{item.name}</div>
+              <div className='text-festival'>{truncate_text(item.name, 90)}</div>
               </div>
                 <div className='crisp-horizontal-line'>|</div>
                 <div className='dates-container'>
@@ -175,7 +209,7 @@ const CrispConcertDetails = React.memo(({ concerts }) => {
             {item.type === 'concert' && (
               <>
                 <div className='concert-name-container'>
-                <div className='text-concert'>{item.name}</div>
+                <div className='text-concert'>{truncate_text(item.name, 65)}</div>
                 </div>
                 <div className='crisp-horizontal-line-2'>|</div>
                 <div className='location-container-concert'>
@@ -189,7 +223,7 @@ const CrispConcertDetails = React.memo(({ concerts }) => {
                 <div className='dates-container-concert'>
                   <div className='concert-dates-crisp'>
                     <span className='material-icons-outlined contrast-110 ml-[0.6vw] mr-[0.8vw] rounded-lg mt-[0.4vh]'>calendar_month</span>
-                     <span className='mt-[1vh]'>{format_date_2(item.startDate)}</span>
+                     <span className='mt-[1vh]'>{format_date_with_helper(item.startDate)}</span>
                   </div>
                   {dateText}
                 </div>
@@ -229,15 +263,13 @@ const CrispConcertDetails = React.memo(({ concerts }) => {
                  <div className='universal-subconcert-container w-[17%]'>
                    <span className="material-icons-outlined dates-icon-large">schedule</span>
                   <div className = 'font-semibold'>
-                  {format_date_2(e.dates.start.dateTime)}
+                  {format_date_with_helper(e.dates.start.dateTime)}
                   </div>
                 </div>
                 <div className="mini-horizontal-line"></div>
 
                 <div className='universal-subconcert-container w-[17%]'>
-                  <div className = 'font-semibold'>
-                  {e._embedded.venues[0].name == null ? "----" : e._embedded.venues[0].name}
-                  </div>
+                  {handleArenaName(e)}
                 </div>
                 <div className="mini-horizontal-line"></div>
                 

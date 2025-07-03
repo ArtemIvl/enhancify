@@ -46,6 +46,7 @@ export const format_date_2 = (isoString) => {
   return `${day} ${month}, ${hours}:${minutes}`;
 };
 
+
 //preprocessing the rankings array for further sorting
 export const sort_num_rankings = rankings =>
   Object.fromEntries(
@@ -57,7 +58,15 @@ export const sort_num_rankings = rankings =>
       // keep only the first 500
       .slice(0, 500)
   );
-  
+
+export function truncate_text(text, limit) {
+  if (text.length <= limit) return text;
+  const ell = '...';
+  // if limit is very small, just slice and append
+  const sliceLen = limit > ell.length ? limit - ell.length : limit;
+  return text.slice(0, sliceLen) + ell;
+}
+
 export const sort_concerts_descending = (concerts, ranks = {}) => {
   if (!concerts || !ranks) return {};
   return Object.fromEntries(
