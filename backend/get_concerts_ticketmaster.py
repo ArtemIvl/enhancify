@@ -48,7 +48,9 @@ def query_concert_info_for_one_singer(redis_instance: redis.Redis, artist_id = N
     #Think of a fallback mechanism for keyword (a separate query, yes, but how to check if keyword got additional info?)
     #By some unique concert id - compare lists. Is it in previous list? no - add to one big list
     request_params["attractionId"] = look_up_artists_attraction_id(redis=redis_instance, artist_name=artist_name, artist_spotify_id=artist_id)
-    
+    if (not request_params["attractionId"]):
+        return 401, "Attraction id not found"
+        
     start = time.time()
     response = requests.get("https://app.ticketmaster.com/discovery/v2/events.json", params=request_params)
     end = time.time()

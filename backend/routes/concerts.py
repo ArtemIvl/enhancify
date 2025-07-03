@@ -113,8 +113,6 @@ def concerts_sorting(concert_to_sort_through, countries = [], stateCode = None, 
     
     return True
 
-### if we need to flush keys (debug purposes, REMOVE before production)
-
 #save the artist ranks and id's after updating top leaderboard
 #separate endpoint and list for storing ranks 
 #separate method for retreiving this information
