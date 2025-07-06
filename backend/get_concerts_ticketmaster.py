@@ -6,6 +6,7 @@ from dateutil.relativedelta import relativedelta
 import redis
 import time
 from dotenv import load_dotenv
+import unicodedata
 # from config import TICKETMASTER_API_KEY
 
 
@@ -68,7 +69,15 @@ def query_concert_info_for_one_singer(redis_instance: redis.Redis, artist_id = N
 
     if (response.status_code == 200):
         final_response = response_filtered["_embedded"]["events"]
+        indexes_to_erase = []
+        #key - concert name
+        #value - index
+        unique_concert_names = dict()
         for item in final_response:
+            
+            #Iterate through every concert item
+            #Group all items that start and end at the same time
+            #Compare this items together - only keep an item with the shortest name in string
             item.pop("seatmap", None)
             item.pop("promoters", None)
             item.pop("promoter", None)
@@ -77,7 +86,21 @@ def query_concert_info_for_one_singer(redis_instance: redis.Redis, artist_id = N
             item.pop("_links", None)
             item.pop("products", None)
             item.pop("images", None)
-            
+            if (get_plain_string(item["name"]) in unique_concert_names.keys()):
+                item_to_compare_with = final_response[unique_concert_names[get_plain_string(item["name"])]]
+                if ((item_to_compare_with.get("dates", dict()).get("start", dict()).get("dateTime", None) and item.get("dates", dict()).get("start", dict()).get("dateTime", None))
+                    and item_to_compare_with.get("dates", dict()).get("start", dict()).get("dateTime", None) == item.get("dates", dict()).get("start", dict()).get("dateTime", None)):
+                    length_first = len(item_to_compare_with["dates"]["start"]["dateTime"])
+                    length_second = len(item["dates"]["start"]["dateTime"])
+                    index_to_erase = unique_concert_names[get_plain_string(item["name"])] if length_first > length_second else final_response.index(item)
+                    indexes_to_erase.append(index_to_erase)
+                else:
+                    item["name"] = item_to_compare_with["name"]
+            else:
+                unique_concert_names[get_plain_string(item["name"])] = final_response.index(item)
+                
+        for element in indexes_to_erase:
+            del final_response[element]
         return response.status_code, final_response
     else:
         return 401, response["fault"]
@@ -126,3 +149,17 @@ def look_up_artists_attraction_id(redis: redis.Redis, artist_name = None, artist
                         break
                 
     return attraction_id
+
+def get_plain_string(text: str) -> str:
+    """
+    Convert text to lowercase, strip diacritics, and remove all characters
+    except a–z and 0–9.
+    """
+    # 1. lowercase
+    lower = text.lower()
+    # 2. decompose accents and remove combining marks
+    decomposed = unicodedata.normalize("NFKD", lower)
+    stripped = "".join(ch for ch in decomposed if not unicodedata.combining(ch))
+    # 3. keep only alphanumeric characters (a–z, 0–9)
+    plain = "".join(ch for ch in stripped if ch.isalnum())
+    return plain

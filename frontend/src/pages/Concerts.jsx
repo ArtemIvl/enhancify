@@ -10,12 +10,14 @@ import NothingFoundCardConcerts from "../components/NothingFoundCardConcerts";
 import {calculateShowsAvailable, extractImageSrc, sort_concerts_descending, sort_num_rankings, preprocessFavouriteArtistsArray} from "../utils/concert_utils.js";
 import GetArtistTags from "../components/GetArtistTags.jsx";
 import { useAuth } from "../services/AuthContext.jsx";
+import ConcertSearchFilters from "../components/ConcertSearchFilters.jsx";
 
 export default function Concerts() {
 
   const token = localStorage.getItem("spotify_token");
   const [concertsToDisplayPerPage, setConcertsToDisplayPerPage] = useState(6)
   const [loadMoreItems, setLoadMoreItems] = useState(false)
+  const [searchToggle, setSearchToggle] = useState("area");
 
   //main array with concerts - the contents of this array are currently displayed on the page
   const [concerts, setConcerts] = useState(null)
@@ -242,14 +244,13 @@ function checkIfArtistIsFavorite(artistId) {
             <button className={`filters-button${filters === "clicked" ? " active" : ""}`} 
             onClick={() => filters === "clicked" ? setFilters("unclicked") : setFilters("clicked")}>
                 <span className="material-icons-outlined icons-tweaked">tune</span>Filters</button>
-             {filters === "clicked" && (
-                <div className="filters-detailed-container">
-                <div className="filters-setting">Menu Item 1</div>
-                <div className="filters-setting">Menu Item 1</div>
-                <div className="filters-setting">Menu Item 1</div>
-
-                </div>
-            )}
+            <div
+            className={`filters-detailed-container ${
+              filters !== "clicked" ? "hidden" : ""
+            }`}
+          >
+            <ConcertSearchFilters setSearchByArtist={setSearchToggle}  />
+          </div>
         </div>
       </div>
       </div>

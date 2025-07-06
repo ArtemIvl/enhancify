@@ -26,6 +26,52 @@ body {
   align-items: center;
 }
 
+.button-row-filters {
+  display: flex;
+  align-items: center;
+  margin-left: -5%;
+}
+
+.filters-detailed-container.hidden {
+    display: none;
+}
+.filters-button-toggle {
+  display: flex;
+  height: 3.5rem;
+  border-radius: 1rem;
+  width: 45%;
+  font-size: 0.9rem;
+  cursor: pointer;
+  /* optional: padding, border, bg, etc. */
+}
+
+.icon-wrapper {
+  flex: 0 0 20%;      /* always 30% of button width */
+  display: flex;
+  justify-content: center;
+  margin-left: 10px;
+  margin-top: 1rem;
+}
+
+.filters-button-toggle.active {
+    background-color: #e6e6e6;
+}
+.text-wrapper {
+  margin-top: 0.5rem;
+  flex: 1;    
+  text-align: left; 
+  margin-left: 0.5rem;      /* take the rest (70%) */
+}
+
+.slider-filters {
+    flex: 1;
+    margin-right: 10%;
+    font-size: 5px;
+}
+
+.button-row-filters .filters-button-toggle + .filters-button-toggle {
+    margin-left: 0.8rem;
+}
 .button-row .button-concerts-search + .button-concerts-search {
   margin-left: 0.9vw;
 }
@@ -34,6 +80,17 @@ body {
   margin-top: 1.5vh;
 }
 
+.filter-radius-container {
+    display: flex;
+    margin-top: 1.5rem;
+    height: 4rem;
+}
+
+.event-search-name {
+    font-size: 0.85rem;
+    margin-top: 0.2rem;
+    flex: 0 0 35%;  
+}
 .icons-tweaked {
     vertical-align: middle;   /* aligns icon with text middle */
     font-size: 1.2em;       
@@ -128,7 +185,7 @@ body {
     padding-left: 30px;
     padding-top: 15px;
     color: #2e2e2e;
-    width: 270px;
+    width: 19rem;
     border: 0.5px solid #2e2e2e;
     z-index: 1000;
     font-size: 15px;
