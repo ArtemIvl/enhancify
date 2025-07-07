@@ -2,14 +2,13 @@ import * as React from 'react';
 import { useState } from "react";
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
-import { fontSize, height } from '@mui/system';
+import { fontSize, height, width } from '@mui/system';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import TextField from '@mui/material/TextField';
-
 
 export default function ConcertSearchFilters({setSearchByArtist, setDateToSearchFrom,
   setDateToSearchUntil, setSearchRadius}) {
@@ -90,23 +89,27 @@ return (
       />
     </Box>
     </div>
-    <div className='ml-[-4%] mt-[5%]'>Search concerts from</div>     <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <div className='mt-[3%] mb-[2%]'>Search concerts from</div>     <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <DatePicker
+    minDate={dayjs()}
+    maxDate={dayjs().add(3, "year")}
+    defaultValue={dayjs().add(2, 'day')}
+    yearsOrder="desc"
+    slotProps={{ textField: { size: 'small'} }}
+    sx={{width: 200}}
+    />
+    </LocalizationProvider>
+    <div className='mt-[5%] mb-[2%]'>Search concerts until</div>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
     <DatePicker
     minDate={dayjs()}
     maxDate={dayjs("2027-02-28")}
     yearsOrder="desc"
-    renderInput={(params) => (
-    <TextField
-      {...params}
-      inputProps={{
-        ...params.inputProps,
-        style: { fontSize: 12 }             // ← px number works too
-      }}
-    />
-    )}
+    defaultValue={dayjs().add(1, "year")}
+    slotProps={{ textField: { size: 'small'} }}
+    sx={{width: 200}}
     />
     </LocalizationProvider>
-    <div className='ml-[-4%] mt-[9%]'>Search concerts until</div>
 
     </div>
 )
