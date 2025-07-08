@@ -1,5 +1,6 @@
 
 import axios from "axios";
+import { useState, useEffect } from "react";
 
 export default function NothingFoundCardConcerts({ setConcerts, setGlobalConcerts, 
   setMostListenedConcerts, setGlobalLoading, setFollowedLoading, toggleMode, followedArtistsToQuery, clearInput, setItemToPassBack}) {
@@ -35,8 +36,6 @@ const HARDCODED_COUNTRIES = [
   { label: "France",        flag: "fr", input_type: "country", code: "FR",                 icon: "flag_circle"   },
   { label: "Paris",         flag: "fr", input_type: "city",    code: "(48.8566, 2.3522)",   icon: "location_city" }
 ];
-
-
 
 function handleClick(selectedItem) {
   setItemToPassBack(selectedItem)
@@ -110,6 +109,7 @@ shuffleCountries();
 
 return (
     <div>
+      {toggleMode === "area" ? (
         <div className="background-rectangle-nothing">
     <div className="nothing-found-title">Whoops! We didn't find any concerts in this area... Try again with a different location?</div>
     <div className="alternative-search-choice-container">
@@ -120,6 +120,11 @@ return (
     <button className="alternative-search-choice" onClick={() => handleClick(HARDCODED_COUNTRIES[4])}><span className={`fi fi-${HARDCODED_COUNTRIES[4].flag} increase-size brightness-90 contrast-110 ml-[10px] mr-[12px] `}></span>{HARDCODED_COUNTRIES[4].label}</button>
     </div>
     </div>
+      ) : (<div className="background-rectangle-nothing">
+    <div className="nothing-found-title">Whoops! We didn't find any concerts for this singer... Try adjusting search filters or searching for someone else?</div>
+    </div>
+      )
+      }
     </div>
 )
 }

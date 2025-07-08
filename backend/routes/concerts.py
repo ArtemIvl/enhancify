@@ -2,11 +2,13 @@ import json
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from geopy.distance import geodesic
-
+from datetime import datetime
 from get_concerts_ticketmaster import query_concert_info_for_one_singer
 from api_schema.request_schema import ConcertsRequest
 from scheduler import update_concerts_for_top_global_singers
 from redis_client import r
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+
 CONCERT_UPDATE_FREQUENCY_PER_DAY = 6
 router = APIRouter()
 
@@ -34,7 +36,7 @@ def get_concerts(request_model: ConcertsRequest):
                 concert_info = json.loads(concert_info) if concert_info else []
             #otherwise make a request to ticketmaster
             else:
-                response_code, concert_info = query_concert_info_for_one_singer(redis_instance=r, artist_id=artist_id, artist_name=item["artist_name"])
+                response_code, concert_info = query_concert_info_for_one_singer(redis_instance=r, artist_id=artist_id, artist_name=item["artist_name"], start_date=request_model.start_date, end_date=request_model.end_date)
                 if concert_info != []:
                     if (response_code == 200):
                             expiration_time = int((3600*24/CONCERT_UPDATE_FREQUENCY_PER_DAY) + 100)
@@ -45,7 +47,7 @@ def get_concerts(request_model: ConcertsRequest):
             #notice that theoretically back-end supports multiple filters (first by country, then by state then by code)
             final_concert_list_with_filters_applied = [item for item in concert_info if 
             concerts_sorting(item, countries=request_model.countries, stateCode=request_model.stateCode, 
-            geo_latitude=request_model.geo_latitude, geo_longitude=request_model.geo_longitude)]
+            geo_latitude=request_model.geo_latitude, geo_longitude=request_model.geo_longitude, search_radius=request_model.search_area, start_date=request_model.start_date, end_date=request_model.end_date)]
             
             if final_concert_list_with_filters_applied != []:
                 final_concert_dict_to_be_used_in_response[artist_id] = final_concert_list_with_filters_applied
@@ -68,7 +70,7 @@ def get_concerts(request_model: ConcertsRequest):
             concert_info_per_artist = json.loads(concert_info_per_artist) if concert_info_per_artist else []
             final_concert_list_with_filters_applied = [item for item in concert_info_per_artist if 
             concerts_sorting(item, countries=request_model.countries, stateCode=request_model.stateCode, 
-                             geo_latitude=request_model.geo_latitude, geo_longitude=request_model.geo_longitude)]
+                             geo_latitude=request_model.geo_latitude, geo_longitude=request_model.geo_longitude, search_radius=request_model.search_area, start_date=request_model.start_date, end_date=request_model.end_date)]
             if final_concert_list_with_filters_applied != []:
                 final_concert_dict_to_be_used_in_response[artist_id] = final_concert_list_with_filters_applied
     
@@ -81,8 +83,32 @@ def get_numerical_rankings():
     return JSONResponse(numerical_rankings, status_code=200)
 
 
-def concerts_sorting(concert_to_sort_through, countries = [], stateCode = None, geo_latitude = None, geo_longitude = None):
+def concerts_sorting(concert_to_sort_through, countries = [], stateCode = None, geo_latitude = None, geo_longitude = None, search_radius = None, start_date = None, end_date = None):
     #To-do: process more than one venue (if the coordinates/city matches at least one venue)
+    if start_date and end_date:
+        date_base = concert_to_sort_through.get("dates", dict()).get("start", None)
+        actual_concert_start_time = None
+        if date_base:
+            if date_base.get("dateTime", None):
+                raw_start_time = date_base["dateTime"].replace("Z", "+00:00")
+                actual_concert_start_time = datetime.fromisoformat(raw_start_time)
+                zone_info = concert_to_sort_through.get("dates", dict()).get("timezone", None)
+                if not zone_info:
+                    zone_info = "Etc/UTC"
+                raw_start_time = actual_concert_start_time.astimezone(ZoneInfo(zone_info))
+            else:
+                if date_base.get("localDate", None):
+                    raw_start_time = datetime.fromisoformat(date_base["localDate"])
+                    zone_info = concert_to_sort_through.get("dates", dict()).get("timezone", None)
+                    if not zone_info:
+                        zone_info = "Etc/UTC"
+                    actual_concert_start_time = raw_start_time.replace(tzinfo=ZoneInfo(zone_info))
+                    date_base["localDate"] = actual_concert_start_time.isoformat(timespec="seconds")
+        if actual_concert_start_time:
+            if actual_concert_start_time < start_date or actual_concert_start_time > end_date:
+                return False
+            
+        
     get_the_venues = concert_to_sort_through.get("_embedded", dict()).get("venues", list())
     venue = None
     if len(get_the_venues) > 0:
@@ -99,7 +125,11 @@ def concerts_sorting(concert_to_sort_through, countries = [], stateCode = None, 
             return False
     if (geo_latitude != None and geo_longitude != None):
         #the radius in which we search for conerts if coordinates are provided
-        allowed_distance_threshold_km = 100
+        
+        allowed_distance_threshold_km = search_radius
+        print(allowed_distance_threshold_km)
+        if not search_radius:
+            allowed_distance_threshold_km = 100
         concert_coords_lat = venue.get("location", dict()).get("latitude", None)
         concert_coords_lng = venue.get("location", dict()).get("longitude", None)
         if concert_coords_lat and concert_coords_lng:

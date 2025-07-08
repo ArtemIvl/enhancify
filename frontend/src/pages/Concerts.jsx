@@ -7,7 +7,7 @@ import axios from "axios";
 import ScrollContainer from "../components/ScrollComponent";
 import CrispConcertDetails from "../components/CrispConcertDetails";
 import NothingFoundCardConcerts from "../components/NothingFoundCardConcerts";
-import {calculateShowsAvailable, extractImageSrc, sort_concerts_descending, sort_num_rankings, preprocessFavouriteArtistsArray} from "../utils/concert_utils.js";
+import {calculateShowsAvailable, extractImageSrc, sort_concerts_descending, sort_num_rankings, preprocessFavouriteArtistsArray, getFiltersFromStorage} from "../utils/concert_utils.js";
 import GetArtistTags from "../components/GetArtistTags.jsx";
 import { useAuth } from "../services/AuthContext.jsx";
 import ConcertSearchFilters from "../components/ConcertSearchFilters.jsx";
@@ -18,10 +18,10 @@ export default function Concerts() {
   const token = localStorage.getItem("spotify_token");
   const [concertsToDisplayPerPage, setConcertsToDisplayPerPage] = useState(6)
   const [loadMoreItems, setLoadMoreItems] = useState(false)
-  const [searchToggle, setSearchToggle] = useState("area");
-  const [searchRadius, setSearchRadius] = useState(100)
-  const [dateToSearchFrom, setDateToSearchFrom] = useState(dayjs().add(3, "day"))
-  const [dateToSearchUntil, setDateToSearchUntil] = useState(dayjs().add(1, "year"))
+  const [searchToggle, setSearchToggle] = useState(getFiltersFromStorage("filters_search_mode", "area"));
+  const [searchRadius, setSearchRadius] = useState(getFiltersFromStorage("search_area_concerts", 100))
+  const [dateToSearchFrom, setDateToSearchFrom] = useState(dayjs(getFiltersFromStorage("search_start_date", dayjs().add(3, "day"))))
+  const [dateToSearchUntil, setDateToSearchUntil] = useState(dayjs(getFiltersFromStorage("search_end_date", dayjs().add(1, "year"))))
   //main array with concerts - the contents of this array are currently displayed on the page
   const [concerts, setConcerts] = useState(null)
   //what we get as a result of webscraping
@@ -69,6 +69,7 @@ export default function Concerts() {
     if (mostListenedArtistList) {
       console.log(mostListenedArtistList)
       console.log("aaaaa")
+      console.log(dateToSearchFrom)
     }
   }, mostListenedArtistList);
 
@@ -100,6 +101,9 @@ export default function Concerts() {
     setGlobalLoading(true)
     axios.post('http://localhost:8000/get_concerts', {
     get_top_artist_info: 1,
+    start_date: dateToSearchFrom.toISOString(),
+    end_date: dateToSearchUntil.toISOString(),
+    search_area: searchRadius,
     countries: []
   })
     .then(response => {
@@ -123,6 +127,9 @@ useEffect(() => {
       return axios.post('http://localhost:8000/get_concerts', {
         get_top_artist_info: 0,
         artists: preprocessFavouriteArtistsArray(artists),
+        start_date: dateToSearchFrom.toISOString(),
+        end_date: dateToSearchUntil.toISOString(),
+        search_area: searchRadius,
         countries: []
       });
     })
@@ -238,7 +245,7 @@ function checkIfArtistIsFavorite(artistId) {
           <span className="material-icons-outlined icons-tweaked">star</span>
           My Artists
         </button>
-        <div><ConcertsSearch countries={statesCitiesCountriesArr} setConcerts={setConcerts} followedArtistsToQuery={preprocessFavouriteArtistsArray(mostListenedArtistList)} 
+        <div><ConcertsSearch searchToggle = {searchToggle} searchRadius = {searchRadius} start_date = {dateToSearchFrom} end_date = {dateToSearchUntil} countries={statesCitiesCountriesArr} setConcerts={setConcerts} followedArtistsToQuery={preprocessFavouriteArtistsArray(mostListenedArtistList)} 
         setGlobalConcerts = {setGlobalTop100Concerts} setMostListenedConcerts = {setMostListenedArtistConcerts} setGlobalLoading={setGlobalLoading} setFollowedLoading = {setFollowedLoading} toggleMode={active}
         searchResultFromNothingFound={forciblyOverrideSearchResult} setSearchResultFromNothingFound={setForciblyOverrideSearchResult}>\
         
@@ -269,8 +276,8 @@ function checkIfArtistIsFavorite(artistId) {
           ) : (
             <ScrollContainer setLoadMoreItems={setLoadMoreItems}>
             {Object.keys(concerts).length === 0 || concerts === null ? (
-              <NothingFoundCardConcerts setConcerts={setConcerts} followedArtistsToQuery={preprocessFavouriteArtistsArray(mostListenedArtistList)} setItemToPassBack={setForciblyOverrideSearchResult}
-        setGlobalConcerts = {setGlobalTop100Concerts} setMostListenedConcerts = {setMostListenedArtistConcerts} setGlobalLoading={setGlobalLoading} setFollowedLoading = {setFollowedLoading} toggleMode={active}></NothingFoundCardConcerts>
+              <NothingFoundCardConcerts toggleMode = {searchToggle} setConcerts={setConcerts} followedArtistsToQuery={preprocessFavouriteArtistsArray(mostListenedArtistList)} setItemToPassBack={setForciblyOverrideSearchResult}
+        setGlobalConcerts = {setGlobalTop100Concerts} setMostListenedConcerts = {setMostListenedArtistConcerts} setGlobalLoading={setGlobalLoading} setFollowedLoading = {setFollowedLoading}></NothingFoundCardConcerts>
             ) : (
               Object.entries(sort_concerts_descending(concerts, numericalRankingsDict)).slice(0, concertsToDisplayPerPage).map(([key, concert], index) => (
                 <div

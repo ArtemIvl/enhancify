@@ -67,6 +67,11 @@ export function truncate_text(text, limit) {
   return text.slice(0, sliceLen) + ell;
 }
 
+export function getFiltersFromStorage(key, defaultValue) {
+    const stored = localStorage.getItem(key);
+    return stored ? JSON.parse(stored) : defaultValue;
+}
+
 export const sort_concerts_descending = (concerts, ranks = {}) => {
   if (!concerts || !ranks) return {};
   return Object.fromEntries(

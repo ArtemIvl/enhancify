@@ -9,14 +9,10 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import TextField from '@mui/material/TextField';
+import { getFiltersFromStorage } from '../utils/concert_utils';
 
 export default function ConcertSearchFilters({setSearchByArtist, setDateToSearchFrom,
   setDateToSearchUntil, setSearchRadius}) {
-
-function getFiltersFromStorage(key, defaultValue) {
-    const stored = localStorage.getItem(key);
-    return stored ? JSON.parse(stored) : defaultValue;
-}
 
 
 const [active, setActive] = useState(getFiltersFromStorage("filters_search_mode", "area"));
@@ -46,13 +42,13 @@ const handleAreaChange = (event, newValue) => {
 function toggleSearchType(newState) {
 if (newState === "area") {
     setActive("artist")
-    setSearchByArtist(active);
+    setSearchByArtist("artist");
     localStorage.setItem('filters_search_mode', JSON.stringify("artist"));
 
 }
 else if (newState === "artist") {
     setActive("area")
-    setSearchByArtist(active);
+    setSearchByArtist("area");
     localStorage.setItem('filters_search_mode', JSON.stringify("area"));
 }
 }
@@ -67,7 +63,9 @@ const handleDateChangeEnd = (newValue) => {
   }
 
 const getAllowedDate = (type) => {
+  console.log(1)
   let start_date_allowed = dayjs(getFiltersFromStorage("search_start_date", dayjs().add(3, "day")))
+  console.log(2)
   let end_date_allowed = dayjs(getFiltersFromStorage("search_end_date", dayjs().add(3, "year")))
   if (type === "start") {
     return end_date_allowed.add(-1, "day")
@@ -127,7 +125,7 @@ return (
         localStorage.setItem('search_start_date', JSON.stringify(newDate));
       }
     }}
-    defaultValue={getFiltersFromStorage("search_start_date", dayjs().add(3, "day"))}
+    defaultValue={dayjs(getFiltersFromStorage("search_start_date", dayjs().add(3, "day")))}
     yearsOrder="asc"
     slotProps={{ textField: { size: 'small'} }}
     sx={{width: 200}}
@@ -145,7 +143,7 @@ return (
       }
     }}
     yearsOrder="asc"
-    defaultValue={getFiltersFromStorage("search_end_date", dayjs().add(1, "year"))}
+    defaultValue={dayjs(getFiltersFromStorage("search_end_date", dayjs().add(1, "year")))}
     slotProps={{ textField: { size: 'small'} }}
     sx={{width: 200}}
     />

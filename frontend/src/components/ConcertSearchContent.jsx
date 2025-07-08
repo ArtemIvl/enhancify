@@ -15,8 +15,8 @@ var SEARCH_HISTORY = [
 
 ];
 
-export default function ConcertsSearch({ countries = [], setConcerts, setGlobalConcerts, 
-  setMostListenedConcerts, setGlobalLoading, setFollowedLoading, toggleMode, followedArtistsToQuery, searchResultFromNothingFound, setSearchResultFromNothingFound}) {
+export default function ConcertsSearch({ countries = [], setConcerts, setGlobalConcerts, start_date, end_date, searchRadius,
+  setMostListenedConcerts, setGlobalLoading, setFollowedLoading, toggleMode, followedArtistsToQuery, searchResultFromNothingFound, setSearchResultFromNothingFound,}) {
   const [inputValue, setInputValue] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedCode, setSelectedCode] = useState(null);
@@ -42,8 +42,13 @@ useEffect(() => {
 function handleClick() {
   setGlobalLoading(true)
   setFollowedLoading(true)
+  console.log("search rad")
+  console.log(searchRadius)
   const params = {
       get_top_artist_info: 1,
+      start_date: start_date,
+      end_date: end_date,
+      search_area: searchRadius,
       countries: []
   }
   if (selectedItem !== null) {

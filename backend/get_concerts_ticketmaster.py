@@ -19,12 +19,12 @@ TICKETMASTER_SECRET = os.getenv("TICKETMASTER_SECRET")
 
 #it would make sense to start returning concerts a bit more in the future, like in 2 upcoming days. 
 # Going to a concert is a big event, it is usually planned in advance
-DEFAULT_START_DATE_TIME = (datetime.now(timezone.utc) + timedelta(days=2)).strftime("%Y-%m-%dT%H:%M:%SZ")
+DEFAULT_START_DATE_TIME = (datetime.now(timezone.utc) + timedelta(days=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
 
-DEFAULT_END_DATE_TIME = (datetime.now(timezone.utc) + relativedelta(years=2)).strftime("%Y-%m-%dT%H:%M:%SZ")
+DEFAULT_END_DATE_TIME = (datetime.now(timezone.utc) + relativedelta(years=3)).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 #same logic - what's the point of planning a concert more than 2 years in advance
-def query_concert_info_for_one_singer(redis_instance: redis.Redis, artist_id = None, artist_name = None):
+def query_concert_info_for_one_singer(redis_instance: redis.Redis, artist_id = None, artist_name = None, start_date = None, end_date = None):
     
     #params - request parameters that we want to see in our reuquest
     #in other words query filters
