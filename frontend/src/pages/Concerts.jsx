@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import "../Concerts.css";
 import ConcertsSearch from "../components/ConcertSearchContent";
 import statesCitiesCountriesArr from "../utils/loadPlaces";
@@ -11,6 +11,7 @@ import {calculateShowsAvailable, extractImageSrc, sort_concerts_descending, sort
 import GetArtistTags from "../components/GetArtistTags.jsx";
 import { useAuth } from "../services/AuthContext.jsx";
 import ConcertSearchFilters from "../components/ConcertSearchFilters.jsx";
+import dayjs from "dayjs";
 
 export default function Concerts() {
 
@@ -18,7 +19,9 @@ export default function Concerts() {
   const [concertsToDisplayPerPage, setConcertsToDisplayPerPage] = useState(6)
   const [loadMoreItems, setLoadMoreItems] = useState(false)
   const [searchToggle, setSearchToggle] = useState("area");
-
+  const [searchRadius, setSearchRadius] = useState(100)
+  const [dateToSearchFrom, setDateToSearchFrom] = useState(dayjs().add(3, "day"))
+  const [dateToSearchUntil, setDateToSearchUntil] = useState(dayjs().add(1, "year"))
   //main array with concerts - the contents of this array are currently displayed on the page
   const [concerts, setConcerts] = useState(null)
   //what we get as a result of webscraping
@@ -249,7 +252,7 @@ function checkIfArtistIsFavorite(artistId) {
               filters !== "clicked" ? "hidden" : ""
             }`}
           >
-            <ConcertSearchFilters setSearchByArtist={setSearchToggle}  />
+            <ConcertSearchFilters setSearchByArtist={setSearchToggle} setSearchRadius={setSearchRadius} setDateToSearchFrom={setDateToSearchFrom} setDateToSearchUntil={setDateToSearchUntil} />
           </div>
         </div>
       </div>

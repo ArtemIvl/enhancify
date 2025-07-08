@@ -13,7 +13,13 @@ import TextField from '@mui/material/TextField';
 export default function ConcertSearchFilters({setSearchByArtist, setDateToSearchFrom,
   setDateToSearchUntil, setSearchRadius}) {
 
-const [active, setActive] = useState("area");
+function getFiltersFromStorage(key, defaultValue) {
+    const stored = localStorage.getItem(key);
+    return stored ? JSON.parse(stored) : defaultValue;
+}
+
+
+const [active, setActive] = useState(getFiltersFromStorage("filters_search_mode", "area"));
 const marks = [
     {
         value: 25,
@@ -32,15 +38,22 @@ const marks = [
         value: 200,
     },
     { value: 250, "label": 250}];
-const [searchArea, setSearchArea] = useState(100);
+
+const handleAreaChange = (event, newValue) => {
+    setSearchRadius(newValue)
+    localStorage.setItem('search_area_concerts', JSON.stringify(newValue));
+  }
 function toggleSearchType(newState) {
 if (newState === "area") {
     setActive("artist")
     setSearchByArtist(active);
+    localStorage.setItem('filters_search_mode', JSON.stringify("artist"));
+
 }
 else if (newState === "artist") {
     setActive("area")
     setSearchByArtist(active);
+    localStorage.setItem('filters_search_mode', JSON.stringify("area"));
 }
 }
 
@@ -48,7 +61,21 @@ function valuetext(value) {
   return `${value}°C`;
 }
 
+const handleDateChangeEnd = (newValue) => {
+    setDateToSearchUntil(newValue)
+    localStorage.setItem('search_end_date', JSON.stringify(newValue));
+  }
 
+const getAllowedDate = (type) => {
+  let start_date_allowed = dayjs(getFiltersFromStorage("search_start_date", dayjs().add(3, "day")))
+  let end_date_allowed = dayjs(getFiltersFromStorage("search_end_date", dayjs().add(3, "year")))
+  if (type === "start") {
+    return end_date_allowed.add(-1, "day")
+  }
+  else if (type === "end") {
+    return start_date_allowed.add(1, "day")
+  }
+}
 return (
     <div>
     <div className="button-row-filters">
@@ -78,7 +105,8 @@ return (
     <Box sx={{ width: 200, mr: 3, ml: 2 }}>
       <Slider
         aria-label="Temperature"
-        defaultValue={100}
+        defaultValue={getFiltersFromStorage("search_area_concerts", 100)}
+        onChange={handleAreaChange}
         getAriaValueText={valuetext}
         valueLabelDisplay="auto"
         step={null}
@@ -92,9 +120,15 @@ return (
     <div className='mt-[3%] mb-[2%]'>Search concerts from</div>     <LocalizationProvider dateAdapter={AdapterDayjs}>
     <DatePicker
     minDate={dayjs()}
-    maxDate={dayjs().add(3, "year")}
-    defaultValue={dayjs().add(2, 'day')}
-    yearsOrder="desc"
+    maxDate={getAllowedDate("start")}
+    onChange={(newDate) => {
+      if (newDate) {
+        setDateToSearchFrom(newDate)
+        localStorage.setItem('search_start_date', JSON.stringify(newDate));
+      }
+    }}
+    defaultValue={getFiltersFromStorage("search_start_date", dayjs().add(3, "day"))}
+    yearsOrder="asc"
     slotProps={{ textField: { size: 'small'} }}
     sx={{width: 200}}
     />
@@ -102,10 +136,16 @@ return (
     <div className='mt-[5%] mb-[2%]'>Search concerts until</div>
     <LocalizationProvider dateAdapter={AdapterDayjs}>
     <DatePicker
-    minDate={dayjs()}
-    maxDate={dayjs("2027-02-28")}
-    yearsOrder="desc"
-    defaultValue={dayjs().add(1, "year")}
+    minDate={getAllowedDate("end")}
+    maxDate={dayjs().add(3, "year")}
+    onChange={(newDate) => {
+      if (newDate) {
+        setDateToSearchUntil(newDate)
+        localStorage.setItem('search_end_date', JSON.stringify(newDate));
+      }
+    }}
+    yearsOrder="asc"
+    defaultValue={getFiltersFromStorage("search_end_date", dayjs().add(1, "year"))}
     slotProps={{ textField: { size: 'small'} }}
     sx={{width: 200}}
     />
