@@ -57,11 +57,6 @@ function valuetext(value) {
   return `${value}°C`;
 }
 
-const handleDateChangeEnd = (newValue) => {
-    setDateToSearchUntil(newValue)
-    localStorage.setItem('search_end_date', JSON.stringify(newValue));
-  }
-
 const getAllowedDate = (type) => {
   console.log(1)
   let start_date_allowed = dayjs(getFiltersFromStorage("search_start_date", dayjs().add(3, "day")))

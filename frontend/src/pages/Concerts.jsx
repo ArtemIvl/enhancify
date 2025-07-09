@@ -42,15 +42,21 @@ export default function Concerts() {
   //when we scroll to bottom and need to load more concerts
   const [playLoadingAnimation, setPlayLoadingAnination] = useState(false)
 
+  //search toggle mode
+  const [artistsGlobalTopPreprocessedForSearch, setArtistsGlobalTopPreprocessedForSearch] = useState([]);
+  const [followedArtistsPreprocessedForSearch, setFollowedArtistsPreprocessedForSearch] = useState([]);
+  const [mainSearchContentsArtist, setMainSearchContentsArtist] = useState([]);
+
   useEffect(() => {
     setConcertsToDisplayPerPage(5)
     fetchTopArtists()
           .then((data) => {
               const top = data["Top 10000"] || [];
+              setArtistsToSearchFriendlyMode(top, setArtistsGlobalTopPreprocessedForSearch);
+              setArtistsToSearchFriendlyMode(top, setMainSearchContentsArtist)
               const first_hundred = top.slice(0, 1000)
               setGlobalTop100ArtistList(first_hundred)
           })
-          .catch(console.error);
     // Your code here (e.g., read from localStorage, fetch data)
   }, []);
 
@@ -65,11 +71,11 @@ export default function Concerts() {
     // Your code here (e.g., read from localStorage, fetch data)
   }, []);
 
+
   useEffect(() => {
     if (mostListenedArtistList) {
-      console.log(mostListenedArtistList)
-      console.log("aaaaa")
-      console.log(dateToSearchFrom)
+      setFollowedArtistsToSearchFriendlyMode(mostListenedArtistList);
+      //console.log(mostListenedArtistList)
     }
   }, mostListenedArtistList);
 
@@ -163,15 +169,45 @@ useEffect(() => {
     if (active === "global") {
       setActive("followed")
       setConcerts(mostListenedArtistConcerts);
+      setMainSearchContentsArtist(followedArtistsPreprocessedForSearch)
     }
     else if (active === "followed") {
       setActive("global")
       setConcerts(globalTop100Concerts);
+      setMainSearchContentsArtist(artistsGlobalTopPreprocessedForSearch)
+
     }
   }
   ///////
+  function setArtistsToSearchFriendlyMode(top_artists, setter) {
+    var preprocessed_artists = [];
+    for (const item of top_artists) {
+      preprocessed_artists.push({ label: item["Artist"], code: item["Spotify ID"], icon: "person", description: item["Genre"], input_type: "artist"})
+    }
+    setter(preprocessed_artists);
+  }
 
-
+  function setFollowedArtistsToSearchFriendlyMode(followed_artists) {
+    var preprocessed_artists = [];
+    for (const item of followed_artists) {
+      let icon_of_choice = "artist";
+      let description = "Your favourite";
+      if (item["popularity"] > 60 && item["popularity"] < 85) {
+        icon_of_choice = "star";
+        description = "Popular"
+      }
+      else if (item["popularity"] >= 85) {
+        icon_of_choice = "hotel_class";
+        description = "Superstar"
+      }
+      else {
+        icon_of_choice = "diamond";
+        description = "Niché"
+      }
+      preprocessed_artists.push({ label: item["Name"], code: item["id"], icon: icon_of_choice, description: description, input_type: "artist"})
+    }
+    setFollowedArtistsPreprocessedForSearch(preprocessed_artists);
+  }
   const [active, setActive] = useState("global");
   const [filters, setFilters] = useState("unclicked")
   const [activeCards, setActiveCards] = useState(new Set());
@@ -245,8 +281,8 @@ function checkIfArtistIsFavorite(artistId) {
           <span className="material-icons-outlined icons-tweaked">star</span>
           My Artists
         </button>
-        <div><ConcertsSearch searchToggle = {searchToggle} searchRadius = {searchRadius} start_date = {dateToSearchFrom} end_date = {dateToSearchUntil} countries={statesCitiesCountriesArr} setConcerts={setConcerts} followedArtistsToQuery={preprocessFavouriteArtistsArray(mostListenedArtistList)} 
-        setGlobalConcerts = {setGlobalTop100Concerts} setMostListenedConcerts = {setMostListenedArtistConcerts} setGlobalLoading={setGlobalLoading} setFollowedLoading = {setFollowedLoading} toggleMode={active}
+        <div><ConcertsSearch toggleMode = {active} searchToggleMode = {searchToggle} artists={mainSearchContentsArtist} searchRadius = {searchRadius} start_date = {dateToSearchFrom} end_date = {dateToSearchUntil} countries={statesCitiesCountriesArr} setConcerts={setConcerts} followedArtistsToQuery={preprocessFavouriteArtistsArray(mostListenedArtistList)} 
+        setGlobalConcerts = {setGlobalTop100Concerts} setMostListenedConcerts = {setMostListenedArtistConcerts} setGlobalLoading={setGlobalLoading} setFollowedLoading = {setFollowedLoading}
         searchResultFromNothingFound={forciblyOverrideSearchResult} setSearchResultFromNothingFound={setForciblyOverrideSearchResult}>\
         
         </ConcertsSearch></div>
@@ -276,7 +312,7 @@ function checkIfArtistIsFavorite(artistId) {
           ) : (
             <ScrollContainer setLoadMoreItems={setLoadMoreItems}>
             {Object.keys(concerts).length === 0 || concerts === null ? (
-              <NothingFoundCardConcerts toggleMode = {searchToggle} setConcerts={setConcerts} followedArtistsToQuery={preprocessFavouriteArtistsArray(mostListenedArtistList)} setItemToPassBack={setForciblyOverrideSearchResult}
+              <NothingFoundCardConcerts toggleMode = {active} searchToggle={searchToggle} setConcerts={setConcerts} followedArtistsToQuery={preprocessFavouriteArtistsArray(mostListenedArtistList)} setItemToPassBack={setForciblyOverrideSearchResult}
         setGlobalConcerts = {setGlobalTop100Concerts} setMostListenedConcerts = {setMostListenedArtistConcerts} setGlobalLoading={setGlobalLoading} setFollowedLoading = {setFollowedLoading}></NothingFoundCardConcerts>
             ) : (
               Object.entries(sort_concerts_descending(concerts, numericalRankingsDict)).slice(0, concertsToDisplayPerPage).map(([key, concert], index) => (

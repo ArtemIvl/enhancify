@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 from geopy.distance import geodesic
 from datetime import datetime
 from get_concerts_ticketmaster import query_concert_info_for_one_singer
-from api_schema.request_schema import ConcertsRequest
+from api_schema.request_schema import ConcertsRequest, ConcertsBySingerRequest
 from scheduler import update_concerts_for_top_global_singers
 from redis_client import r
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
@@ -16,7 +16,6 @@ router = APIRouter()
 def get_concerts(request_model: ConcertsRequest):
     #important!
     #artist_id is artists spotify id
-    
     final_concert_dict_to_be_used_in_response = dict()
     #for followed artists
     if not request_model.get_top_artist_info:
@@ -127,7 +126,6 @@ def concerts_sorting(concert_to_sort_through, countries = [], stateCode = None, 
         #the radius in which we search for conerts if coordinates are provided
         
         allowed_distance_threshold_km = search_radius
-        print(allowed_distance_threshold_km)
         if not search_radius:
             allowed_distance_threshold_km = 100
         concert_coords_lat = venue.get("location", dict()).get("latitude", None)
@@ -151,3 +149,33 @@ def get_global_artist_rank_by_id(spotify_id = None):
     numerical_rank = r.hget("top_listened_artists:numerical_rankings", spotify_id)
     print(numerical_rank)
     return numerical_rank
+
+@router.post("/get_concerts_by_singer")
+def get_concert_by_singer(request_model: ConcertsBySingerRequest):
+    #important!
+    #artist_id is artists spotify id
+    final_concert_dict_to_be_used_in_response = dict()
+    artists_spotify_id = request_model.artist_id
+    if r.exists(f"most_listened_artists:concert_info:{artists_spotify_id}"):
+            concert_info = r.get(f"most_listened_artists:concert_info:{artists_spotify_id}")
+            concert_info = json.loads(concert_info) if concert_info else []
+            #if an artist is in top-100, we fetch it directly from cache for faster processing
+            #otherwise make a request to ticketmaster
+    else:
+        response_code, concert_info = query_concert_info_for_one_singer(redis_instance=r, artist_id=artists_spotify_id, artist_name=request_model.artists_name, start_date=request_model.start_date, end_date=request_model.end_date)
+        if concert_info != []:
+            if (response_code == 200):
+                    expiration_time = int((3600*24/CONCERT_UPDATE_FREQUENCY_PER_DAY) + 100)
+                    r.set(f"most_listened_artists:concert_info:{artists_spotify_id}", json.dumps(concert_info), ex=expiration_time)
+            
+            #filtering the concerts by provided fields
+            #notice that theoretically back-end supports multiple filters (first by country, then by state then by code)
+        final_concert_list_with_filters_applied = [item for item in concert_info if 
+        concerts_sorting(item, start_date=request_model.start_date, end_date=request_model.end_date)]
+            
+        if final_concert_list_with_filters_applied != []:
+            final_concert_dict_to_be_used_in_response[artists_spotify_id] = final_concert_list_with_filters_applied
+            
+        
+    
+    return JSONResponse(final_concert_dict_to_be_used_in_response, status_code=200)

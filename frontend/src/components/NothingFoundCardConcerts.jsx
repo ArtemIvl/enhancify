@@ -3,7 +3,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 
 export default function NothingFoundCardConcerts({ setConcerts, setGlobalConcerts, 
-  setMostListenedConcerts, setGlobalLoading, setFollowedLoading, toggleMode, followedArtistsToQuery, clearInput, setItemToPassBack}) {
+  setMostListenedConcerts, setGlobalLoading, setFollowedLoading, toggleMode, searchToggle, followedArtistsToQuery, clearInput, setItemToPassBack}) {
 
 const HARDCODED_COUNTRIES = [
   { label: "Spain",         flag: "es", input_type: "country", code: "ES",                 icon: "flag_circle"   },
@@ -66,7 +66,6 @@ function handleClick(selectedItem) {
     params["geo_latitude"] = lat;
     params["geo_longitude"] = lng;
   }
-  console.log(params)
   //GLOBAL
   axios.post('http://localhost:8000/get_concerts', params)
     .then(response => {
@@ -109,7 +108,7 @@ shuffleCountries();
 
 return (
     <div>
-      {toggleMode === "area" ? (
+      {searchToggle === "area" ? (
         <div className="background-rectangle-nothing">
     <div className="nothing-found-title">Whoops! We didn't find any concerts in this area... Try again with a different location?</div>
     <div className="alternative-search-choice-container">

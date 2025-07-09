@@ -11,12 +11,21 @@ const HARDCODED = [
 
 ];
 
+const HARDCODED_ARTISTS = [
+  {label:"Taylor Swift",code:"06HL4z0CvFAxyc27GXpf02",icon:"person",description:"Pop",input_type:"artist"},
+  {label:"Drake",code:"3TVXtAsR1Inumwj472S9r4",icon:"person",description:"Hip-Hop",input_type:"artist"},
+  {label:"Ed Sheeran",code:"6eUKZXaKkcviH0Ku9w2n3V",icon:"person",description:"Pop",input_type:"artist"},
+  {label:"Beyoncé",code:"6vWDO969PvNqNYHIOW5v0m",icon:"person",description:"R&B",input_type:"artist"},
+  {label:"The Weeknd",code:"1Xyo4u8uXC1ZmMpatF05PJ",icon:"person",description:"R&B",input_type:"artist"}
+];
+
+
 var SEARCH_HISTORY = [
 
 ];
 
-export default function ConcertsSearch({ countries = [], setConcerts, setGlobalConcerts, start_date, end_date, searchRadius,
-  setMostListenedConcerts, setGlobalLoading, setFollowedLoading, toggleMode, followedArtistsToQuery, searchResultFromNothingFound, setSearchResultFromNothingFound,}) {
+export default function ConcertsSearch({ countries = [], artists = [], setConcerts, setGlobalConcerts, start_date, end_date, searchRadius,
+  setMostListenedConcerts, setGlobalLoading, setFollowedLoading, toggleMode, searchToggleMode, followedArtistsToQuery, searchResultFromNothingFound, setSearchResultFromNothingFound,}) {
   const [inputValue, setInputValue] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedCode, setSelectedCode] = useState(null);
@@ -39,11 +48,15 @@ useEffect(() => {
    }
 }, [searchResultFromNothingFound, setSearchResultFromNothingFound]);
 
+  useEffect(() => {
+    clearInput();
+  }, [searchToggleMode]);
+
+
 function handleClick() {
   setGlobalLoading(true)
   setFollowedLoading(true)
-  console.log("search rad")
-  console.log(searchRadius)
+  if (searchToggleMode === "area") {
   const params = {
       get_top_artist_info: 1,
       start_date: start_date,
@@ -126,16 +139,45 @@ function handleClick() {
     .catch(error => {
       console.error(error);
     });
+  }
+  else {
+     const params = {
+      start_date: start_date,
+      end_date: end_date,
+      artist_id: selectedItem.code,
+      artists_name: selectedItem.label
+      } 
+   axios.post('http://localhost:8000/get_concerts_by_singer', params)
+    .then(response => {
+        setConcerts(response.data);
+      setGlobalConcerts(response.data)
+      setGlobalLoading(false);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  }
 }
 
-  const filtered =
-      isSearching && inputValue.length > 0
-        ? countries
-            .filter(c =>
-              c.label.toLowerCase().includes(inputValue.toLowerCase())
-            )
-            .slice(0, 15)
-        : HARDCODED;
+let filtered;
+
+if (searchToggleMode === 'artist') {
+  if (isSearching && inputValue.length > 0) {
+    filtered = artists
+      .filter(c => c.label.toLowerCase().includes(inputValue.toLowerCase()))
+      .slice(0, 15);
+  } else {
+    filtered = HARDCODED_ARTISTS;
+  }
+} else {
+  if (isSearching && inputValue.length > 0) {
+    filtered = countries
+      .filter(c => c.label.toLowerCase().includes(inputValue.toLowerCase()))
+      .slice(0, 15);
+  } else {
+    filtered = HARDCODED;
+  }
+}
 
   const history =
       isSearching && inputValue.length > 0
@@ -175,6 +217,8 @@ function handleClick() {
     const selectedItemToAcknowledge = {...option};
     selectedItemToAcknowledge.icon = "history";
     setSelectedItem(selectedItemToAcknowledge);
+
+
     setInputValue(option.label === "My location" ? "" : option.label);
     setCurrentSelectedIcon(option.icon)
     setSelectedCode(option.code);
@@ -207,7 +251,7 @@ function handleClick() {
         onFocus={handleInputFocus}
         onBlur={handleBlur}
         onChange={handleInputChange}
-        placeholder="Search by region, country or city..."
+        placeholder={searchToggleMode === "area" ? "Search by region, country or city..." : "Search by artist's name..."}
         className="search-bar"
         style={{ paddingLeft: currentSelectedIcon !== null ? '3.8vw' : '2.6vw' }}
         autoComplete="off"
@@ -239,7 +283,7 @@ function handleClick() {
               </div>
             ))
           )}
-          {(history.length === 0 || (inputValue !== "" && selectedCode === null))? (
+          {(history.length === 0 || (inputValue !== "" && selectedCode === null) || searchToggleMode !== "area")? (
             null
           ) : (
             <>  <div className="horizontal-line-search-bar"></div>

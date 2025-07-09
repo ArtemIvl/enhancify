@@ -13,3 +13,9 @@ class ConcertsRequest(BaseModel):
     search_area: Optional[int] = 100
     start_date: Optional[datetime] = None
     end_date: Optional[datetime] = None
+    
+class ConcertsBySingerRequest(BaseModel):
+    artist_id: str
+    artists_name: str = None
+    start_date: Optional[datetime] = None
+    end_date: Optional[datetime] = None 
