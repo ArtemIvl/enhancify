@@ -83,8 +83,8 @@ def get_numerical_rankings():
 
 
 def concerts_sorting(concert_to_sort_through, countries = [], stateCode = None, geo_latitude = None, geo_longitude = None, search_radius = None, start_date = None, end_date = None):
-    try:
         #To-do: process more than one venue (if the coordinates/city matches at least one venue)
+    try:
         if start_date and end_date:
             date_base = concert_to_sort_through.get("dates", dict()).get("start", None)
             
@@ -138,7 +138,6 @@ def concerts_sorting(concert_to_sort_through, countries = [], stateCode = None, 
                     return False
                 
             else:
-                print("not found")
                 return False
         
         return True
@@ -160,27 +159,26 @@ def get_concert_by_singer(request_model: ConcertsBySingerRequest):
     #artist_id is artists spotify id
     final_concert_dict_to_be_used_in_response = dict()
     artists_spotify_id = request_model.artist_id
+    print(artists_spotify_id)
     if r.exists(f"most_listened_artists:concert_info:{artists_spotify_id}"):
-            print("a")
             concert_info = r.get(f"most_listened_artists:concert_info:{artists_spotify_id}")
             concert_info = json.loads(concert_info) if concert_info else []
+            
             #if an artist is in top-100, we fetch it directly from cache for faster processing
             #otherwise make a request to ticketmaster
     else:
         response_code, concert_info = query_concert_info_for_one_singer(redis_instance=r, artist_id=artists_spotify_id, artist_name=request_model.artists_name, start_date=request_model.start_date, end_date=request_model.end_date)
-        if concert_info != [] and concert_info != None:
+        if concert_info != [] and concert_info != None and concert_info != {}:
             if (response_code == 200):
                     expiration_time = int((3600*24/CONCERT_UPDATE_FREQUENCY_PER_DAY) + 100)
                     r.set(f"most_listened_artists:concert_info:{artists_spotify_id}", json.dumps(concert_info), ex=expiration_time)
             
             #filtering the concerts by provided fields
             #notice that theoretically back-end supports multiple filters (first by country, then by state then by code)
-        final_concert_list_with_filters_applied = [item for item in concert_info if 
-        concerts_sorting(item, start_date=request_model.start_date, end_date=request_model.end_date)]
-            
-        if final_concert_list_with_filters_applied != []:
-            final_concert_dict_to_be_used_in_response[artists_spotify_id] = final_concert_list_with_filters_applied
-            
+    final_concert_list_with_filters_applied = [item for item in concert_info if 
+    concerts_sorting(item, start_date=request_model.start_date, end_date=request_model.end_date)]
         
+    if final_concert_list_with_filters_applied != []:
+        final_concert_dict_to_be_used_in_response[artists_spotify_id] = final_concert_list_with_filters_applied
     print(final_concert_dict_to_be_used_in_response)
     return JSONResponse(final_concert_dict_to_be_used_in_response, status_code=200)

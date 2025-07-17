@@ -21,9 +21,9 @@ TICKETMASTER_SECRET = os.getenv("TICKETMASTER_SECRET")
 # Going to a concert is a big event, it is usually planned in advance
 DEFAULT_START_DATE_TIME = (datetime.now(timezone.utc) + timedelta(days=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
 
+#same logic - what's the point of planning a concert more than 3 years in advance
 DEFAULT_END_DATE_TIME = (datetime.now(timezone.utc) + relativedelta(years=3)).strftime("%Y-%m-%dT%H:%M:%SZ")
 
-#same logic - what's the point of planning a concert more than 2 years in advance
 def query_concert_info_for_one_singer(redis_instance: redis.Redis, artist_id = None, artist_name = None, start_date = None, end_date = None):
     
     #params - request parameters that we want to see in our reuquest
@@ -61,7 +61,6 @@ def query_concert_info_for_one_singer(redis_instance: redis.Redis, artist_id = N
     
     
     response_filtered = response.json()
-
     #if there were not concerts
     if response_filtered.get("_embedded", None) == None:
         #return an empty dict
@@ -74,7 +73,6 @@ def query_concert_info_for_one_singer(redis_instance: redis.Redis, artist_id = N
         #value - index
         unique_concert_names = dict()
         for item in final_response:
-            
             #Iterate through every concert item
             #Group all items that start and end at the same time
             #Compare this items together - only keep an item with the shortest name in string
@@ -130,9 +128,9 @@ def look_up_artists_attraction_id(redis: redis.Redis, artist_name = None, artist
         for artist in retreived_people:
             #if the name matches ideally (character by character)
             #then this is our artist
-            if (artist["name"]) == artist_name:
+            if artist["name"] == artist_name:
                 attraction_id = artist["id"]
-                redis.hset("attraction_ids_ticketmaster_v3", artist_spotify_id, attraction_id)
+                redis.hset("attraction_ids_ticketmaster_v4", artist_spotify_id, attraction_id)
                 break
             #otherwise we try to find spotify id
             #the spotify id is nested deeply inside the response

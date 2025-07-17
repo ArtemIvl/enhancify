@@ -156,6 +156,12 @@ function handleClick() {
     });
   }
   else {
+     if (toggleModeRef.current === "global") {
+      setFollowedLoading(false)
+     }
+     else {
+      setGlobalLoading(false)
+     }
      const params = {
       start_date: start_date,
       end_date: end_date,
@@ -165,8 +171,14 @@ function handleClick() {
    axios.post('http://localhost:8000/get_concerts_by_singer', params)
     .then(response => {
       setConcerts(response.data);
+      if (toggleMode === "global") {
       setGlobalConcerts(response.data)
-      setGlobalLoading(false);
+      setGlobalLoading(false)
+      }
+      else {
+      setMostListenedConcerts(response.data)
+      setFollowedLoading(false)
+      }
       })
     .catch(error => {
       console.error(error);
@@ -182,7 +194,7 @@ if (searchToggleMode === 'artist') {
       .filter(c => c.label.toLowerCase().includes(inputValue.toLowerCase()))
       .slice(0, 15);
   } else {
-    if (toggleMode !== "followed") {
+    if (toggleModeRef.current !== "followed") {
     filtered = HARDCODED_ARTISTS;
     }
     else {
@@ -286,7 +298,7 @@ if (searchToggleMode === 'artist') {
         >
           {filtered.length === 0 ? (
             <div>
-              No results
+              Loading... Please wait a moment
             </div>
           ) : (
             filtered.map(option => (

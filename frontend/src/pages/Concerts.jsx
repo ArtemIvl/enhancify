@@ -59,8 +59,7 @@ export default function Concerts() {
               const top = data["Top 10000"] || [];
               setArtistsToSearchFriendlyMode(top, setArtistsGlobalTopPreprocessedForSearch);
               setArtistsToSearchFriendlyMode(top, setMainSearchContentsArtist)
-              const first_hundred = top.slice(0, 1000)
-              setGlobalTop100ArtistList(first_hundred)
+              setGlobalTop100ArtistList(top)
           })
     // Your code here (e.g., read from localStorage, fetch data)
   }, []);
@@ -98,6 +97,12 @@ const activeRef = useRef(active);
       console.log(globalTop100ArtistList);
     }
   }, [globalTop100ArtistList])
+
+  useEffect (() => {
+    if (concerts) {
+      console.log(concerts);
+    }
+  }, [concerts])
   useEffect(() => {
     if (loadMoreItems === true) {
       if (Object.keys(concerts).length > concertsToDisplayPerPage) {
