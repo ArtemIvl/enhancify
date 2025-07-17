@@ -1,4 +1,4 @@
-import { useState, useEffect, use } from "react";
+import { useState, useEffect, useRef } from "react";
 import "../Concerts.css";
 import ConcertsSearch from "../components/ConcertSearchContent";
 import statesCitiesCountriesArr from "../utils/loadPlaces";
@@ -47,6 +47,11 @@ export default function Concerts() {
   const [followedArtistsPreprocessedForSearch, setFollowedArtistsPreprocessedForSearch] = useState([]);
   const [mainSearchContentsArtist, setMainSearchContentsArtist] = useState([]);
 
+  //managing click states
+  const [active, setActive] = useState("global");
+  const [filters, setFilters] = useState("unclicked")
+  const [activeCards, setActiveCards] = useState(new Set());
+
   useEffect(() => {
     setConcertsToDisplayPerPage(5)
     fetchTopArtists()
@@ -61,7 +66,14 @@ export default function Concerts() {
   }, []);
 
   const timeRange = "medium_term";
-  
+
+
+const activeRef = useRef(active);
+  useEffect(() => {
+    activeRef.current = active;
+  }, [active]);
+
+
   useEffect(() => {
     getNumericalRankings()
           .then((data) => {
@@ -113,7 +125,9 @@ export default function Concerts() {
     countries: []
   })
     .then(response => {
+      if (activeRef.current === "global") {
       setConcerts(response.data);
+      }
       setGlobalTop100Concerts(response.data)
       setGlobalLoading(false)
     })
@@ -141,11 +155,14 @@ useEffect(() => {
     })
     .then(({ data }) => {
       setMostListenedArtistConcerts(data);
-      setFollowedLoading(false);
+      if (activeRef.current === "followed") {
+        setConcerts(data);
+      }})
+    .then(() => {
+       setFollowedLoading(false);
     })
     .catch(error => {
       console.error(error);
-      setFollowedLoading(false);
     });
 }, [timeRange, token]);
 
@@ -165,15 +182,19 @@ useEffect(() => {
 
 
 ////////
-  function toggleConcertViewMode() {
-    if (active === "global") {
+  function toggleConcertViewMode(clickTarget) {
+    if (active === "global" && clickTarget != "global") {
       setActive("followed")
+      if (followedLoading === false) {
       setConcerts(mostListenedArtistConcerts);
+      }
       setMainSearchContentsArtist(followedArtistsPreprocessedForSearch)
     }
-    else if (active === "followed") {
+    else if (active === "followed" && clickTarget != "followed") {
       setActive("global")
+      if (globalLoading === false) {
       setConcerts(globalTop100Concerts);
+      }
       setMainSearchContentsArtist(artistsGlobalTopPreprocessedForSearch)
 
     }
@@ -204,13 +225,10 @@ useEffect(() => {
         icon_of_choice = "diamond";
         description = "Niché"
       }
-      preprocessed_artists.push({ label: item["Name"], code: item["id"], icon: icon_of_choice, description: description, input_type: "artist"})
+      preprocessed_artists.push({ label: item["name"], code: item["id"], icon: icon_of_choice, description: description, input_type: "artist"})
     }
     setFollowedArtistsPreprocessedForSearch(preprocessed_artists);
   }
-  const [active, setActive] = useState("global");
-  const [filters, setFilters] = useState("unclicked")
-  const [activeCards, setActiveCards] = useState(new Set());
 
     function toggleCard(key) {
     setActiveCards(prev => {
@@ -269,14 +287,14 @@ function checkIfArtistIsFavorite(artistId) {
       <div className="button-row">
         <button
           className={`button-concerts-search${active === "global" ? " active" : ""}`}
-          onClick={() => toggleConcertViewMode()}
+          onClick={() => toggleConcertViewMode("global")}
         >
           <span className="material-icons-outlined icons-tweaked">leaderboard</span>
           Spotify Top-100
         </button>
         <button
           className={`button-concerts-search${active === "followed" ? " active" : ""}`}
-          onClick={() => toggleConcertViewMode()}
+          onClick={() => toggleConcertViewMode("followed")}
         >
           <span className="material-icons-outlined icons-tweaked">star</span>
           My Artists

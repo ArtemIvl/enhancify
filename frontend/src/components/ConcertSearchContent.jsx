@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import "../Concerts.css"
 import axios from "axios";
+import { resolveDateTimeFormat } from "@mui/x-date-pickers/internals";
 
 const HARDCODED = [
   { label: "My Location", code: "LOC", icon: "pin_drop", description: "Within 100km radius", input_type: "location" },
@@ -38,6 +39,12 @@ export default function ConcertsSearch({ countries = [], artists = [], setConcer
   const [myLocationLat, setMyLocationLat] = useState(null)
   const [myLocationLng, setMyLocationLng] = useState(null)
 
+  const toggleModeRef = useRef(toggleMode);
+
+  useEffect(() => {
+    toggleModeRef.current = toggleMode;
+  }, [toggleMode]);
+
 useEffect(() => {
    if (searchResultFromNothingFound) {
     setInputValue(searchResultFromNothingFound.label);
@@ -52,6 +59,11 @@ useEffect(() => {
     clearInput();
   }, [searchToggleMode]);
 
+  useEffect(() => {
+    if (searchToggleMode === "artist") {
+    clearInput();
+    }
+  }, [toggleMode]);
 
 function handleClick() {
   setGlobalLoading(true)
@@ -114,7 +126,7 @@ function handleClick() {
   //GLOBAL
   axios.post('http://localhost:8000/get_concerts', params)
     .then(response => {
-      if (toggleMode === "global") {
+      if (toggleModeRef.current === "global") {
         setConcerts(response.data);
       }
       setGlobalConcerts(response.data)
@@ -130,10 +142,13 @@ function handleClick() {
   params["artists"] = followedArtistsToQuery;
   axios.post('http://localhost:8000/get_concerts', params)
     .then(response => {
-      if (toggleMode === "followed") {
+      console.log("finished")
+      if (toggleModeRef.current === "followed") {
         setConcerts(response.data)
       }
       setMostListenedConcerts(response.data);
+    })
+    .then(() => {
       setFollowedLoading(false);
     })
     .catch(error => {
@@ -149,10 +164,10 @@ function handleClick() {
       } 
    axios.post('http://localhost:8000/get_concerts_by_singer', params)
     .then(response => {
-        setConcerts(response.data);
+      setConcerts(response.data);
       setGlobalConcerts(response.data)
       setGlobalLoading(false);
-    })
+      })
     .catch(error => {
       console.error(error);
     });
@@ -167,7 +182,12 @@ if (searchToggleMode === 'artist') {
       .filter(c => c.label.toLowerCase().includes(inputValue.toLowerCase()))
       .slice(0, 15);
   } else {
+    if (toggleMode !== "followed") {
     filtered = HARDCODED_ARTISTS;
+    }
+    else {
+      filtered = artists.slice(0, 5);
+    }
   }
 } else {
   if (isSearching && inputValue.length > 0) {
