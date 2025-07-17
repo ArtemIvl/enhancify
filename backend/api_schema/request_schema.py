@@ -19,3 +19,7 @@ class ConcertsBySingerRequest(BaseModel):
     artists_name: str = None
     start_date: Optional[datetime] = None
     end_date: Optional[datetime] = None 
+
+class GetTicketPriceRequest(BaseModel):
+    event_id: str
+    

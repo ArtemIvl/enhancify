@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import "../CrispConcertDetails.css";
 import "../Concerts.css";
 import { formatDate, format_date_2, truncate_text } from '../utils/concert_utils';
-
+import axios from 'axios';
 // Use Vite’s import.meta.glob to load images
 const concertImages = import.meta.glob('../images/concert/*.{png,jpg,jpeg,svg}', { eager: true, import: 'default' });
 const festivalImages = import.meta.glob('../images/festival/*.{png,jpg,jpeg,svg}', { eager: true, import: 'default' });
@@ -113,6 +113,7 @@ const CrispConcertDetails = React.memo(({ concerts }) => {
 
   const [images, setImages] = useState([]);
   const [seeAllStates, setSeeAllStates] = useState({});
+  const [priceInfo, setPriceInfo] = useState({})
   
   // to update:
   const updateEntry = (k, v) => {
@@ -122,10 +123,30 @@ const CrispConcertDetails = React.memo(({ concerts }) => {
     }));
   };
 
+  const updateEntryPrice = (k, v) => {
+    setPriceInfo(prev => ({ 
+      ...prev,      // copy existing entries
+      [k]: v        // overwrite or add the key
+    }));
+  };
+
+  function getEventPrices(event_id_str) {
+    updateEntryPrice(event_id_str, 0)
+    axios.post('http://localhost:8000/get_event_ticket_price', {
+        event_id: event_id_str
+    }).then(({ data }) => {
+      updateEntryPrice(event_id_str, data)
+      console.log(data)
+      })
+    .catch(error => {
+      console.error(error);
+    });
+    
+  }
+
   function activateSeeAll(idx) {
     updateEntry(idx, true);
   }
-
   function handleArenaName(e) {
     if (e._embedded.venues[0].name != null) {
     return (
@@ -184,7 +205,7 @@ const CrispConcertDetails = React.memo(({ concerts }) => {
             className={`crisp-card brightness-90 ${item.type}-card`}
             style={{ height, backgroundImage: `url(${imageUrl})` }}
           >
-
+            {console.log(idx)}
             {item.type === 'festival' && (
               <>
               <div className='festival-name-container'>
@@ -229,10 +250,13 @@ const CrispConcertDetails = React.memo(({ concerts }) => {
                 </div>
                 <div className='crisp-horizontal-line-2'>|</div>
                 <div className='get-prices-container-concert'>
-                  <div className='get-prices-crisp'>
+                  {
+                   item.elements[0].id in priceInfo ? <div>{priceInfo[item.elements[0].id]}</div> : 
+                  <button className='get-prices-crisp' style={{cursor: 'pointer'}} onClick={() => getEventPrices(item.elements[0].id)}>
                     <span className='material-icons-outlined contrast-110 ml-[0.6vw] mr-[0.8vw] rounded-lg mt-[0.4vh]'>info</span>
                      <span className='mt-[1vh]'>Get prices</span>
-                  </div>
+                  </button>
+                  }
                   {dateText}
                 </div>
                 <div className='crisp-horizontal-line-2'>|</div>
@@ -273,10 +297,10 @@ const CrispConcertDetails = React.memo(({ concerts }) => {
                 </div>
                 <div className="mini-horizontal-line"></div>
                 
-                <div className='universal-subconcert-container w-[13%]'>
+                <button className='universal-subconcert-container w-[13%]'>
                    <span className="material-icons-outlined dates-icon-large">info</span>
-                   <div className='get-prices'>Get prices</div>
-                </div>
+                   {e.id in priceInfo ? <div>{priceInfo[e.id]}</div> : <div className='get-prices'>Get prices</div>}
+                </button>
                 <div className='get-tickets-concert-fade get-tickets-tour-size'  onClick={() => window.open(e.url, '_blank')}>
                   <a href={e.url} target="_blank" rel="noopener noreferrer">
                   <div className='font-semibold center-buy-tickets-text mt-[10px] '> Buy tickets <span className="material-icons-outlined dates-icon-large ml-[5px] pt-[5px]">arrow_outward</span></div>

@@ -161,3 +161,16 @@ def get_plain_string(text: str) -> str:
     # 3. keep only alphanumeric characters (a–z, 0–9)
     plain = "".join(ch for ch in stripped if ch.isalnum())
     return plain
+
+def get_event_price(event_id):
+    request_url = f"https://app.ticketmaster.com/discovery/v2/events/{event_id}.json?apikey={TICKETMASTER_API}"
+    response = requests.get(request_url)
+    response_json = response.json()
+    if (response.status_code == 200):
+        min_price = response_json.get("priceRanges", dict()).get("min", "N/A")
+        max_price = response_json.get("priceRanges", dict()).get("max", "N/A")
+        return {"min_price": min_price, "max_price": max_price}
+    else:
+        print(response.status_code)
+    return None
+    
