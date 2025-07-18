@@ -132,6 +132,7 @@ const activeRef = useRef(active);
       setConcerts(response.data);
       }
       setGlobalTop100Concerts(response.data)
+    }).then(() => {
       setGlobalLoading(false)
     })
     .catch(error => {

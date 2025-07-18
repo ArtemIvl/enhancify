@@ -1,6 +1,6 @@
 
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 export default function NothingFoundCardConcerts({ setConcerts, setGlobalConcerts, 
   setMostListenedConcerts, setGlobalLoading, setFollowedLoading, toggleMode, searchToggle, followedArtistsToQuery, clearInput, setItemToPassBack}) {
@@ -104,7 +104,10 @@ function shuffleCountries() {
     }
     return HARDCODED_COUNTRIES;
 }
-shuffleCountries();
+
+const randomCountries = useMemo(() => {
+  return shuffleCountries();
+}, [])
 
 return (
     <div>
@@ -112,11 +115,11 @@ return (
         <div className="background-rectangle-nothing">
     <div className="nothing-found-title">Whoops! We didn't find any concerts in this area... Try again with a different location?</div>
     <div className="alternative-search-choice-container">
-    <button className="alternative-search-choice" onClick={() => handleClick(HARDCODED_COUNTRIES[0])}><span className={`fi fi-${HARDCODED_COUNTRIES[0].flag} increase-size brightness-90 contrast-110 ml-[10px] mr-[12px] `}></span>{HARDCODED_COUNTRIES[0].label}</button>
-    <button className="alternative-search-choice" onClick={() => handleClick(HARDCODED_COUNTRIES[1])}><span className={`fi fi-${HARDCODED_COUNTRIES[1].flag} increase-size brightness-90 contrast-110 ml-[10px] mr-[12px] `}></span>{HARDCODED_COUNTRIES[1].label}</button>
-    <button className="alternative-search-choice" onClick={() => handleClick(HARDCODED_COUNTRIES[2])}><span className={`fi fi-${HARDCODED_COUNTRIES[2].flag} increase-size brightness-90 contrast-110 ml-[10px] mr-[12px] `}></span>{HARDCODED_COUNTRIES[2].label}</button>
-    <button className="alternative-search-choice" onClick={() => handleClick(HARDCODED_COUNTRIES[3])}><span className={`fi fi-${HARDCODED_COUNTRIES[3].flag} increase-size brightness-90 contrast-110 ml-[10px] mr-[12px] `}></span>{HARDCODED_COUNTRIES[3].label}</button>
-    <button className="alternative-search-choice" onClick={() => handleClick(HARDCODED_COUNTRIES[4])}><span className={`fi fi-${HARDCODED_COUNTRIES[4].flag} increase-size brightness-90 contrast-110 ml-[10px] mr-[12px] `}></span>{HARDCODED_COUNTRIES[4].label}</button>
+    <button className="alternative-search-choice" onClick={() => handleClick(randomCountries[0])}><span className={`fi fi-${randomCountries[0].flag} increase-size brightness-90 contrast-110 ml-[10px] mr-[12px] `}></span>{randomCountries[0].label}</button>
+    <button className="alternative-search-choice" onClick={() => handleClick(randomCountries[1])}><span className={`fi fi-${randomCountries[1].flag} increase-size brightness-90 contrast-110 ml-[10px] mr-[12px] `}></span>{randomCountries[1].label}</button>
+    <button className="alternative-search-choice" onClick={() => handleClick(randomCountries[2])}><span className={`fi fi-${randomCountries[2].flag} increase-size brightness-90 contrast-110 ml-[10px] mr-[12px] `}></span>{randomCountries[2].label}</button>
+    <button className="alternative-search-choice" onClick={() => handleClick(randomCountries[3])}><span className={`fi fi-${randomCountries[3].flag} increase-size brightness-90 contrast-110 ml-[10px] mr-[12px] `}></span>{randomCountries[3].label}</button>
+    <button className="alternative-search-choice" onClick={() => handleClick(randomCountries[4])}><span className={`fi fi-${randomCountries[4].flag} increase-size brightness-90 contrast-110 ml-[10px] mr-[12px] `}></span>{randomCountries[4].label}</button>
     </div>
     </div>
       ) : (<div className="background-rectangle-nothing">

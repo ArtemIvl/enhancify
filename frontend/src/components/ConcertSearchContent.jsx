@@ -92,7 +92,9 @@ function handleClick() {
     if (HARDCODED.length > 1) {
     HARDCODED.pop();
     }
+    if (searchToggleMode !== "artist") {
     SEARCH_HISTORY.push(selectedItem);
+    }
     }
   }
   if (inputCodeType === "country") {
@@ -129,9 +131,10 @@ function handleClick() {
       if (toggleModeRef.current === "global") {
         setConcerts(response.data);
       }
-      setGlobalConcerts(response.data)
-      setGlobalLoading(false);
-    })
+      setGlobalConcerts(response.data)})
+      .then(() => {
+        setGlobalLoading(false);
+      })
     .catch(error => {
       console.error(error);
     });
