@@ -68,7 +68,7 @@ useEffect(() => {
 function handleClick() {
   setGlobalLoading(true)
   setFollowedLoading(true)
-  if (searchToggleMode === "area") {
+  if (searchToggleMode === "area" || (searchToggleMode === "artist" && (inputValue === "" || inputValue === null))) {
   const params = {
       get_top_artist_info: 1,
       start_date: start_date,

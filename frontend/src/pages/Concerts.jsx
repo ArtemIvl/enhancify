@@ -92,17 +92,15 @@ const activeRef = useRef(active);
 
   // for the followed artists: 1) On load fetch followed artists using the spotify API. using Spotify API.
   // 
-  useEffect (() => {
-    if (globalTop100ArtistList !== null) {
-      console.log(globalTop100ArtistList);
-    }
-  }, [globalTop100ArtistList])
 
+  /*
   useEffect (() => {
     if (concerts) {
       console.log(concerts);
     }
   }, [concerts])
+  */
+
   useEffect(() => {
     if (loadMoreItems === true) {
       if (Object.keys(concerts).length > concertsToDisplayPerPage) {

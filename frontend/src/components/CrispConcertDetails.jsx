@@ -131,7 +131,6 @@ const CrispConcertDetails = React.memo(({ concerts }) => {
   };
 
   function getEventPrices(event_id_str) {
-    updateEntryPrice(event_id_str, 0)
     axios.post('http://localhost:8000/get_event_ticket_price', {
         event_id: event_id_str
     }).then(({ data }) => {
@@ -251,7 +250,7 @@ const CrispConcertDetails = React.memo(({ concerts }) => {
                 <div className='crisp-horizontal-line-2'>|</div>
                 <div className='get-prices-container-concert'>
                   {
-                   item.elements[0].id in priceInfo ? <div>{priceInfo[item.elements[0].id]}</div> : 
+                   item.elements[0].id in priceInfo ? <div>{priceInfo[item.elements[0].id]["min_price"]}</div> : 
                   <button className='get-prices-crisp' style={{cursor: 'pointer'}} onClick={() => getEventPrices(item.elements[0].id)}>
                     <span className='material-icons-outlined contrast-110 ml-[0.6vw] mr-[0.8vw] rounded-lg mt-[0.4vh]'>info</span>
                      <span className='mt-[1vh]'>Get prices</span>

@@ -13,7 +13,7 @@ import unicodedata
 load_dotenv()
 
 #TO-DO implement switching to a backup api key when/if quota is exceeded
-TICKETMASTER_API = os.getenv("TICKETMASTER_API_KEY")
+TICKETMASTER_API = "NrvIaCsR0hamAEiuWTVOU7NeWyLNW1AL"
 TICKETMASTER_SECRET = os.getenv("TICKETMASTER_SECRET")
 
 
@@ -65,7 +65,7 @@ def query_concert_info_for_one_singer(redis_instance: redis.Redis, artist_id = N
     if response_filtered.get("_embedded", None) == None:
         #return an empty dict
         return response.status_code, {}
-
+    
     if (response.status_code == 200):
         final_response = response_filtered["_embedded"]["events"]
         indexes_to_erase = []
@@ -167,8 +167,13 @@ def get_event_price(event_id):
     response = requests.get(request_url)
     response_json = response.json()
     if (response.status_code == 200):
-        min_price = response_json.get("priceRanges", dict()).get("min", "N/A")
-        max_price = response_json.get("priceRanges", dict()).get("max", "N/A")
+        priceRanges = response_json.get("priceRanges", None)
+        min_price = "N/A"
+        max_price = "N/A"
+        if priceRanges:
+            print(priceRanges)
+            min_price = priceRanges[0].get("min", "N/A")
+            max_price = priceRanges[0].get("max", "N/A")
         return {"min_price": min_price, "max_price": max_price}
     else:
         print(response.status_code)
