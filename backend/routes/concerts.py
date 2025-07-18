@@ -150,7 +150,6 @@ def concerts_sorting(concert_to_sort_through, countries = [], stateCode = None, 
 #separate method for retreiving this information
 def get_global_artist_rank_by_id(spotify_id = None):
     numerical_rank = r.hget("top_listened_artists:numerical_rankings", spotify_id)
-    print(numerical_rank)
     return numerical_rank
 
 @router.post("/get_concerts_by_singer")
@@ -159,7 +158,6 @@ def get_concert_by_singer(request_model: ConcertsBySingerRequest):
     #artist_id is artists spotify id
     final_concert_dict_to_be_used_in_response = dict()
     artists_spotify_id = request_model.artist_id
-    print(artists_spotify_id)
     if r.exists(f"most_listened_artists:concert_info:{artists_spotify_id}"):
             concert_info = r.get(f"most_listened_artists:concert_info:{artists_spotify_id}")
             concert_info = json.loads(concert_info) if concert_info else []
@@ -180,7 +178,6 @@ def get_concert_by_singer(request_model: ConcertsBySingerRequest):
         
     if final_concert_list_with_filters_applied != []:
         final_concert_dict_to_be_used_in_response[artists_spotify_id] = final_concert_list_with_filters_applied
-    print(final_concert_dict_to_be_used_in_response)
     return JSONResponse(final_concert_dict_to_be_used_in_response, status_code=200)
 
 @router.post("/get_event_ticket_price")
