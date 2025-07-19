@@ -288,8 +288,10 @@ function checkIfArtistIsFavorite(artistId) {
     <div>
       <div className="gradient-div">
     <div className="move-down">
-    <div className="big-title"><span className="material-icons-outlined pr-4">celebration</span>Find concerts in your area<span className="material-icons-outlined pl-4">celebration</span>
+    <div className="big-title"><span className="material-icons-outlined pr-4">celebration</span>Find concerts and shows<span className="material-icons-outlined pl-4">celebration</span>
+    
 </div>
+ <div className="ml-[6%] mb-[1.6vh] italic flex">Search results are powered by <img className="rounded mt-[-0.2%] ml-[1%]" height={40} width={90} src="https://i.imghippo.com/files/XU8614G.jpg"></img></div>
       <div className="button-row">
         <button
           className={`button-concerts-search${active === "global" ? " active" : ""}`}
@@ -329,11 +331,24 @@ function checkIfArtistIsFavorite(artistId) {
           {(active === "followed" && unauthorized === 401) ? 
             <Unauthorized></Unauthorized> : (
           (active === "global" & globalLoading) | (active === "followed" & followedLoading) ? (
-            <div className="concerts-content-container mt-[0px] flex flex-col justify-center space-y-6">
-              <div className="w-4/5 h-15/80 animate-skeleton rounded-xl ml-[7.5vw]" />
-              <div className="w-4/5 h-15/80 animate-skeleton rounded-xl ml-[7.5vw]" />
-              <div className="w-4/5 h-15/80 animate-skeleton rounded-xl ml-[7.5vw]" />
-              <div className="w-4/5 h-15/80 animate-skeleton rounded-xl ml-[7.5vw]" />
+            <div className="concerts-content-container mt-[-12vh] flex flex-col justify-center space-y-6">
+              <div className="w-[83%] h-[12.75vh] mt-[-3.5vh] animate-skeleton rounded-xl flex ml-[7.5vw]">
+                <div className="w-[9vh] mt-[2vh] mb-[1.5vh] ml-[1.5vw] h-[9vh] animate-skeleton-sub rounded-xl"></div><div className="w-[15vw] mt-[4.6vh] mb-[3vh] ml-[3vw] h-[4vh] animate-skeleton-sub rounded-xl"></div>
+                <div className="w-[13.5vw] mt-[4.6vh] mb-[3vh] ml-[4vw] h-[4vh] animate-skeleton-sub rounded-xl"></div><div className="w-[15.5vw] mt-[2vh] mb-[2vh] ml-[4vw] h-[9vh] animate-skeleton-sub rounded-xl"></div>
+                <div className="w-[15vw] mt-[2.5vh] mb-[2.5vh] ml-[4vw] h-[8vh] animate-skeleton-sub rounded-4xl"></div></div>
+              <div className="w-[83%] h-[12.75vh] animate-skeleton rounded-xl flex ml-[7.5vw]">
+                <div className="w-[9vh] mt-[2vh] mb-[1.5vh] ml-[1.5vw] h-[9vh] animate-skeleton-sub rounded-xl"></div><div className="w-[15vw] mt-[4.6vh] mb-[3vh] ml-[3vw] h-[4vh] animate-skeleton-sub rounded-xl"></div>
+                <div className="w-[13.5vw] mt-[4.6vh] mb-[3vh] ml-[4vw] h-[4vh] animate-skeleton-sub rounded-xl"></div><div className="w-[15.5vw] mt-[2vh] mb-[2vh] ml-[4vw] h-[9vh] animate-skeleton-sub rounded-xl"></div>
+                <div className="w-[15vw] mt-[2.5vh] mb-[2.5vh] ml-[4vw] h-[8vh] animate-skeleton-sub rounded-4xl"></div></div>
+              <div className="w-[83%] h-[12.75vh] animate-skeleton rounded-xl flex ml-[7.5vw]">
+                <div className="w-[9vh] mt-[2vh] mb-[1.5vh] ml-[1.5vw] h-[9vh] animate-skeleton-sub rounded-xl"></div><div className="w-[15vw] mt-[4.6vh] mb-[3vh] ml-[3vw] h-[4vh] animate-skeleton-sub rounded-xl"></div>
+                <div className="w-[13.5vw] mt-[4.6vh] mb-[3vh] ml-[4vw] h-[4vh] animate-skeleton-sub rounded-xl"></div><div className="w-[15.5vw] mt-[2vh] mb-[2vh] ml-[4vw] h-[9vh] animate-skeleton-sub rounded-xl"></div>
+                <div className="w-[15vw] mt-[2.5vh] mb-[2.5vh] ml-[4vw] h-[8vh] animate-skeleton-sub rounded-4xl"></div></div>
+                              <div className="w-[83%] h-[12.75vh] animate-skeleton rounded-xl flex ml-[7.5vw]">
+                <div className="w-[9vh] mt-[2vh] mb-[1.5vh] ml-[1.5vw] h-[9vh] animate-skeleton-sub rounded-xl"></div><div className="w-[15vw] mt-[4.6vh] mb-[3vh] ml-[3vw] h-[4vh] animate-skeleton-sub rounded-xl"></div>
+                <div className="w-[13.5vw] mt-[4.6vh] mb-[3vh] ml-[4vw] h-[4vh] animate-skeleton-sub rounded-xl"></div><div className="w-[15.5vw] mt-[2vh] mb-[2vh] ml-[4vw] h-[9vh] animate-skeleton-sub rounded-xl"></div>
+                <div className="w-[15vw] mt-[2.5vh] mb-[2.5vh] ml-[4vw] h-[8vh] animate-skeleton-sub rounded-4xl"></div></div>
+
             </div>
           ) : (
 
@@ -379,7 +394,10 @@ function checkIfArtistIsFavorite(artistId) {
               ))
             )}
             {playLoadingAnimation && (
-              <div className="loading-bottom"><div className="w-5/6 h-3/4 animate-skeleton rounded-xl ml-[100px]"></div></div>
+              <div className="loading-bottom mt-[1vh] mb-[1vh]"><div className="w-[93%] h-[12.75vh] animate-skeleton rounded-xl flex ml-[7.5vw]">
+                <div className="w-[9vh] mt-[2vh] mb-[1.5vh] ml-[1.5vw] h-[9vh] animate-skeleton-sub rounded-xl"></div><div className="w-[15vw] mt-[4.6vh] mb-[3vh] ml-[3vw] h-[4vh] animate-skeleton-sub rounded-xl"></div>
+                <div className="w-[13.5vw] mt-[4.6vh] mb-[3vh] ml-[4vw] h-[4vh] animate-skeleton-sub rounded-xl"></div><div className="w-[15.5vw] mt-[2vh] mb-[2vh] ml-[4vw] h-[9vh] animate-skeleton-sub rounded-xl"></div>
+                <div className="w-[15vw] mt-[2.5vh] mb-[2.5vh] ml-[4vw] h-[8vh] animate-skeleton-sub rounded-4xl"></div></div></div>
              )}
             </ScrollContainer>
           ))

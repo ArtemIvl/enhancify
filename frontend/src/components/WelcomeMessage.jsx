@@ -8,7 +8,7 @@ export default function WelcomeMessage() {
     const visited = localStorage.getItem("hasVisited");
     if (!visited) {
       setShowMessage(true);
-      // localStorage.setItem("hasVisited", "true");
+      localStorage.setItem("hasVisited", "true");
     }
     const handleKeyDown = (event) => {
       if (event.key === 'Enter') { // specify key here

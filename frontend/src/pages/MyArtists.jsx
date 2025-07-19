@@ -18,6 +18,7 @@ export default function TopContent() {
   const [isLoading, setIsLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [unauthorized, setUnauthorized] = useState(false);
 
   useEffect(() => {
     if (!token) {
@@ -45,6 +46,7 @@ export default function TopContent() {
         }
       } catch (err) {
         console.error(err);
+        setUnauthorized(true)
       } finally {
         setIsLoading(false);
       }
@@ -115,8 +117,8 @@ export default function TopContent() {
           />
         </div>
       </div>
-
-      {!token ? <Unauthorized></Unauthorized> : (<>
+<div class="loader"></div> */
+      {(!token || unauthorized) ? <Unauthorized></Unauthorized> : (<>
       {isLoading && (
         <Loading />
       )}
