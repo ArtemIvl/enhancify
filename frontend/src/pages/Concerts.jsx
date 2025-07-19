@@ -12,6 +12,7 @@ import GetArtistTags from "../components/GetArtistTags.jsx";
 import { useAuth } from "../services/AuthContext.jsx";
 import ConcertSearchFilters from "../components/ConcertSearchFilters.jsx";
 import dayjs from "dayjs";
+import Unauthorized from "../components/Unauthorized.jsx";
 
 export default function Concerts() {
 
@@ -167,7 +168,7 @@ useEffect(() => {
        setFollowedLoading(false);
     })
     .catch(error => {
-      console.error(error);
+      setUnauthorized(401)
     });
 }, [timeRange, token]);
 
@@ -325,7 +326,9 @@ function checkIfArtistIsFavorite(artistId) {
       </div>
         <div>
           <div className="cool-concert-line"></div>
-          {(active === "global" & globalLoading) | (active === "followed" & followedLoading) ? (
+          {(active === "followed" && unauthorized === 401) ? 
+            <Unauthorized></Unauthorized> : (
+          (active === "global" & globalLoading) | (active === "followed" & followedLoading) ? (
             <div className="concerts-content-container mt-[0px] flex flex-col justify-center space-y-6">
               <div className="w-4/5 h-15/80 animate-skeleton rounded-xl ml-[7.5vw]" />
               <div className="w-4/5 h-15/80 animate-skeleton rounded-xl ml-[7.5vw]" />
@@ -377,9 +380,10 @@ function checkIfArtistIsFavorite(artistId) {
             )}
             {playLoadingAnimation && (
               <div className="loading-bottom"><div className="w-5/6 h-3/4 animate-skeleton rounded-xl ml-[100px]"></div></div>
-            )}
+             )}
             </ScrollContainer>
-          )}
+          ))
+        }
         </div>
 
     </div>

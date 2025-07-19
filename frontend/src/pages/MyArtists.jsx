@@ -6,6 +6,8 @@ import { fetchMySongs, fetchMyArtists } from "../services/api";
 import Loading from "../components/Loading";
 import DropdownComponent from "../components/DropdownComponent.jsx"
 import { FaMusic, FaSearch, FaMicrophone } from "react-icons/fa";
+import "../Concerts.css"
+import Unauthorized from "../components/Unauthorized.jsx";
 
 export default function TopContent() {
   const [tab, setTab] = useState("tracks");
@@ -61,9 +63,6 @@ export default function TopContent() {
 
   return (
     <>
-    {!token ? (
-      <div className="text-center py-10">Please log in to view your personal top 50.</div>
-    ) : (
     <div className="px-8">
       <div className="text-2xl font-bold py-4">Your personal TOP 50</div>
       <div className="flex w-full justify-between items-center gap-4">
@@ -117,6 +116,7 @@ export default function TopContent() {
         </div>
       </div>
 
+      {!token ? <Unauthorized></Unauthorized> : (<>
       {isLoading && (
         <Loading />
       )}
@@ -175,9 +175,8 @@ export default function TopContent() {
           </div>
         </div>
       )}
-      <div className="mb-2"></div>
+      <div className="mb-2"></div></>)}
     </div>
-    )}
     </>
   );
 }
