@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import "../index.css"
+import "./WelcomeMessage.css"
 export default function WelcomeMessage() {
   const [showMessage, setShowMessage] = useState(false);
 
@@ -11,7 +12,9 @@ export default function WelcomeMessage() {
     }
     const handleKeyDown = (event) => {
       if (event.key === 'Enter') { // specify key here
-        handleClick();
+        setShowMessage(false);
+        document.body.style.overflow = 'auto'; // Restore scrolling on close
+
       }
     };
 
@@ -25,15 +28,16 @@ export default function WelcomeMessage() {
 
   return (
     <div className="fixed top-0 left-0 w-full h-full welcome-message-container bg-opacity-10 flex items-center justify-center z-50">
-      <div className="bg-silver p-6 rounded-lg shadow-2xl text-center ml-[25%] mr-[25%]">
-        <h1 className="text-3xl mb-4"><span className="material-icons-outlined dates-icon-large mt-[1vh]">waving_hand</span>Welcome to Enhancify!<span className="material-icons-outlined dates-icon-large ml-[0.9vw] mt-[1vh]">waving_hand</span></h1>
-        <div className='text-xl'>The mission of our web-app is extremely simple. It adds the features that you've been missing when using Spotify. This includes:
-            <li>Global leaderboard updated in real time</li>
-            <li>Your top listened Spotify artists and songs</li>
-            <li>Convenient Concert searching tool</li>
-        I hope that after reading this, you are as excited to try our application as we were excited to make it. 
+      <div className="bg-[#f1f1f1] p-6 rounded-lg shadow-2xl text-center ml-[25%] mr-[25%]">
+        <div className="welcome-message-header mb-4"><span className="material-icons-outlined dates-icon-large mt-[1vh]">waving_hand</span>Welcome to Enhancify!<span className="material-icons-outlined dates-icon-large ml-[0.9vw] mt-[1vh]">waving_hand</span></div>
+        <div className='welcome-horizontal-line'></div>
+        <div className='welcome-pitch-message mb-[2%]'>Our mission is simple - improve your music listening experience by introducing features you've been missing in Spotify</div>
+            <div className='feature-welcome-message'><span className="material-icons-outlined mr-[-13%] ml-[8%] text-purple-900">checkmark</span>Statistics of your most listened artists and tracks</div>
+            <div className='feature-welcome-message'><span className="material-icons-outlined mr-[-13%] ml-[8%] text-purple-900">checkmark</span>Global Spotify artist leaderboard, updated in real time.</div>
+            <div className='feature-welcome-message'><span className="material-icons-outlined mr-[-13%] ml-[8%] mb-[1%] text-purple-900">checkmark</span>Concert search, infused with your Spotify listening preferences.</div>
+            <div className='welcome-horizontal-line'></div>
+        <div className='italic'>Please note that to access all features you need to connect your Spotify account.</div>
 
-        </div>
         <button 
           className="mt-4 bg-black text-white px-4 py-2 rounded-xl"
           onClick={() => {

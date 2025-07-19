@@ -1,0 +1,36 @@
+
+.welcome-message-header {
+  font-size: 1.7vw;
+}
+
+.welcome-message-container {
+    background-image: linear-gradient(
+      to bottom,
+      #d3cfce 0%,
+      #d3cfce 30%,
+      #d6c2da 100%
+      );
+}
+
+.feature-welcome-message {
+    display: flex;
+    margin-top: 1vh;
+    margin-left: 10%;
+    font-size: 1vw;
+}
+
+.welcome-horizontal-line {
+    margin-top: 1.1vh;
+    margin-bottom: 1.1vh;
+    margin-left: 5%;
+    margin-right: 5%;
+    width: 89%;
+    height: 0.4px;
+    background-color: #2e2e2e;
+}
+.welcome-pitch-message {
+    font-size: 1.2vw;
+    font-weight: 300;
+    margin-left: 8%;
+    margin-right: 8%;
+}

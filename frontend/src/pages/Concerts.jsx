@@ -17,6 +17,7 @@ export default function Concerts() {
 
   const token = localStorage.getItem("spotify_token");
   const [concertsToDisplayPerPage, setConcertsToDisplayPerPage] = useState(6)
+  const [unauthorized, setUnauthorized] = useState(true)
   const [loadMoreItems, setLoadMoreItems] = useState(false)
   const [searchToggle, setSearchToggle] = useState(getFiltersFromStorage("filters_search_mode", "area"));
   const [searchRadius, setSearchRadius] = useState(getFiltersFromStorage("search_area_concerts", 100))
@@ -332,6 +333,7 @@ function checkIfArtistIsFavorite(artistId) {
               <div className="w-4/5 h-15/80 animate-skeleton rounded-xl ml-[7.5vw]" />
             </div>
           ) : (
+
             <ScrollContainer setLoadMoreItems={setLoadMoreItems}>
             {Object.keys(concerts).length === 0 || concerts === null ? (
               <NothingFoundCardConcerts toggleMode = {active} searchToggle={searchToggle} setConcerts={setConcerts} followedArtistsToQuery={preprocessFavouriteArtistsArray(mostListenedArtistList)} setItemToPassBack={setForciblyOverrideSearchResult}
