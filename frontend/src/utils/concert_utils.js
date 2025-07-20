@@ -35,6 +35,52 @@ export const preprocessFavouriteArtistsArray = (favouriteArtists) => {
   return extracted;
 };
 
+export function dummyCalculatePriceInfo(startDateIso) {
+  let diffDays = 1; // Default if parsing fails
+
+  // Try parsing the date
+  const eventDate = new Date(startDateIso);
+  const now = new Date();
+  if (!isNaN(eventDate.getTime())) {
+    diffDays = Math.max(1, Math.floor((eventDate - now) / (1000 * 60 * 60 * 24)));
+  }
+
+  // Sooner event = higher price, between $50 and $200
+  // Decrease base as diffDays increases, linear scaling
+  let base = 200 - Math.min(diffDays, 100) * 1.5; // At 0 days: 200, at 100+ days: 50
+  base = Math.round(Math.max(50, Math.min(base, 200)));
+
+  // Calculate min_price
+  let min_price = base + Math.floor(Math.random() * 20); // adds a bit of randomness
+  min_price = Math.min(min_price, 200);
+
+  // 60% chance to end with 0 or 9
+  if (Math.random() < 0.6) {
+    min_price = Math.floor(min_price / 10) * 10 + (Math.random() < 0.5 ? 0 : 9);
+    min_price = Math.max(50, Math.min(min_price, 200));
+  }
+
+  // Calculate max_price (at least 10% more), up to 300
+  let max_price = Math.ceil(min_price * (1.1 + Math.random() * 0.6));
+  max_price = Math.max(max_price, min_price + 1);
+  max_price = Math.min(max_price, 300);
+
+  // 60% chance to end with 0 or 9 for max_price
+  if (Math.random() < 0.6) {
+    max_price = Math.floor(max_price / 10) * 10 + (Math.random() < 0.5 ? 0 : 9);
+    max_price = Math.max(max_price, min_price + 1);
+    max_price = Math.min(max_price, 300);
+  }
+
+  // 80% chance to return range, 20% "from"
+  if (Math.random() < 0.8) {
+    return `$${min_price}-${max_price}`;
+  } else {
+    return `from ${min_price}$`;
+  }
+}
+
+
 // same to previous function, but the formatting is a bit different
 // Output example: 21 May, 05:00
 export const format_date_2 = (isoString) => {

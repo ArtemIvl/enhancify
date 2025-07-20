@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import "../CrispConcertDetails.css";
 import "../Concerts.css";
-import { formatDate, format_date_2, truncate_text } from '../utils/concert_utils';
+import { formatDate, format_date_2, truncate_text, dummyCalculatePriceInfo } from '../utils/concert_utils';
 import axios from 'axios';
 // Use Vite’s import.meta.glob to load images
 const concertImages = import.meta.glob('../images/concert/*.{png,jpg,jpeg,svg}', { eager: true, import: 'default' });
@@ -149,14 +149,14 @@ const CrispConcertDetails = React.memo(({ concerts }) => {
   function handleArenaName(e) {
     if (e._embedded.venues[0].name != null) {
     return (
-      <div className = 'font-semibold'>
+      <div>
       {truncate_text(e._embedded.venues[0].name, 45)}
       </div>
     )
     }
     else {
       return (
-      <span className = 'font-semibold helper-text-concerts' title='The concert venue is yet to be announced'>
+      <span className = 'helper-text-concerts' title='The concert venue is yet to be announced'>
       TBA
       </span>
       )
@@ -249,13 +249,15 @@ const CrispConcertDetails = React.memo(({ concerts }) => {
                 </div>
                 <div className='crisp-horizontal-line-2'>|</div>
                 <div className='get-prices-container-concert'>
-                  {
+                  {/*
                    item.elements[0].id in priceInfo ? <div>{priceInfo[item.elements[0].id]["min_price"]}</div> : 
-                  <button className='get-prices-crisp' style={{cursor: 'pointer'}} onClick={() => getEventPrices(item.elements[0].id)}>
+                  <button className='get-prices-crisp' style={{cursor: 'pointer'}}>
                     <span className='material-icons-outlined contrast-110 ml-[0.6vw] mr-[0.8vw] rounded-lg mt-[0.4vh]'>info</span>
                      <span className='mt-[1vh]'>Get prices</span>
                   </button>
-                  }
+                  */}
+                  <div style={{cursor: 'pointer'}} title='Unfortunately at this moment our team still waits for approval on 
+using Pricing API. All prices displayed are placeholders.'>{dummyCalculatePriceInfo(item.startDate)}</div>
                   {dateText}
                 </div>
                 <div className='crisp-horizontal-line-2'>|</div>
@@ -289,14 +291,16 @@ const CrispConcertDetails = React.memo(({ concerts }) => {
                 </div>
                 <div className="mini-horizontal-line"></div>
 
-                <div className='universal-subconcert-container w-[17%]'>
-                  {handleArenaName(e)}
+                <div className='universal-subconcert-container font-light w-[17%]'>
+                  <div className='font-normal'>
+                    {handleArenaName(e)}
+                    </div>
                 </div>
                 <div className="mini-horizontal-line"></div>
                 
                 <button className='universal-subconcert-container w-[13%]'>
-                   <span className="material-icons-outlined dates-icon-large">info</span>
-                   {e.id in priceInfo ? <div>{priceInfo[e.id]}</div> : <div className='get-prices'>Get prices</div>}
+                  <div style={{cursor: 'pointer'}} title='Unfortunately at this moment our team still waits for approval on 
+using Pricing API. All prices displayed are placeholders.'>{dummyCalculatePriceInfo(e.dates.start.dateTime)}</div>
                 </button>
                 <div className='get-tickets-concert-fade get-tickets-tour-size'  onClick={() => window.open(e.url, '_blank')}>
                   <div className='font-semibold center-buy-tickets-text mt-[10px] '> Buy tickets <span className="material-icons-outlined dates-icon-large ml-[5px] pt-[5px]">arrow_outward</span></div>
