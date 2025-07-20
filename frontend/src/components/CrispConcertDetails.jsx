@@ -261,9 +261,7 @@ const CrispConcertDetails = React.memo(({ concerts }) => {
                 <div className='crisp-horizontal-line-2'>|</div>
                 <div className='universal-subconcert-container w-[20%]'>
                 <div className='get-tickets-concert-fade get-tickets-concert'  onClick={() => window.open(item.elements[0].url, '_blank')}>
-                  <a href={item.elements[0].url} target="_blank" rel="noopener noreferrer">
                   <div className='font-semibold center-buy-tickets-concert mt-[1vh] '>Buy tickets</div>
-                  </a>
                 </div>
                </div>
               </>
@@ -301,9 +299,7 @@ const CrispConcertDetails = React.memo(({ concerts }) => {
                    {e.id in priceInfo ? <div>{priceInfo[e.id]}</div> : <div className='get-prices'>Get prices</div>}
                 </button>
                 <div className='get-tickets-concert-fade get-tickets-tour-size'  onClick={() => window.open(e.url, '_blank')}>
-                  <a href={e.url} target="_blank" rel="noopener noreferrer">
                   <div className='font-semibold center-buy-tickets-text mt-[10px] '> Buy tickets <span className="material-icons-outlined dates-icon-large ml-[5px] pt-[5px]">arrow_outward</span></div>
-                  </a>
                 </div>
 
                 </div>

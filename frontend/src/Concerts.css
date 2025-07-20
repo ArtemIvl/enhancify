@@ -571,7 +571,7 @@ body {
 }
 
 .spotify-button {
-  background-color: #179d46;
+  background-color: #2e2e2e;
   color: white;
   border: none;
   border-radius: 25px;
@@ -605,7 +605,7 @@ body {
     height: 9vh;
 }
 .spotify-button:hover {
-  background-color: #2e2e2e;
+  background-color: #179d46;
 }
 
 .spotify-logo {

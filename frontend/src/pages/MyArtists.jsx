@@ -117,7 +117,6 @@ export default function TopContent() {
           />
         </div>
       </div>
-<div class="loader"></div> */
       {(!token || unauthorized) ? <Unauthorized></Unauthorized> : (<>
       {isLoading && (
         <Loading />
