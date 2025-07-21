@@ -3,6 +3,7 @@ import "../CrispConcertDetails.css";
 import "../Concerts.css";
 import { formatDate, format_date_2, truncate_text, dummyCalculatePriceInfo } from '../utils/concert_utils';
 import axios from 'axios';
+import dayjs from 'dayjs';
 // Use Vite’s import.meta.glob to load images
 const concertImages = import.meta.glob('../images/concert/*.{png,jpg,jpeg,svg}', { eager: true, import: 'default' });
 const festivalImages = import.meta.glob('../images/festival/*.{png,jpg,jpeg,svg}', { eager: true, import: 'default' });
@@ -11,22 +12,30 @@ const howMuchConcertsToDisplayPerTour = 5;
 let previousSelectedConcertImage = null;
 let previousSelectedFestivalImage = null;
 
-export const format_date_with_helper = (isoString) => {
-  const date = new Date(isoString);
-  if (isNaN(date.getTime())) {
-    // handle invalid input however you like:
-    return (
-      <div title='The exact dates for this event are yet to be decided' className='helper-text-concerts'>TBD</div>
-    )
-    // or throw new Error(`Bad date: ${isoString}`);
+import { DateTime } from 'luxon';
+
+export const format_date_with_helper = iso => {
+  if (!iso) {
+    return <div className="helper-text-concerts" title="Date not set">TBD</div>;
   }
 
-  const day     = date.getDate();
-  const month   = date.toLocaleString('en-GB', { month: 'short' });
-  const hours   = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  
-  return `${day} ${month}, ${hours}:${minutes}`;
+  // Only date (YYYY-MM-DD), no time info
+  if (/^\d{4}-\d{2}-\d{2}$/.test(iso)) {
+    const dt = DateTime.fromISO(iso);
+    return (
+      <div className="helper-text-concerts" title="Exact time not set">
+        {dt.toFormat('d MMM')}, TBD
+      </div>
+    );
+  }
+
+  // Date + time + offset (handles any valid ISO with offset)
+  const dt = DateTime.fromISO(iso, { setZone: true });
+  if (!dt.isValid) {
+    return <div className="helper-text-concerts" title="Invalid date">TBD</div>;
+  }
+
+  return dt.toFormat('d MMM, HH:mm');
 };
 
 const get_random_image = (type) => {

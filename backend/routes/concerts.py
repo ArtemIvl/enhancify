@@ -87,7 +87,8 @@ def concerts_sorting(concert_to_sort_through, countries = [], stateCode = None, 
     try:
         if start_date and end_date:
             date_base = concert_to_sort_through.get("dates", dict()).get("start", None)
-            
+            #1 - always store the start times in original time zone
+            #2 - check if there are multiple similar dates, if yes - delete
             actual_concert_start_time = None
             if date_base:
                 if date_base.get("dateTime", None):
@@ -181,7 +182,7 @@ def get_concert_by_singer(request_model: ConcertsBySingerRequest):
     return JSONResponse(final_concert_dict_to_be_used_in_response, status_code=200)
 
 @router.post("/get_event_ticket_price")
-def get_concert_by_singer(request_model: GetTicketPriceRequest):
+def get_event_price_ranges(request_model: GetTicketPriceRequest):
     #important!
     #artist_id is artists spotify id
     event_id = request_model.event_id

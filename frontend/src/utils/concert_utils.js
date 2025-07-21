@@ -24,6 +24,7 @@ export const formatDate = (isoString) => {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
+    timeZone: 'UTC'
   });
 };
 
@@ -85,10 +86,10 @@ export function dummyCalculatePriceInfo(startDateIso) {
 // Output example: 21 May, 05:00
 export const format_date_2 = (isoString) => {
   const date = new Date(isoString);
-  const day = date.getDate();
-  const month = date.toLocaleString('en-GB', { month: 'short' });
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const day = date.getUTCDate();
+  const month = date.toLocaleString('en-GB', { month: 'short', timeZone: 'UTC' });
+  const hours = String(date.getUTCHours()).padStart(2, '0');
+  const minutes = String(date.getUTCMinutes()).padStart(2, '0');
   return `${day} ${month}, ${hours}:${minutes}`;
 };
 

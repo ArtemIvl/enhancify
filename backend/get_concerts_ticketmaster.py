@@ -7,6 +7,9 @@ import redis
 import time
 from dotenv import load_dotenv
 import unicodedata
+from zoneinfo import ZoneInfo
+import traceback
+
 # from config import TICKETMASTER_API_KEY
 
 
@@ -34,7 +37,7 @@ def query_concert_info_for_one_singer(redis_instance: redis.Redis, artist_id = N
         return 400, "Invalid request"
     
     request_params = {}
-    
+    debug_num_files = 1
     #default values are initialized first, so it's possible to override them with values from a dictionary (params)
     request_params["startDateTime"] = DEFAULT_START_DATE_TIME
     #more relevant events come first
@@ -71,34 +74,79 @@ def query_concert_info_for_one_singer(redis_instance: redis.Redis, artist_id = N
         indexes_to_erase = []
         #key - concert name
         #value - index
-        unique_concert_names = dict()
+        dict_with_dicts_with_dates_and_names = dict()
+
         for item in final_response:
-            #Iterate through every concert item
-            #Group all items that start and end at the same time
-            #Compare this items together - only keep an item with the shortest name in string
-            item.pop("seatmap", None)
-            item.pop("promoters", None)
-            item.pop("promoter", None)
-            item.pop("info", None)
-            item.pop("ticketing", None)
-            item.pop("_links", None)
-            item.pop("products", None)
-            item.pop("images", None)
-            if (get_plain_string(item["name"]) in unique_concert_names.keys()):
-                item_to_compare_with = final_response[unique_concert_names[get_plain_string(item["name"])]]
-                if ((item_to_compare_with.get("dates", dict()).get("start", dict()).get("dateTime", None) and item.get("dates", dict()).get("start", dict()).get("dateTime", None))
-                    and item_to_compare_with.get("dates", dict()).get("start", dict()).get("dateTime", None) == item.get("dates", dict()).get("start", dict()).get("dateTime", None)):
-                    length_first = len(item_to_compare_with["dates"]["start"]["dateTime"])
-                    length_second = len(item["dates"]["start"]["dateTime"])
-                    index_to_erase = unique_concert_names[get_plain_string(item["name"])] if length_first > length_second else final_response.index(item)
-                    indexes_to_erase.append(index_to_erase)
-                else:
-                    item["name"] = item_to_compare_with["name"]
-            else:
-                unique_concert_names[get_plain_string(item["name"])] = final_response.index(item)
+            try:
+                #Iterate through every concert item
+                #Group all items that start and end at the same time
+                #Compare this items together - only keep an item with the shortest name in string
+                item.pop("seatmap", None)
+                item.pop("promoters", None)
+                item.pop("promoter", None)
+                item.pop("info", None)
+                item.pop("ticketing", None)
+                item.pop("_links", None)
+                item.pop("products", None)
+                item.pop("images", None)
                 
-        for element in indexes_to_erase:
-            del final_response[element]
+                iso_date_time = item.get("dates", dict()).get("start", dict()).get("dateTime", None)
+                zone_info = item.get("_embedded", dict()).get("venues", [])[0].get("timezone", None)
+                if iso_date_time and zone_info:
+                    raw_start_time = iso_date_time.replace("Z", "+00:00")
+                    actual_concert_start_time = datetime.fromisoformat(raw_start_time)
+                    raw_start_time = actual_concert_start_time.astimezone(ZoneInfo(zone_info))   
+                    item["dates"]["start"]["dateTime"] = raw_start_time.isoformat();   
+                else:
+                    local_date = item.get("dates", dict()).get("start", dict()).get("localDate", None)
+                    local_time = item.get("dates", dict()).get("start", dict()).get("localTime", None)
+                    if local_date:
+                        if local_time:
+                            dt = datetime.strptime(f"{local_date} {local_time}", "%Y-%m-%d %H:%M:%S")
+                            dt = dt.replace(tzinfo=ZoneInfo(zone_info))  # assign the correct timezone
+                            item["dates"]["start"]["dateTime"] = dt.isoformat()
+                        else:
+                            item["dates"]["start"]["dateTime"] = local_date
+                            
+                #updated working principle:
+                #for every concert - look if there's a concert with the matching date
+                #if yes, compare the names of that date, keep the longest
+                #additionally, normalize all names, so that weird characters will be flattened out
+                #goal - remove all apostrophe characters, keep all concerts grouped together as much as possible
+                #remove all "vip packages" stuff, where there's just duplicate concerts of the same thing
+                #example input: {"0": {"date": "name"}}
+                #iterate through every item in this dict and compare two things of an iterable item
+                #iterable item's date matches with one of the items? 
+                #compare the names, whatever the shortest get's erased
+                #names for events under plain_string match? Inherit the name of the element in a dictionary
+                
+                fresh_item_event_name = item["name"]
+                fresh_item_event_time = item["dates"]["start"]["dateTime"]
+                new_item_marked_to_deletion = False
+                new_item_name_changed = False
+                for index, dict_with_items in dict_with_dicts_with_dates_and_names.items():
+                    if fresh_item_event_time == dict_with_items["date"]:
+                        new_items_length = len(fresh_item_event_name)
+                        previous_items_length = len(dict_with_items["name"])
+                        if previous_items_length > new_items_length:
+                            indexes_to_erase.append(index)
+                        else:
+                            new_item_marked_to_deletion = True
+                            indexes_to_erase.append(final_response.index(item))
+                        break
+                    else:
+                        if get_plain_string(fresh_item_event_name) == get_plain_string(dict_with_items["name"]) and not new_item_name_changed:
+                            item["name"] = dict_with_items["name"]
+                            new_item_name_changed = True
+                            
+                if not new_item_marked_to_deletion:
+                    dict_with_dicts_with_dates_and_names[final_response.index(item)] = {"name": fresh_item_event_name, "date": fresh_item_event_time} 
+
+            except Exception as e:
+                continue
+                
+        final_response = [x for idx, x in enumerate(final_response) if idx not in indexes_to_erase]
+        
         return response.status_code, final_response
     else:
         return 401, response["fault"]
@@ -178,4 +226,3 @@ def get_event_price(event_id):
     else:
         print(response.status_code)
     return None
-    
