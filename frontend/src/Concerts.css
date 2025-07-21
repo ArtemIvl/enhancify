@@ -166,7 +166,7 @@ body {
 .big-title {
     margin-left: 5vw;
     margin-bottom: 0.8vh;
-    font-size: 1.75vw;
+    font-size: clamp(15px, 1.75vw, 40px);
     display: inline-block; /* or inline-block if you want to control padding/margin */
     padding: 8px 15px;
     border-radius: 10px; /* optional rounded corners */
@@ -327,11 +327,18 @@ body {
     z-index: 1000;                        /* stay on top of content */
     }
 
+@media (max-width: 600px) {
+  .hide-on-mobile {
+    display: none;
+  }
+}
 
 .main-concert-card {
-    margin-left: 110px;
+    margin-left: 7.5vw;
     margin-top: 0.2rem;
     height: 12.75vh;
+    min-height: 80px;
+    
     width: 84%;
     display: flex;
     z-index: 1000;
@@ -392,7 +399,7 @@ body {
 }
 
 .artists-name-main {
-    font-size: 1.9vw;
+    font-size: clamp(15px, 1.9vw, 50px);
     width: 20%;
     font-weight: 200;
     margin-left: 30px;

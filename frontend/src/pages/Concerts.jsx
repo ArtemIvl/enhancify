@@ -291,7 +291,7 @@ function checkIfArtistIsFavorite(artistId) {
     <div className="big-title"><span className="material-icons-outlined pr-4">celebration</span>Find concerts and shows<span className="material-icons-outlined pl-4">celebration</span>
     
 </div>
- <div className="ml-[6%] mb-[1.6vh] italic flex">Search results are powered by <img className="rounded mt-[-0.2%] ml-[1%]" height={40} width={90} src="https://i.imghippo.com/files/XU8614G.jpg"></img></div>
+ <div className="ml-[6%] mb-[1.6vh] italic flex hide-item-height hide-item-width">Search results are powered by <img className="rounded mt-[-0.2%] ml-[1%]" height={40} width={90} src="https://i.imghippo.com/files/XU8614G.jpg"></img></div>
       <div className="button-row">
         <button
           className={`button-concerts-search${active === "global" ? " active" : ""}`}
@@ -312,7 +312,7 @@ function checkIfArtistIsFavorite(artistId) {
         searchResultFromNothingFound={forciblyOverrideSearchResult} setSearchResultFromNothingFound={setForciblyOverrideSearchResult}>\
         
         </ConcertsSearch></div>
-        <div className="filters_container">  
+        <div className="filters_container hide-item-width">  
             <button className={`filters-button${filters === "clicked" ? " active" : ""}`} 
             onClick={() => filters === "clicked" ? setFilters("unclicked") : setFilters("clicked")}>
                 <span className="material-icons-outlined icons-tweaked">tune</span>Filters</button>
@@ -374,7 +374,7 @@ function checkIfArtistIsFavorite(artistId) {
 
                   <div className="small-horizontal-divisive-line">│</div>
                   <div className="shows-available-text">{calculateShowsAvailable(concert)}</div>
-                  <div className="small-horizontal-divisive-line">│</div>
+                  <div className="small-horizontal-divisive-line hide-item-width">│</div>
                   <GetArtistTags topArtist={active === "global" ? null : getArtistsObject(key)} artistInfo={active === "global" ? getArtistsObject(key) : getArtistsObjectFollowed(key)} 
                   tagsToCalculate={["genre", "favorite", "rising", "popular", "fans", "main_language", "world_rank", "your_most_listened"]} is_webscraped={active === "global" ? true : false} favoriteRank = {active === "global" ? checkIfArtistIsFavorite(getArtistsObject(key)["Spotify ID"]) : checkIfArtistIsFavorite(getArtistsObjectFollowed(key)["id"])}></GetArtistTags>
                   <div className="small-horizontal-divisive-line">│</div>

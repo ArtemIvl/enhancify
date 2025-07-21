@@ -1,6 +1,6 @@
 import React from 'react';
 import "../Concerts.css";
-
+import "../index.css"
 //input: tagsToCalculate - tags that need to be returned. 
 // artistInfo - all information on the artist
 // is_webscraped - if yes, then this is a global artist, we have access to more info
@@ -157,7 +157,7 @@ export default function GetArtistTags({artistInfo = null, is_webscraped, tagsToC
     }
   }
   return (
-    <div className="genre-container">
+    <div className="genre-container hide-item-width">
       {Object.entries(dict_with_tags_to_return).map(([key, value]) => (
         <div className="genre-button" key={key}><div className="genre-text"><span 
         className={
