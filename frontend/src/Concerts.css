@@ -3,9 +3,10 @@
   background-color: #D3CFCE;
   color: #2e2e2e;
   border-radius: 12px;
+  min-width: 90px;
   width: 11vw;
   height: 5.5vh;
-  font-size: 0.95vw;
+  font-size: clamp(8px, 0.95vw, 30px);
   text-align: center;
   border: none;
   cursor: pointer;
@@ -29,8 +30,11 @@ body {
 .button-row-filters {
   display: flex;
   align-items: center;
-  margin-left: -5%;
+  margin-left: -0.75vw;
+  right: 0;
+  margin-right: 0.5vw;
 }
+
 
 .filters-detailed-container.hidden {
     display: none;
@@ -53,14 +57,32 @@ body {
   margin-top: 1rem;
 }
 
+@media (max-width: 1000px) {
+.items-extra-margin-filters {
+  margin-left: -8%;
+}
+}
+@media (max-width: 1000px) {
+.icon-wrapper {
+  margin-left: 2.5vw;
+}
+}
 .filters-button-toggle.active {
     background-color: #e6e6e6;
 }
+
 .text-wrapper {
-  margin-top: 0.5rem;
+  margin-top: 0.5vw;
   flex: 1;    
+  font-size: 0.92vw;
   text-align: left; 
   margin-left: 0.5rem;      /* take the rest (70%) */
+}
+
+@media (max-width: 1000px) {
+.text-wrapper {
+  display: none;
+}
 }
 
 .slider-filters {
@@ -68,7 +90,9 @@ body {
     margin-right: 10%;
     font-size: 5px;
 }
-
+.dates-filters-text {
+  font-size: clamp(10px, 0.95vw, 20px);
+}
 .button-row-filters .filters-button-toggle + .filters-button-toggle {
     margin-left: 0.8rem;
 }
@@ -82,6 +106,9 @@ body {
     height: 4rem;
 }
 
+.dates-right-border {
+  padding-right: 10%;
+}
 .event-search-name {
     font-size: 0.85rem;
     margin-top: 0.2rem;
@@ -89,17 +116,25 @@ body {
 }
 .icons-tweaked {
     vertical-align: middle;   /* aligns icon with text middle */
-    font-size: 1.2em;       
+    font-size: clamp(7px, 1.2em, 20px);
+    margin-bottom: 4px;
+    margin-right: 8px;
+}
+
+.icons-tweaked-filters {
+    vertical-align: middle;   /* aligns icon with text middle */
+    font-size: clamp(15px, 1.2em, 20px);
     margin-bottom: 4px;
     margin-right: 8px;
 }
 
 .icons-tweaked-search {   /* aligns icon with text middle */
-    font-size: 1.2em;       
-    margin-top: -5px;
-    margin-left: -10px;
+    font-size: clamp(12px, 1.2em, 25px);       
+    margin-top: -0.4vw;
+    margin-left: -0.7vw;
     position: absolute;
 }
+
 
 .search-bar-container {
     margin-left: 5vw;
@@ -115,7 +150,7 @@ body {
     width: 30vw;
     padding-left: 3.2vw;
     letter-spacing: 0.35px;
-    font-size: 1.1vw;
+    font-size: clamp(10px, 1.1vw, 20px);
     border-radius: 27px 0px 0px 27px;
 }
 
@@ -128,7 +163,7 @@ body {
 }
 .search-bar::placeholder {
     color: #4c4a4a;
-    font-size: 1vw;
+    font-size: clamp(9px, 1vw, 30px)
 }
 
 .search-bar-button {
@@ -138,11 +173,18 @@ body {
     border-radius: 0px 27px 27px 0px;
     color: white;
     width: 4vw;
+    min-width: 35px;
 }
 
-.filters_container {
+.filters-container {
     margin-top: 0.35vh;
     margin-left: 8vw;
+}
+
+@media (max-width: 690px) {
+  .filters-container {
+    display: none;
+  }
 }
 
 .filters-button {
@@ -163,6 +205,9 @@ body {
     border: 0px;
 }
 
+.helper-text-search {
+  font-size: clamp(10px, 1em, 15px)
+}
 .big-title {
     margin-left: 5vw;
     margin-bottom: 0.8vh;
@@ -173,31 +218,39 @@ body {
     font-weight: 300;
     color: #141313;
 }
+
 .filters-detailed-container {
     position: absolute;
     margin-top: 20px;
     height: 21rem;
+    min-width: 175px;
     background-color: white;
     padding-left: 30px;
     padding-top: 15px;
     color: #2e2e2e;
-    width: 19rem;
+    width: 20vw;
+    right: 0;
+    max-height: 35vw;
+    min-height: 300px;
+    margin-right: 60px; /* or whatever margin you want */
     border: 0.5px solid #2e2e2e;
     z-index: 1000;
-    font-size: 15px;
+    font-size: 1rem;
     border-radius: 20px;
 }
 
+
+
 .search-contents-container {
     position: absolute;
-    margin-top: 70px;
+    margin-top: clamp(30px, 8.5vh, 100px);
     height: 50vh;
     background-color: white;
     padding-left: 30px;
     padding-top: 15px;
     color: #2e2e2e;
     width: 30vw;
-    font-size: 15px;
+    max-height: 45vw;
     border-radius: 12px;
     border: 0.5px solid #2e2e2e;
     z-index: 1000;
@@ -247,11 +300,20 @@ body {
 }
 
 .margin-left-search {
-    margin-left: 20px;
+    margin-left: 1.25vw;
+    font-size: clamp(10px, 1em, 20px);
 }
+
+
 .concerts-search-secondary-text {
-    font-size: 13px;
+    font-size: clamp(8px, 0.9em, 15px);
     margin-top: 5px;
+}
+
+@media (max-width: 650px) {
+.concerts-search-secondary-text {
+  display: none;
+}
 }
 
 .icon-search-contents {
@@ -327,8 +389,9 @@ body {
     z-index: 1000;                        /* stay on top of content */
     }
 
-@media (max-width: 600px) {
-  .hide-on-mobile {
+
+@media (max-width: 930px) {
+  .minimize-filters {
     display: none;
   }
 }
@@ -424,22 +487,27 @@ body {
 
 .small-horizontal-divisive-line {
 
-    font-size: 1.5vw ;
+    font-size: clamp(14px, 1.5vw, 20px) ;
     margin-left: 1vw;
     font-weight: 200;
     margin-right: 1vh;
-    margin-top: 4.5vh;
+    margin-top: clamp(29px, 4.5vh, 50px);
     margin-bottom: 1vh;
 }
 
-.shows-available-text {
-    font-size: 1.25vw;
+.available-shows-container {
     width: 16%;
-    margin-top: 5vh;
+    top: 0;
+    margin-top: 0.5vh;
     margin-left: 8px;
     justify-content: center;     /* Horizontal centering */
     align-items: center;         /* Vertical centering */
     text-align: center;
+    display: flex;
+}
+
+.shows-available-text {
+    font-size: clamp(10px, 1.25vw, 25px);
 }
 
 .genre-container {
@@ -486,7 +554,7 @@ body {
     border-radius: 35px;
     font-weight: 500;
     border: 0.75px solid #2e2e2e;
-    font-size: 1.2vw;
+    font-size: clamp(10px, 1.2vw, 30px);
 
 }
 
@@ -553,7 +621,7 @@ body {
     color: rgb(108, 182, 202);
 }
 .increase-size {
-    font-size: 20px;
+    font-size: clamp(16px, 1.35vw, 25px);
 }
 
 .search-wrapper {             /* 1. create positioning context */

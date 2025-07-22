@@ -77,8 +77,20 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .hide-item-width {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .hide-item-width-details {
+    display: none;
+  }
+}
+
+@media (max-width: 1000px) {
+  .hide-item-width-900 {
     display: none;
   }
 }

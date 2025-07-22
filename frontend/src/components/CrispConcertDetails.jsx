@@ -4,6 +4,7 @@ import "../Concerts.css";
 import { formatDate, format_date_2, truncate_text, dummyCalculatePriceInfo } from '../utils/concert_utils';
 import axios from 'axios';
 import dayjs from 'dayjs';
+import "../index.css"
 // Use Vite’s import.meta.glob to load images
 const concertImages = import.meta.glob('../images/concert/*.{png,jpg,jpeg,svg}', { eager: true, import: 'default' });
 const festivalImages = import.meta.glob('../images/festival/*.{png,jpg,jpeg,svg}', { eager: true, import: 'default' });
@@ -185,7 +186,7 @@ const CrispConcertDetails = React.memo(({ concerts }) => {
   }, [filteredCrispData]);
 
   return (
-    <div className='font-size-crisp-main'>
+    <div>
     
       {filteredCrispData.map((item, idx) => {
         const imageUrl = images[idx];
@@ -226,7 +227,7 @@ const CrispConcertDetails = React.memo(({ concerts }) => {
                   </div>
                   {dateText}
                 </div>
-                <div className='crisp-horizontal-line'>|</div>
+                <div className='crisp-horizontal-line hide-item-width-details'>|</div>
                 <div className='locations-container'>
                   <div className='locations-crisp'>
                     <span className="material-icons-outlined dates-icon-large">pin_drop</span>
@@ -236,28 +237,26 @@ const CrispConcertDetails = React.memo(({ concerts }) => {
               </>
             ) }
             {item.type === 'concert' && (
-              <>
-                <div className='concert-name-container'>
+              <div className='concerts-parent-container ml-[1.5vw]'>
+                <div className='universal-concert-container-2 flex-[2]'>
                 <div className='text-concert'>{truncate_text(item.name, 65)}</div>
                 </div>
                 <div className='crisp-horizontal-line-2'>|</div>
-                <div className='location-container-concert'>
+                <div className='universal-concert-container-2 flex-[1.7]'>
                   <div className='concert-crisp'>
                     <span className={`fi fi-${item.elements[0]._embedded.venues[0].country.countryCode.toLowerCase()} increase-size brightness-90 contrast-110 ml-[0.6vw] mr-[0.8vw] rounded-lg mt-[0.6vh]`}></span>
                     {item.elements[0]._embedded.venues[0].city.name}
                   </div>
-                  {dateText}
                 </div>
                 <div className='crisp-horizontal-line-2'>|</div>
-                <div className='dates-container-concert'>
+                <div className='universal-concert-container-2 flex-[1.4]'>
                   <div className='concert-dates-crisp'>
-                    <span className='material-icons-outlined contrast-110 ml-[0.6vw] mr-[0.8vw] rounded-lg mt-[0.4vh]'>calendar_month</span>
-                     <span className='mt-[1vh]'>{format_date_with_helper(item.startDate)}</span>
+                    <span className='material-icons-outlined dates-icon-large contrast-110 ml-[0.6vw] mr-[0vw] rounded-lg cheeky-margin-top'>calendar_month</span>
+                     <span className='mt-[1vh] date-concert-text-resized'>{format_date_with_helper(item.startDate)}</span>
                   </div>
-                  {dateText}
                 </div>
                 <div className='crisp-horizontal-line-2'>|</div>
-                <div className='get-prices-container-concert'>
+                <div className='universal-concert-container-3 flex-[1]'>
                   {/*
                    item.elements[0].id in priceInfo ? <div>{priceInfo[item.elements[0].id]["min_price"]}</div> : 
                   <button className='get-prices-crisp' style={{cursor: 'pointer'}}>
@@ -265,17 +264,16 @@ const CrispConcertDetails = React.memo(({ concerts }) => {
                      <span className='mt-[1vh]'>Get prices</span>
                   </button>
                   */}
-                  <div style={{cursor: 'pointer'}} title='Unfortunately at this moment our team still waits for approval on 
+                  <div style={{cursor: 'pointer'}} className='dates-filters-text' title='Unfortunately at this moment our team still waits for approval on 
 using Pricing API. All prices displayed are placeholders.'>{dummyCalculatePriceInfo(item.startDate)}</div>
-                  {dateText}
                 </div>
-                <div className='crisp-horizontal-line-2'>|</div>
-                <div className='universal-subconcert-container w-[20%]'>
+                <div className='crisp-horizontal-line-2 hide-item-width'>|</div>
+                <div className='universal-bconcert-container-2 flex-[1.7]'>
                 <div className='get-tickets-concert-fade get-tickets-concert'  onClick={() => window.open(item.elements[0].url, '_blank')}>
-                  <div className='font-semibold center-buy-tickets-concert mt-[1vh] '>Buy tickets</div>
+                  <div className='font-semibold center-buy-tickets-concert mt-[1%]'>Buy tickets</div>
                 </div>
                </div>
-              </>
+              </div>
             )}
           </div>
         {item.type === 'festival' && (
@@ -285,34 +283,34 @@ using Pricing API. All prices displayed are placeholders.'>{dummyCalculatePriceI
               const city = e._embedded.venues[0].city.name;
               return (
                 <div className = "tour-concert-info-container" key={i} style={{ fontSize: '12px' }}>
-                  <div className='universal-subconcert-container w-[25%]'>
+                  <div className='universal-subconcert-container flex-[2]'>
                     <span className={`fi fi-${e._embedded.venues[0].country.countryCode.toLowerCase()} increase-size brightness-85 contrast-110 ml-[30px] mr-[12px] rounded-lg`}></span>
-                    <div className = 'font-semibold'>
+                    <div className = 'font-semibold dates-filters-text'>
                   {city}
                   </div>
                   </div>
                 <div className="mini-horizontal-line"></div>
-                 <div className='universal-subconcert-container w-[17%]'>
+                 <div className='universal-subconcert-container flex-[1.5]'>
                    <span className="material-icons-outlined dates-icon-large">schedule</span>
-                  <div className = 'font-semibold'>
+                  <div className = 'font-semibold dates-filters-text'>
                   {format_date_with_helper(e.dates.start.dateTime)}
                   </div>
                 </div>
-                <div className="mini-horizontal-line"></div>
+                <div className="mini-horizontal-line hide-item-width-900"></div>
 
-                <div className='universal-subconcert-container font-light w-[17%]'>
-                  <div className='font-normal'>
+                <div className='universal-subconcert-container-arena font-light flex-[1.5]'>
+                  <div className='font-normal dates-filters-text'>
                     {handleArenaName(e)}
                     </div>
                 </div>
                 <div className="mini-horizontal-line"></div>
                 
-                <button className='universal-subconcert-container w-[13%]'>
-                  <div style={{cursor: 'pointer'}} title='Unfortunately at this moment our team still waits for approval on 
+                <button className='universal-subconcert-container flex-[1.5]'>
+                  <div style={{cursor: 'pointer'}} className='dates-filters-text' title='Unfortunately at this moment our team still waits for approval on 
 using Pricing API. All prices displayed are placeholders.'>{dummyCalculatePriceInfo(e.dates.start.dateTime)}</div>
                 </button>
                 <div className='get-tickets-concert-fade get-tickets-tour-size'  onClick={() => window.open(e.url, '_blank')}>
-                  <div className='font-semibold center-buy-tickets-text mt-[10px] '> Buy tickets <span className="material-icons-outlined dates-icon-large ml-[5px] pt-[5px]">arrow_outward</span></div>
+                  <div className='font-semibold center-buy-tickets-text '> <span className='hide-item-width-details'>Buy tickets</span> <span className="material-icons-outlined get-tickets-icon ml-[5px] pt-[5px]">arrow_outward</span></div>
                 </div>
 
                 </div>

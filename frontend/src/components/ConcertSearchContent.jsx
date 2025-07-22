@@ -313,7 +313,7 @@ if (searchToggleMode === 'artist') {
                 <div className="margin-left-search">
                 {option.label}
                 </div>
-                <span className="material-icons-outlined icons-tweaked-search">{option.icon}</span>
+                <span className="material-icons-outlined icons-tweaked-search hide-item-width">{option.icon}</span>
                 <div className="concerts-search-secondary-text margin-left-search">{option.description}</div>
               </div>
             ))

@@ -10,7 +10,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import TextField from '@mui/material/TextField';
 import { getFiltersFromStorage } from '../utils/concert_utils';
-
+import "../index.css"
 export default function ConcertSearchFilters({setSearchByArtist, setDateToSearchFrom,
   setDateToSearchUntil, setSearchRadius}) {
 
@@ -70,7 +70,7 @@ const getAllowedDate = (type) => {
   }
 }
 return (
-    <div>
+    <div className='items-extra-margin-filters'>
     <div className="button-row-filters">
         <button
           className={`filters-button-toggle${active === "area" ? " active" : ""}`}
@@ -110,7 +110,7 @@ return (
       />
     </Box>
     </div>
-    <div className='mt-[3%] mb-[2%]'>Search concerts from</div>     <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <div className='mt-[3%] mb-[2%] dates-filters-text'>Search concerts from</div>     <LocalizationProvider dateAdapter={AdapterDayjs}>
     <DatePicker
     minDate={dayjs()}
     maxDate={getAllowedDate("start")}
@@ -123,10 +123,10 @@ return (
     defaultValue={dayjs(getFiltersFromStorage("search_start_date", dayjs().add(3, "day")))}
     yearsOrder="asc"
     slotProps={{ textField: { size: 'small'} }}
-    sx={{width: 200}}
+    sx={{width: "14vw", minWidth: "135px"}}
     />
     </LocalizationProvider>
-    <div className='mt-[5%] mb-[2%]'>Search concerts until</div>
+    <div className='mt-[5%] mb-[2%] dates-filters-text'>Search concerts until</div>
     <LocalizationProvider dateAdapter={AdapterDayjs}>
     <DatePicker
     minDate={getAllowedDate("end")}
@@ -140,7 +140,7 @@ return (
     yearsOrder="asc"
     defaultValue={dayjs(getFiltersFromStorage("search_end_date", dayjs().add(1, "year")))}
     slotProps={{ textField: { size: 'small'} }}
-    sx={{width: 200}}
+    sx={{width: "14vw", minWidth: "135px"}}
     />
     </LocalizationProvider>
 
