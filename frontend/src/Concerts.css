@@ -301,12 +301,12 @@ body {
 
 .margin-left-search {
     margin-left: 1.25vw;
-    font-size: clamp(10px, 1em, 20px);
+    font-size: clamp(10px, 0.95vw, 20px);
 }
 
 
 .concerts-search-secondary-text {
-    font-size: clamp(8px, 0.9em, 15px);
+    font-size: clamp(8px, 0.85vw, 15px);
     margin-top: 5px;
 }
 
