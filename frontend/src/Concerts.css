@@ -129,12 +129,17 @@ body {
 }
 
 .icons-tweaked-search {   /* aligns icon with text middle */
-    font-size: clamp(12px, 1.2em, 25px);       
+    font-size: clamp(15px, 1.2em, 30px);       
     margin-top: -0.4vw;
     margin-left: -0.7vw;
     position: absolute;
 }
 
+.icons-tweaked-welcome {   /* aligns icon with text middle */
+    font-size: clamp(15px, 1.6vw, 30px);       
+    margin-top: -0.25vw;
+    position: absolute;
+}
 
 .search-bar-container {
     margin-left: 5vw;
@@ -206,7 +211,7 @@ body {
 }
 
 .helper-text-search {
-  font-size: clamp(10px, 1em, 15px)
+  font-size: clamp(10px, 0.95vw, 15px)
 }
 .big-title {
     margin-left: 5vw;
@@ -398,7 +403,7 @@ body {
 
 .main-concert-card {
     margin-left: 7.5vw;
-    margin-top: 0.2rem;
+    margin-top: 3vh;
     height: 12.75vh;
     min-height: 80px;
     
@@ -515,9 +520,9 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 1vw 1vw;          /* 0 px vertically, 12 px horizontally */
-  margin-top: clamp(15px, 5vh, 20px);
-  width: 20%;
-  height: clamp(30px, 4vw, 150px);
+  margin-top: clamp(15px, 4vh, 20px);
+  width: 21%;
+  height: clamp(50px, 4vw, 150px);
   justify-content: center;
 }
 
@@ -526,16 +531,27 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 1vw 1vw;          /* 0 px vertically, 12 px horizontally */
-  margin-top: 3vh;
+  margin-top: 2vh;
   width: 20%;
-  height: clamp(30px, 4vw, 150px);
+  height: clamp(40px, 3vw, 150px);
   justify-content: center;
+}
+}
+
+.genre-text {           /* no vertical margins */
+  margin: 0;
+  font-size: 0.9vw;
+}
+
+@media (max-width: 950px) {
+  .genre-text {
+  font-size: 0.8vw;
 }
 }
 
 .genre-button {
   /* let content decide the height; use padding instead of fixed height */
-  padding: 0px 0.95vw;    /* ⬅ tweak top/bottom to shrink the row height */
+  padding: 0px 0.8vw;    /* ⬅ tweak top/bottom to shrink the row height */
   background: #2e2e2e;
   color: #e6e8ec;
   padding-top: 0.15vw;
@@ -544,15 +560,11 @@ body {
   justify-content: center;
   align-items: center;
   height: 3.2vh;
-  max-height: 2.25vw;
+  max-height: 2vw;
   margin: 0;            /* be certain no extra margins sneak in */
   line-height: 0;       /* keeps text compact */
 }
 
-.genre-text {           /* no vertical margins */
-  margin: 0;
-  font-size: 0.95vw;
-}
 
 
 .concert-details-button {
@@ -665,7 +677,7 @@ body {
   border: none;
   border-radius: 25px;
   padding: 1.2vh 2vw;
-  font-size: 120%;
+  font-size: clamp(12px, 0.95vw, 30px);
   cursor: pointer;
   font-weight: bold;
   display: flex;
@@ -675,23 +687,26 @@ body {
 }
 
 .unauthorized-text {
-    font-size: 2.6vh;
+    font-size: clamp(13px, 1.4vw, 30px);
     color: rgb(0, 0, 0);
     font-weight: 300;
     margin-left: 5%;
     margin-right: 5%;
+    margin-top: 1vh;
     margin-bottom: 21vh;
-    margin-top: 1%;
 }
 .unauthorized-rectangle-background {
     background-color: rgb(223, 223, 223);
+    margin-bottom: clamp(150px, 11vw, 500px);
     border-radius: 1.5vh;
     margin-left: 38%;
+    min-width: 200px;
     position: fixed;
     text-align: center;
     margin-right: 38%;
     box-shadow: 2px;
-    height: 9vh;
+    height: 5vw;
+    min-height: 60px;
 }
 .spotify-button:hover {
   background-color: #179d46;

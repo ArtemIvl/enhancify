@@ -10,7 +10,7 @@ export default function Unauthorized() {
   return (
     <div className="unauthorized-container mt-[0px] flex flex-col justify-center space-y-6">
         <div className="spotify-container">
-        <div className="unauthorized-rectangle-background mt-[-11%]"><div className="unauthorized-text">To access this content please connect your Spotify account</div></div>
+        <div className="unauthorized-rectangle-background"><div className="unauthorized-text">To access this content please connect your Spotify account</div></div>
         <button onClick={handleLogin} class="spotify-button">
         <img src="https://upload.wikimedia.org/wikipedia/commons/8/84/Spotify_icon.svg"
             alt="Spotify Logo" class="spotify-logo"></img>

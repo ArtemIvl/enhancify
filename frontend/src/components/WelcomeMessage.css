@@ -1,6 +1,6 @@
 
 .welcome-message-header {
-  font-size: 1.7vw;
+  font-size: clamp(16px, 1.7vw, 40px);
 }
 
 .welcome-message-container {
@@ -10,13 +10,15 @@
       #d3cfce 30%,
       #d6c2da 100%
       );
+      min-width: 600px;
 }
 
 .feature-welcome-message {
-    display: flex;
-    margin-top: 1vh;
-    margin-left: 10%;
-    font-size: 1vw;
+  display: flex;
+  align-items: center;
+  margin-top: 1vh;
+  margin-left: 10%;
+  font-size: clamp(9px, 1vw, 25px);
 }
 
 .welcome-horizontal-line {
@@ -29,7 +31,7 @@
     background-color: #2e2e2e;
 }
 .welcome-pitch-message {
-    font-size: 1.2vw;
+    font-size: clamp(10px, 1.2vw, 25px);
     font-weight: 300;
     margin-left: 8%;
     margin-right: 8%;

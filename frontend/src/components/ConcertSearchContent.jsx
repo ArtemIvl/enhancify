@@ -273,10 +273,10 @@ if (searchToggleMode === 'artist') {
       {/* 1️⃣ background rectangle sized by the text */}
       {inputValue !== "" && selectedCode !== null ? (  <span
         aria-hidden="true"
-        className="bg-[whitesmoke] rounded-xl absolute text-[1.1vw] pl-[45px] pr-[18px] ml-[30px] mb-[6px] mt-[9px]"
+        className="bg-[whitesmoke] rounded-xl absolute text-[clamp(12px,_1.1vw,_30px)] pl-[1vw] pr-[1vw] ml-[1.5vw] mb-[0.2vw] h-[50%] items-center flex mt-[clamp(6px,_1vh,_30px)]"
         style={{back: (inputValue !== "" && selectedCode !== null) ? 2000 : 0}}
       >
-        <span className="material-icons-outlined search-icon">{currentSelectedIcon}</span>
+        <span className="material-icons-outlined icons-tweaked">{currentSelectedIcon}</span>
 
         {inputValue || null}      {/* keep width when empty */}
       </span>) : null}
@@ -287,7 +287,7 @@ if (searchToggleMode === 'artist') {
         onBlur={handleBlur}
         onChange={handleInputChange}
         placeholder={searchToggleMode === "area" ? "Search by region, country or city..." : "Search by artist's name..."}
-        className="search-bar"
+        className="search-bar focus:outline-none focus:ring-2 focus:ring-black"
         style={{ paddingLeft: currentSelectedIcon !== null ? '3.8vw' : '2.6vw' }}
         autoComplete="off"
       />

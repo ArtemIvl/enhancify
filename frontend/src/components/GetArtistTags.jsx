@@ -162,12 +162,12 @@ export default function GetArtistTags({artistInfo = null, is_webscraped, tagsToC
         <div className="genre-button" key={key}><div className="genre-text"><span 
         className={
     value === "Rising"
-      ? "material-icons-outlined icons-tweaked rising hide-item-width"
+      ? "material-icons-outlined icons-tweaked rising"
       : value === "Falling"
-      ? "material-icons-outlined icons-tweaked falling hide-item-width"
+      ? "material-icons-outlined icons-tweaked falling"
       : value === "Your favorite" 
-      ? "material-icons-outlined icons-tweaked favorite hide-item-width"
-      : "material-icons-outlined icons-tweaked hide-item-width"
+      ? "material-icons-outlined icons-tweaked favorite"
+      : "material-icons-outlined icons-tweaked"
   }>{key}</span>{value}</div></div>
       ))}
       </div> 

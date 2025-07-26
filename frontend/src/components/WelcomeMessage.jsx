@@ -32,14 +32,14 @@ export default function WelcomeMessage() {
         <div className="welcome-message-header mb-4"><span className="material-icons-outlined dates-icon-large mt-[1vh]">waving_hand</span>Welcome to Enhancify!<span className="material-icons-outlined dates-icon-large ml-[0.9vw] mt-[1vh]">waving_hand</span></div>
         <div className='welcome-horizontal-line'></div>
         <div className='welcome-pitch-message mb-[2%]'>Our mission is simple - improve your music listening experience by introducing features you've been missing in Spotify</div>
-            <div className='feature-welcome-message'><span className="material-icons-outlined mr-[-13%] ml-[8%] text-purple-900">checkmark</span>Statistics of your most listened artists and tracks</div>
-            <div className='feature-welcome-message'><span className="material-icons-outlined mr-[-13%] ml-[8%] text-purple-900">checkmark</span>Global Spotify artist leaderboard, updated in real time.</div>
-            <div className='feature-welcome-message'><span className="material-icons-outlined mr-[-13%] ml-[8%] mb-[1%] text-purple-900">checkmark</span>Concert search, infused with your Spotify listening preferences.</div>
+            <div className='feature-welcome-message mr-[25px]'><span className="material-icons-outlined text-purple-900 ml-[3vw] icons-tweaked-welcome">checkmark</span><div className='ml-[5.4vw]'>Statistics of your most listened artists and tracks</div></div>
+            <div className='feature-welcome-message'><span className="material-icons-outlined text-purple-900 ml-[3vw] icons-tweaked-welcome">checkmark</span><div className='ml-[5.4vw]'>Global Spotify artist leaderboard, updated in real time.</div></div>
+            <div className='feature-welcome-message mb-[1.5%]'><span className="material-icons-outlined text-purple-900 ml-[3vw] icons-tweaked-welcome">checkmark</span><div className='ml-[5.4vw]'>Concert search, infused with your Spotify listening preferences.</div></div>
             <div className='welcome-horizontal-line'></div>
-        <div className='italic'>Please note that to access all features you need to connect your Spotify account.</div>
+        <div className="italic text-[clamp(12px,_1vw,_30px)]">Please note that to access all features you need to connect your Spotify account.</div>
 
         <button 
-          className="mt-4 bg-black text-white px-4 py-2 rounded-xl"
+          className="mt-4 bg-black text-white px-4 py-2 rounded-xl  text-[clamp(12px,_1vw,_30px)]"
           onClick={() => {
             setShowMessage(false);
             document.body.style.overflow = 'auto'; // Restore scrolling on close
