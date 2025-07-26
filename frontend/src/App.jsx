@@ -8,7 +8,7 @@ import WelcomeMessage from './components/WelcomeMessage.jsx';
 function App() {
   return (
     <>
-    <WelcomeMessage></WelcomeMessage>
+    <WelcomeMessage />
     <BrowserRouter>
       {/* <Loading /> */}
       <NavMenu />

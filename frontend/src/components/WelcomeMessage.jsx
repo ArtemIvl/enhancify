@@ -4,11 +4,24 @@ import "./WelcomeMessage.css"
 export default function WelcomeMessage() {
   const [showMessage, setShowMessage] = useState(false);
 
+  useEffect(() => {
+    // whenever showMessage flips
+    if (showMessage) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    // cleanup on unmount
+    return () => { document.body.style.overflow = '' }
+  }, [showMessage])
+
   useEffect(() => {    
     const visited = localStorage.getItem("hasVisited");
     if (!visited) {
       setShowMessage(true);
       localStorage.setItem("hasVisited", "true");
+    } else {
+      document.body.style.overflow = 'auto';
     }
     const handleKeyDown = (event) => {
       if (event.key === 'Enter') { // specify key here

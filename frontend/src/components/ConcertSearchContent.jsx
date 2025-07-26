@@ -104,7 +104,6 @@ function handleClick() {
     params["stateCode"] = selectedCode 
   }
   else if (inputCodeType === "city") {
-    console.log(selectedCode)
     let lat = 0;
     let lng = 0;
 
@@ -124,7 +123,6 @@ function handleClick() {
     params["geo_longitude"] = myLocationLng;
     }
   }
-  console.log(params)
   //GLOBAL
   axios.post('http://localhost:8000/get_concerts', params)
     .then(response => {
@@ -145,7 +143,6 @@ function handleClick() {
   params["artists"] = followedArtistsToQuery;
   axios.post('http://localhost:8000/get_concerts', params)
     .then(response => {
-      console.log("finished")
       if (toggleModeRef.current === "followed") {
         setConcerts(response.data)
       }

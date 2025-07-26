@@ -88,7 +88,6 @@ const activeRef = useRef(active);
   useEffect(() => {
     if (mostListenedArtistList) {
       setFollowedArtistsToSearchFriendlyMode(mostListenedArtistList);
-      //console.log(mostListenedArtistList)
     }
   }, mostListenedArtistList);
 
