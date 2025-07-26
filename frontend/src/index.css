@@ -70,3 +70,27 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: -1.09rem;
   margin-left: -2.5rem;
 }
+
+@media (max-height: 500px) {
+  .hide-item-height {
+    display: none;
+  }
+}
+
+@media (max-width: 800px) {
+  .hide-item-width {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .hide-item-width-details {
+    display: none;
+  }
+}
+
+@media (max-width: 1000px) {
+  .hide-item-width-900 {
+    display: none;
+  }
+}

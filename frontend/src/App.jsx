@@ -4,9 +4,11 @@ import Profile from './pages/Profile.jsx'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NavMenu from './components/NavMenu.jsx'
 import Concerts from "./pages/Concerts.jsx"
-
+import WelcomeMessage from './components/WelcomeMessage.jsx';
 function App() {
   return (
+    <>
+    <WelcomeMessage></WelcomeMessage>
     <BrowserRouter>
       {/* <Loading /> */}
       <NavMenu />
@@ -17,6 +19,7 @@ function App() {
         <Route path="/concerts" element={<Concerts />} />
       </Routes>
     </BrowserRouter>
+    </>
   );
 }
 

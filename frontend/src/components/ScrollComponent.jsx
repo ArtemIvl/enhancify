@@ -14,6 +14,7 @@ const ScrollComponent = ({ children, setLoadMoreItems }) => {
       className="concerts-content-container slight-margin-bottom"
       onScroll={handleScroll}
     >
+      <div className='mt-[1.75rem]'></div>
       {children}
     </div>
   );

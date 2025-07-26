@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import "../Concerts.css"
 import axios from "axios";
+import { resolveDateTimeFormat } from "@mui/x-date-pickers/internals";
 
 const HARDCODED = [
   { label: "My Location", code: "LOC", icon: "pin_drop", description: "Within 100km radius", input_type: "location" },
@@ -11,12 +12,21 @@ const HARDCODED = [
 
 ];
 
+const HARDCODED_ARTISTS = [
+  {label:"Taylor Swift",code:"06HL4z0CvFAxyc27GXpf02",icon:"person",description:"Pop",input_type:"artist"},
+  {label:"Drake",code:"3TVXtAsR1Inumwj472S9r4",icon:"person",description:"Hip-Hop",input_type:"artist"},
+  {label:"Ed Sheeran",code:"6eUKZXaKkcviH0Ku9w2n3V",icon:"person",description:"Pop",input_type:"artist"},
+  {label:"Beyoncé",code:"6vWDO969PvNqNYHIOW5v0m",icon:"person",description:"R&B",input_type:"artist"},
+  {label:"The Weeknd",code:"1Xyo4u8uXC1ZmMpatF05PJ",icon:"person",description:"R&B",input_type:"artist"}
+];
+
+
 var SEARCH_HISTORY = [
 
 ];
 
-export default function ConcertsSearch({ countries = [], setConcerts, setGlobalConcerts, 
-  setMostListenedConcerts, setGlobalLoading, setFollowedLoading, toggleMode, followedArtistsToQuery, searchResultFromNothingFound, setSearchResultFromNothingFound}) {
+export default function ConcertsSearch({ countries = [], artists = [], setConcerts, setGlobalConcerts, start_date, end_date, searchRadius,
+  setMostListenedConcerts, setGlobalLoading, setFollowedLoading, toggleMode, searchToggleMode, followedArtistsToQuery, searchResultFromNothingFound, setSearchResultFromNothingFound,}) {
   const [inputValue, setInputValue] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedCode, setSelectedCode] = useState(null);
@@ -29,6 +39,12 @@ export default function ConcertsSearch({ countries = [], setConcerts, setGlobalC
   const [myLocationLat, setMyLocationLat] = useState(null)
   const [myLocationLng, setMyLocationLng] = useState(null)
 
+  const toggleModeRef = useRef(toggleMode);
+
+  useEffect(() => {
+    toggleModeRef.current = toggleMode;
+  }, [toggleMode]);
+
 useEffect(() => {
    if (searchResultFromNothingFound) {
     setInputValue(searchResultFromNothingFound.label);
@@ -39,11 +55,25 @@ useEffect(() => {
    }
 }, [searchResultFromNothingFound, setSearchResultFromNothingFound]);
 
+  useEffect(() => {
+    clearInput();
+  }, [searchToggleMode]);
+
+  useEffect(() => {
+    if (searchToggleMode === "artist") {
+    clearInput();
+    }
+  }, [toggleMode]);
+
 function handleClick() {
   setGlobalLoading(true)
   setFollowedLoading(true)
+  if (searchToggleMode === "area" || (searchToggleMode === "artist" && (inputValue === "" || inputValue === null))) {
   const params = {
       get_top_artist_info: 1,
+      start_date: start_date,
+      end_date: end_date,
+      search_area: searchRadius,
       countries: []
   }
   if (selectedItem !== null) {
@@ -62,7 +92,9 @@ function handleClick() {
     if (HARDCODED.length > 1) {
     HARDCODED.pop();
     }
+    if (searchToggleMode !== "artist") {
     SEARCH_HISTORY.push(selectedItem);
+    }
     }
   }
   if (inputCodeType === "country") {
@@ -96,12 +128,13 @@ function handleClick() {
   //GLOBAL
   axios.post('http://localhost:8000/get_concerts', params)
     .then(response => {
-      if (toggleMode === "global") {
+      if (toggleModeRef.current === "global") {
         setConcerts(response.data);
       }
-      setGlobalConcerts(response.data)
-      setGlobalLoading(false);
-    })
+      setGlobalConcerts(response.data)})
+      .then(() => {
+        setGlobalLoading(false);
+      })
     .catch(error => {
       console.error(error);
     });
@@ -112,25 +145,74 @@ function handleClick() {
   params["artists"] = followedArtistsToQuery;
   axios.post('http://localhost:8000/get_concerts', params)
     .then(response => {
-      if (toggleMode === "followed") {
+      console.log("finished")
+      if (toggleModeRef.current === "followed") {
         setConcerts(response.data)
       }
       setMostListenedConcerts(response.data);
+    })
+    .then(() => {
       setFollowedLoading(false);
     })
     .catch(error => {
       console.error(error);
     });
+  }
+  else {
+     if (toggleModeRef.current === "global") {
+      setFollowedLoading(false)
+     }
+     else {
+      setGlobalLoading(false)
+     }
+     const params = {
+      start_date: start_date,
+      end_date: end_date,
+      artist_id: selectedItem.code,
+      artists_name: selectedItem.label
+      } 
+   axios.post('http://localhost:8000/get_concerts_by_singer', params)
+    .then(response => {
+      setConcerts(response.data);
+      if (toggleMode === "global") {
+      setGlobalConcerts(response.data)
+      setGlobalLoading(false)
+      }
+      else {
+      setMostListenedConcerts(response.data)
+      setFollowedLoading(false)
+      }
+      })
+    .catch(error => {
+      console.error(error);
+    });
+  }
 }
 
-  const filtered =
-      isSearching && inputValue.length > 0
-        ? countries
-            .filter(c =>
-              c.label.toLowerCase().includes(inputValue.toLowerCase())
-            )
-            .slice(0, 15)
-        : HARDCODED;
+let filtered;
+
+if (searchToggleMode === 'artist') {
+  if (isSearching && inputValue.length > 0) {
+    filtered = artists
+      .filter(c => c.label.toLowerCase().includes(inputValue.toLowerCase()))
+      .slice(0, 15);
+  } else {
+    if (toggleModeRef.current !== "followed") {
+    filtered = HARDCODED_ARTISTS;
+    }
+    else {
+      filtered = artists.slice(0, 5);
+    }
+  }
+} else {
+  if (isSearching && inputValue.length > 0) {
+    filtered = countries
+      .filter(c => c.label.toLowerCase().includes(inputValue.toLowerCase()))
+      .slice(0, 15);
+  } else {
+    filtered = HARDCODED;
+  }
+}
 
   const history =
       isSearching && inputValue.length > 0
@@ -170,6 +252,8 @@ function handleClick() {
     const selectedItemToAcknowledge = {...option};
     selectedItemToAcknowledge.icon = "history";
     setSelectedItem(selectedItemToAcknowledge);
+
+
     setInputValue(option.label === "My location" ? "" : option.label);
     setCurrentSelectedIcon(option.icon)
     setSelectedCode(option.code);
@@ -189,10 +273,10 @@ function handleClick() {
       {/* 1️⃣ background rectangle sized by the text */}
       {inputValue !== "" && selectedCode !== null ? (  <span
         aria-hidden="true"
-        className="bg-[whitesmoke] rounded-xl absolute text-[1.1vw] pl-[45px] pr-[18px] ml-[30px] mb-[6px] mt-[9px]"
+        className="bg-[whitesmoke] rounded-xl absolute text-[clamp(12px,_1.1vw,_30px)] pl-[1vw] pr-[1vw] ml-[1.5vw] mb-[0.2vw] h-[50%] items-center flex mt-[clamp(6px,_1vh,_30px)]"
         style={{back: (inputValue !== "" && selectedCode !== null) ? 2000 : 0}}
       >
-        <span className="material-icons-outlined search-icon">{currentSelectedIcon}</span>
+        <span className="material-icons-outlined icons-tweaked">{currentSelectedIcon}</span>
 
         {inputValue || null}      {/* keep width when empty */}
       </span>) : null}
@@ -202,8 +286,8 @@ function handleClick() {
         onFocus={handleInputFocus}
         onBlur={handleBlur}
         onChange={handleInputChange}
-        placeholder="Search by region, country or city..."
-        className="search-bar"
+        placeholder={searchToggleMode === "area" ? "Search by region, country or city..." : "Search by artist's name..."}
+        className="search-bar focus:outline-none focus:ring-2 focus:ring-black"
         style={{ paddingLeft: currentSelectedIcon !== null ? '3.8vw' : '2.6vw' }}
         autoComplete="off"
       />
@@ -217,7 +301,7 @@ function handleClick() {
         >
           {filtered.length === 0 ? (
             <div>
-              No results
+              Loading... Please wait a moment
             </div>
           ) : (
             filtered.map(option => (
@@ -229,12 +313,12 @@ function handleClick() {
                 <div className="margin-left-search">
                 {option.label}
                 </div>
-                <span className="material-icons-outlined icons-tweaked-search">{option.icon}</span>
+                <span className="material-icons-outlined icons-tweaked-search hide-item-width">{option.icon}</span>
                 <div className="concerts-search-secondary-text margin-left-search">{option.description}</div>
               </div>
             ))
           )}
-          {(history.length === 0 || (inputValue !== "" && selectedCode === null))? (
+          {(history.length === 0 || (inputValue !== "" && selectedCode === null) || searchToggleMode !== "area")? (
             null
           ) : (
             <>  <div className="horizontal-line-search-bar"></div>

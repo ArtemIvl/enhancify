@@ -1,0 +1,647 @@
+{
+  "name": "Bruno Mars Las Vegas",
+  "type": "event",
+  "id": "G5ezZbxNi08lq",
+  "test": false,
+  "url": "https://www.ticketmaster.com/bruno-mars-las-vegas-las-vegas-nevada-06-02-2025/event/2E006228EC910ADD",
+  "locale": "en-us",
+  "images": [
+    {
+      "ratio": "16_9",
+      "url": "https://s1.ticketm.net/dam/a/89f/12045572-b7ae-4018-a769-93eca023989f_RETINA_PORTRAIT_16_9.jpg",
+      "width": 640,
+      "height": 360,
+      "fallback": false
+    },
+    {
+      "ratio": "16_9",
+      "url": "https://s1.ticketm.net/dam/a/89f/12045572-b7ae-4018-a769-93eca023989f_TABLET_LANDSCAPE_16_9.jpg",
+      "width": 1024,
+      "height": 576,
+      "fallback": false
+    },
+    {
+      "ratio": "16_9",
+      "url": "https://s1.ticketm.net/dam/a/89f/12045572-b7ae-4018-a769-93eca023989f_RETINA_LANDSCAPE_16_9.jpg",
+      "width": 1136,
+      "height": 639,
+      "fallback": false
+    },
+    {
+      "ratio": "16_9",
+      "url": "https://s1.ticketm.net/dam/a/89f/12045572-b7ae-4018-a769-93eca023989f_SOURCE",
+      "width": 2048,
+      "height": 1152,
+      "fallback": false
+    },
+    {
+      "ratio": "16_9",
+      "url": "https://s1.ticketm.net/dam/a/89f/12045572-b7ae-4018-a769-93eca023989f_EVENT_DETAIL_PAGE_16_9.jpg",
+      "width": 205,
+      "height": 115,
+      "fallback": false
+    },
+    {
+      "ratio": "16_9",
+      "url": "https://s1.ticketm.net/dam/a/89f/12045572-b7ae-4018-a769-93eca023989f_RECOMENDATION_16_9.jpg",
+      "width": 100,
+      "height": 56,
+      "fallback": false
+    },
+    {
+      "ratio": "3_2",
+      "url": "https://s1.ticketm.net/dam/a/89f/12045572-b7ae-4018-a769-93eca023989f_ARTIST_PAGE_3_2.jpg",
+      "width": 305,
+      "height": 203,
+      "fallback": false
+    },
+    {
+      "ratio": "4_3",
+      "url": "https://s1.ticketm.net/dam/a/89f/12045572-b7ae-4018-a769-93eca023989f_CUSTOM.jpg",
+      "width": 305,
+      "height": 225,
+      "fallback": false
+    },
+    {
+      "ratio": "3_2",
+      "url": "https://s1.ticketm.net/dam/a/89f/12045572-b7ae-4018-a769-93eca023989f_TABLET_LANDSCAPE_3_2.jpg",
+      "width": 1024,
+      "height": 683,
+      "fallback": false
+    },
+    {
+      "ratio": "3_2",
+      "url": "https://s1.ticketm.net/dam/a/89f/12045572-b7ae-4018-a769-93eca023989f_RETINA_PORTRAIT_3_2.jpg",
+      "width": 640,
+      "height": 427,
+      "fallback": false
+    }
+  ],
+  "sales": {
+    "public": {
+      "startDateTime": "2025-01-31T18:00:00Z",
+      "startTBD": false,
+      "startTBA": false,
+      "endDateTime": "2025-06-03T04:00:00Z"
+    },
+    "presales": [
+      {
+        "startDateTime": "2025-01-29T18:00:00Z",
+        "endDateTime": "2025-01-31T06:00:00Z",
+        "name": "Artist Presale"
+      },
+      {
+        "startDateTime": "2025-01-29T18:00:00Z",
+        "endDateTime": "2025-01-31T06:00:00Z",
+        "name": "Official Platinum Presale"
+      },
+      {
+        "startDateTime": "2025-01-30T18:00:00Z",
+        "endDateTime": "2025-01-31T06:00:00Z",
+        "name": "Live Nation Presale"
+      },
+      {
+        "startDateTime": "2025-01-31T18:00:00Z",
+        "endDateTime": "2025-06-03T04:00:00Z",
+        "name": "Official Platinum Onsale"
+      }
+    ]
+  },
+  "dates": {
+    "start": {
+      "localDate": "2025-06-02",
+      "localTime": "21:00:00",
+      "dateTime": "2025-06-03T04:00:00Z",
+      "dateTBD": false,
+      "dateTBA": false,
+      "timeTBA": false,
+      "noSpecificTime": false
+    },
+    "timezone": "America/Los_Angeles",
+    "status": {
+      "code": "offsale"
+    },
+    "spanMultipleDays": false
+  },
+  "classifications": [
+    {
+      "primary": true,
+      "segment": {
+        "id": "KZFzniwnSyZfZ7v7nJ",
+        "name": "Music"
+      },
+      "genre": {
+        "id": "KnvZfZ7vAeA",
+        "name": "Rock"
+      },
+      "subGenre": {
+        "id": "KZazBEonSMnZfZ7v6F1",
+        "name": "Pop"
+      },
+      "type": {
+        "id": "KZAyXgnZfZ7v7nI",
+        "name": "Undefined"
+      },
+      "subType": {
+        "id": "KZFzBErXgnZfZ7v7lJ",
+        "name": "Undefined"
+      },
+      "family": false
+    }
+  ],
+  "promoter": {
+    "id": "494",
+    "name": "PROMOTED BY VENUE",
+    "description": "PROMOTED BY VENUE / NTL / USA"
+  },
+  "promoters": [
+    {
+      "id": "494",
+      "name": "PROMOTED BY VENUE",
+      "description": "PROMOTED BY VENUE / NTL / USA"
+    }
+  ],
+  "info": "Bruno Mars will be a phone-free experience. Use of cellphones, smart watches, smart accessories, cameras or recording devices will not be permitted in the performance space. Upon arrival at the venue, all devices will be secured in YONDR pouches. Guests maintain possession of their phones and can access their phones during the show at designated Phone Use Areas in the venue. All phones will be re-secured in YONDR pouches before returning to the performance space. Anyone seen using a cellphone during the performance will be escorted out of the venue. We appreciate your cooperation in creating a phone-free viewing experience. This is a SafeTix event, your phone is your ticket. Mobile delivery begins 72 hours prior to the event time.",
+  "pleaseNote": "Bruno Mars will be a phone-free experience. Use of cellphones, smart watches, smart accessories, cameras or recording devices will not be permitted in the performance space. Anyone seen using a cellphone during the performance will be escorted out of the venue. This is a SafeTix event, your phone is your ticket. Mobile delivery begins 72 hours prior to the event time. Stage, Floor, and/or Seating configuration may change without notice. Prices are subject to change based on performance demand. Pricing & locations are subject to availability. No Refunds or Exchanges. No smoking, this includes vaping & e-cigarettes, no audio recorders, no photography & no outside food. Visit Dolby Live at Park MGM HERE for FAQs & complete list of prohibited items, including all backpacks & oversized bags (larger than 12\"x12\"x6\"). Venue enforces a $25 Reprint Fee.",
+  "products": [
+    {
+      "name": "Bruno Mars Pre-Show Reception (7:30pm to 8:30pm, Check-in 7:10pm)",
+      "id": "G5ezZbxTgf8yL",
+      "url": "https://www.ticketmaster.com/bruno-mars-preshow-reception-730pm-to-las-vegas-nevada-06-02-2025/event/2E00622FF5510E5F",
+      "type": "Upsell",
+      "classifications": [
+        {
+          "primary": true,
+          "segment": {
+            "id": "KZFzniwnSyZfZ7v7n1",
+            "name": "Miscellaneous"
+          },
+          "genre": {
+            "id": "KnvZfZ7v7ll",
+            "name": "Undefined"
+          },
+          "subGenre": {
+            "id": "KZazBEonSMnZfZ7vAv1",
+            "name": "Undefined"
+          },
+          "type": {
+            "id": "KZAyXgnZfZ7v7nJ",
+            "name": "Upsell"
+          },
+          "subType": {
+            "id": "KZFzBErXgnZfZ7v7lv",
+            "name": "Special Entry"
+          },
+          "family": false
+        }
+      ]
+    },
+    {
+      "name": "Dash Pass",
+      "id": "G5ezZbxTiCYJG",
+      "url": "https://www.ticketmaster.com/dash-pass-las-vegas-nevada-06-02-2025/event/2E00622FEC3B098C",
+      "type": "Upsell",
+      "classifications": [
+        {
+          "primary": true,
+          "segment": {
+            "id": "KZFzniwnSyZfZ7v7n1",
+            "name": "Miscellaneous"
+          },
+          "genre": {
+            "id": "KnvZfZ7v7ll",
+            "name": "Undefined"
+          },
+          "subGenre": {
+            "id": "KZazBEonSMnZfZ7vAv1",
+            "name": "Undefined"
+          },
+          "type": {
+            "id": "KZAyXgnZfZ7v7nJ",
+            "name": "Upsell"
+          },
+          "subType": {
+            "id": "KZFzBErXgnZfZ7v7lv",
+            "name": "Special Entry"
+          },
+          "family": false
+        }
+      ]
+    }
+  ],
+  "seatmap": {
+    "staticUrl": "https://mapsapi.tmol.io/maps/geometry/3/event/2E006228EC910ADD/staticImage?type=png&systemId=HOST",
+    "id": "seatmap"
+  },
+  "accessibility": {
+    "ticketLimit": 2,
+    "id": "accessibility"
+  },
+  "ticketLimit": {
+    "info": "There is an overall 8 ticket limit for this event.",
+    "id": "ticketLimit"
+  },
+  "ageRestrictions": {
+    "legalAgeEnforced": false,
+    "id": "ageRestrictions"
+  },
+  "doorsTimes": {
+    "localDate": "2025-06-02",
+    "localTime": "19:30:00",
+    "dateTime": "2025-06-03T02:30:00Z",
+    "id": "doorsTimes"
+  },
+  "ticketing": {
+    "safeTix": {
+      "enabled": true
+    },
+    "allInclusivePricing": {
+      "enabled": true
+    },
+    "id": "ticketing"
+  },
+  "_links": {
+    "self": {
+      "href": "/discovery/v2/events/G5ezZbxNi08lq?locale=en-us"
+    },
+    "attractions": [
+      {
+        "href": "/discovery/v2/attractions/K8vZ917_p7V?locale=en-us"
+      },
+      {
+        "href": "/discovery/v2/attractions/K8vZ917GJc7?locale=en-us"
+      }
+    ],
+    "venues": [
+      {
+        "href": "/discovery/v2/venues/KovZ917A5L7?locale=en-us"
+      }
+    ]
+  },
+  "_embedded": {
+    "venues": [
+      {
+        "name": "Dolby Live",
+        "type": "venue",
+        "id": "KovZ917A5L7",
+        "test": false,
+        "url": "https://www.ticketmaster.com/dolby-live-tickets-las-vegas/venue/376930",
+        "locale": "en-us",
+        "images": [
+          {
+            "ratio": "16_9",
+            "url": "https://s1.ticketm.net/dbimages/22275v.jpg",
+            "width": 640,
+            "height": 360,
+            "fallback": false
+          }
+        ],
+        "postalCode": "89109",
+        "timezone": "America/Los_Angeles",
+        "city": {
+          "name": "Las Vegas"
+        },
+        "state": {
+          "name": "Nevada",
+          "stateCode": "NV"
+        },
+        "country": {
+          "name": "United States Of America",
+          "countryCode": "US"
+        },
+        "address": {
+          "line1": "3770 S. Las Vegas Blvd"
+        },
+        "location": {
+          "longitude": "-115.17523300",
+          "latitude": "36.10512600"
+        },
+        "markets": [
+          {
+            "name": "Las Vegas",
+            "id": "14"
+          }
+        ],
+        "dmas": [
+          {
+            "id": 319
+          }
+        ],
+        "boxOfficeInfo": {
+          "openHoursDetail": "The Box Office is open only on event days from 12:00PM to 30 minutes after scheduled event start time.",
+          "acceptedPaymentDetail": "The Box Office accepts cash and all major credit cards.",
+          "willCallDetail": "Bring Photo ID, Credit Card, and Ticketmaster confirmation number. Note: The credit card holder must be present for ticket pick up. Will Call should be picked up at least 2 hours before show time on day of show to avoid delays. Please arrive early if you are picking up Will Call Tickets OR to avoid long lines, select SafeTix delivery, where your phone is your ticket. Dolby Live enforces a $25 Reprint Fee. Any re-prints for tickets not printed prior to arriving at the venue will incur a $25 Reprint Fee."
+        },
+        "parkingDetail": "For detailed information about parking at any MGM Resorts destination, please visit mgmresorts.com/parking",
+        "accessibleSeatingDetail": "Accessible seating is available at Dolby Live and can be purchased on Ticketmaster.com. Please look for seats designated with an accessible icon to purchase. For additional accessible needs or questions, please email ticketoffice@dolbylivelv.com or call the box office at 702-730-6946.",
+        "generalInfo": {
+          "generalRule": "No bags or backpacks will be permitted into the venue except for small personal bags or purses (12 x 12 x 6 max). No smoking, vaping or e-cigarettes permitted. Other prohibited items include: Cameras with interchangeable/detachable lens or external flash (No Professional Photography), Audio/Visual Recording Devices (includes GoPro, Google Glass, Spectacles, etc.), Selfie Sticks, Tripods, Monopods, Binoculars, Cans, Metal/Glass/Plastic Containers, Bottles, Flasks (empty or sealed bottles included), Laptops, Tablets, Personal Computers, Two-Way Radios, Weapons, Firearms, Pepper Spray, Pocket Knives or Mace, Illegal Drugs or Substances, Flammable Liquids, Aerosol Cans, Permanent Markers, Flashlights, Laser Pointers, Flares, Fireworks, Noise Making Devices (i.e. Air Horns, whistles, bells, vuvuzelas, etc.), Balloons, Balls, Projectiles, Optical Illusions, Skateboards, Segways, Scooters, Rollerblades, Bicycles, Hover boards, Helmets, Coolers, Ice Chests, Folding Chairs, Pointed-Tip Umbrellas, Flowers (unless otherwise permitted by Tour Production), Seat Cushions or Booster Seats, Patrons Without Shoes or Shirt, Masks, Chains, Studded Belts/Bracelets, Drones (without prior written consent from Venue Management), Animals or Pets (accommodations made for trained, harnessed, and housebroken service animals), Unapproved Pamphlets, Handouts, Ads, or Flyers without prior consent from Venue Management, Clothing, garments, or signs displaying explicit language, profanity, or derogatory characterization toward any person(s), Signs, Flags, or Banners exceeding 11 x 17 or attached to a pole/stick. Signs must be relevant to event. Signs may not contain or display obscene or offensive language and/or pictures as determined by venue management. Management reserves the right to prohibit or remove a sign or banner at any time. (1) One drink/beverage poured into a plastic container is allowed. No Outside Food Allowed.",
+          "childRule": "Children ages 3 and older require a full-price ticket for entry. Any child younger than the age of 3 may enter without a ticket, but must remain on the lap of the ticket holder. Children under the age of 18 must be accompanied by an adult."
+        },
+        "upcomingEvents": {
+          "ticketmaster": 53,
+          "_total": 53,
+          "_filtered": 0
+        },
+        "_links": {
+          "self": {
+            "href": "/discovery/v2/venues/KovZ917A5L7?locale=en-us"
+          }
+        }
+      }
+    ],
+    "attractions": [
+      {
+        "name": "Bruno Mars Las Vegas",
+        "type": "attraction",
+        "id": "K8vZ917_p7V",
+        "test": false,
+        "url": "https://www.ticketmaster.com/bruno-mars-las-vegas-tickets/artist/2780176",
+        "locale": "en-us",
+        "images": [
+          {
+            "ratio": "16_9",
+            "url": "https://s1.ticketm.net/dam/a/89f/12045572-b7ae-4018-a769-93eca023989f_RETINA_PORTRAIT_16_9.jpg",
+            "width": 640,
+            "height": 360,
+            "fallback": false
+          },
+          {
+            "ratio": "16_9",
+            "url": "https://s1.ticketm.net/dam/a/89f/12045572-b7ae-4018-a769-93eca023989f_TABLET_LANDSCAPE_16_9.jpg",
+            "width": 1024,
+            "height": 576,
+            "fallback": false
+          },
+          {
+            "ratio": "16_9",
+            "url": "https://s1.ticketm.net/dam/a/89f/12045572-b7ae-4018-a769-93eca023989f_RETINA_LANDSCAPE_16_9.jpg",
+            "width": 1136,
+            "height": 639,
+            "fallback": false
+          },
+          {
+            "ratio": "16_9",
+            "url": "https://s1.ticketm.net/dam/a/89f/12045572-b7ae-4018-a769-93eca023989f_SOURCE",
+            "width": 2048,
+            "height": 1152,
+            "fallback": false
+          },
+          {
+            "ratio": "16_9",
+            "url": "https://s1.ticketm.net/dam/a/89f/12045572-b7ae-4018-a769-93eca023989f_EVENT_DETAIL_PAGE_16_9.jpg",
+            "width": 205,
+            "height": 115,
+            "fallback": false
+          },
+          {
+            "ratio": "16_9",
+            "url": "https://s1.ticketm.net/dam/a/89f/12045572-b7ae-4018-a769-93eca023989f_RECOMENDATION_16_9.jpg",
+            "width": 100,
+            "height": 56,
+            "fallback": false
+          },
+          {
+            "ratio": "3_2",
+            "url": "https://s1.ticketm.net/dam/a/89f/12045572-b7ae-4018-a769-93eca023989f_ARTIST_PAGE_3_2.jpg",
+            "width": 305,
+            "height": 203,
+            "fallback": false
+          },
+          {
+            "ratio": "4_3",
+            "url": "https://s1.ticketm.net/dam/a/89f/12045572-b7ae-4018-a769-93eca023989f_CUSTOM.jpg",
+            "width": 305,
+            "height": 225,
+            "fallback": false
+          },
+          {
+            "ratio": "3_2",
+            "url": "https://s1.ticketm.net/dam/a/89f/12045572-b7ae-4018-a769-93eca023989f_TABLET_LANDSCAPE_3_2.jpg",
+            "width": 1024,
+            "height": 683,
+            "fallback": false
+          },
+          {
+            "ratio": "3_2",
+            "url": "https://s1.ticketm.net/dam/a/89f/12045572-b7ae-4018-a769-93eca023989f_RETINA_PORTRAIT_3_2.jpg",
+            "width": 640,
+            "height": 427,
+            "fallback": false
+          }
+        ],
+        "classifications": [
+          {
+            "primary": true,
+            "segment": {
+              "id": "KZFzniwnSyZfZ7v7nJ",
+              "name": "Music"
+            },
+            "genre": {
+              "id": "KnvZfZ7vAeA",
+              "name": "Rock"
+            },
+            "subGenre": {
+              "id": "KZazBEonSMnZfZ7v6F1",
+              "name": "Pop"
+            },
+            "type": {
+              "id": "KZAyXgnZfZ7v7la",
+              "name": "Individual"
+            },
+            "subType": {
+              "id": "KZFzBErXgnZfZ7vAd7",
+              "name": "Musician"
+            },
+            "family": false
+          }
+        ],
+        "upcomingEvents": {
+          "ticketmaster": 9,
+          "_total": 9,
+          "_filtered": 0
+        },
+        "_links": {
+          "self": {
+            "href": "/discovery/v2/attractions/K8vZ917_p7V?locale=en-us"
+          }
+        }
+      },
+      {
+        "name": "Bruno Mars",
+        "type": "attraction",
+        "id": "K8vZ917GJc7",
+        "test": false,
+        "url": "https://www.ticketmaster.com/bruno-mars-tickets/artist/1466801",
+        "locale": "en-us",
+        "externalLinks": {
+          "youtube": [
+            {
+              "url": "https://www.youtube.com/channel/UCoUM-UJ7rirJYP8CQ0EIaHA"
+            }
+          ],
+          "twitter": [
+            {
+              "url": "https://twitter.com/BRUNOMARS"
+            }
+          ],
+          "itunes": [
+            {
+              "url": "https://itunes.apple.com/us/artist/id278873078"
+            }
+          ],
+          "lastfm": [
+            {
+              "url": "http://www.last.fm/music/Bruno+Mars"
+            }
+          ],
+          "spotify": [
+            {
+              "url": "https://open.spotify.com/artist/0du5cEVh5yTK9QJze8zA0C"
+            }
+          ],
+          "wiki": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Bruno_Mars"
+            }
+          ],
+          "facebook": [
+            {
+              "url": "https://www.facebook.com/brunomars"
+            }
+          ],
+          "musicbrainz": [
+            {
+              "id": "afb680f2-b6eb-4cd7-a70b-a63b25c763d5",
+              "url": "https://musicbrainz.org/artist/afb680f2-b6eb-4cd7-a70b-a63b25c763d5"
+            }
+          ],
+          "instagram": [
+            {
+              "url": "https://instagram.com/brunomars/"
+            }
+          ],
+          "homepage": [
+            {
+              "url": "http://www.brunomars.com/"
+            }
+          ]
+        },
+        "images": [
+          {
+            "ratio": "4_3",
+            "url": "https://s1.ticketm.net/dam/a/e65/bb733d2d-c17f-462b-aff7-d2d445f2fe65_CUSTOM.jpg",
+            "width": 305,
+            "height": 225,
+            "fallback": false
+          },
+          {
+            "ratio": "16_9",
+            "url": "https://s1.ticketm.net/dam/a/e65/bb733d2d-c17f-462b-aff7-d2d445f2fe65_RETINA_PORTRAIT_16_9.jpg",
+            "width": 640,
+            "height": 360,
+            "fallback": false
+          },
+          {
+            "ratio": "16_9",
+            "url": "https://s1.ticketm.net/dam/a/e65/bb733d2d-c17f-462b-aff7-d2d445f2fe65_RETINA_LANDSCAPE_16_9.jpg",
+            "width": 1136,
+            "height": 639,
+            "fallback": false
+          },
+          {
+            "ratio": "16_9",
+            "url": "https://s1.ticketm.net/dam/a/e65/bb733d2d-c17f-462b-aff7-d2d445f2fe65_TABLET_LANDSCAPE_16_9.jpg",
+            "width": 1024,
+            "height": 576,
+            "fallback": false
+          },
+          {
+            "url": "https://s1.ticketm.net/dam/a/e65/bb733d2d-c17f-462b-aff7-d2d445f2fe65_SOURCE",
+            "width": 2880,
+            "height": 1800,
+            "fallback": false
+          },
+          {
+            "ratio": "3_2",
+            "url": "https://s1.ticketm.net/dam/a/e65/bb733d2d-c17f-462b-aff7-d2d445f2fe65_ARTIST_PAGE_3_2.jpg",
+            "width": 305,
+            "height": 203,
+            "fallback": false
+          },
+          {
+            "ratio": "3_2",
+            "url": "https://s1.ticketm.net/dam/a/e65/bb733d2d-c17f-462b-aff7-d2d445f2fe65_RETINA_PORTRAIT_3_2.jpg",
+            "width": 640,
+            "height": 427,
+            "fallback": false
+          },
+          {
+            "ratio": "16_9",
+            "url": "https://s1.ticketm.net/dam/a/e65/bb733d2d-c17f-462b-aff7-d2d445f2fe65_RECOMENDATION_16_9.jpg",
+            "width": 100,
+            "height": 56,
+            "fallback": false
+          },
+          {
+            "ratio": "3_2",
+            "url": "https://s1.ticketm.net/dam/a/e65/bb733d2d-c17f-462b-aff7-d2d445f2fe65_TABLET_LANDSCAPE_3_2.jpg",
+            "width": 1024,
+            "height": 683,
+            "fallback": false
+          },
+          {
+            "ratio": "16_9",
+            "url": "https://s1.ticketm.net/dam/a/e65/bb733d2d-c17f-462b-aff7-d2d445f2fe65_EVENT_DETAIL_PAGE_16_9.jpg",
+            "width": 205,
+            "height": 115,
+            "fallback": false
+          },
+          {
+            "ratio": "16_9",
+            "url": "https://s1.ticketm.net/dam/a/e65/bb733d2d-c17f-462b-aff7-d2d445f2fe65_TABLET_LANDSCAPE_LARGE_16_9.jpg",
+            "width": 2048,
+            "height": 1152,
+            "fallback": false
+          }
+        ],
+        "classifications": [
+          {
+            "primary": true,
+            "segment": {
+              "id": "KZFzniwnSyZfZ7v7nJ",
+              "name": "Music"
+            },
+            "genre": {
+              "id": "KnvZfZ7vAeA",
+              "name": "Rock"
+            },
+            "subGenre": {
+              "id": "KZazBEonSMnZfZ7v6F1",
+              "name": "Pop"
+            },
+            "type": {
+              "id": "KZAyXgnZfZ7v7nI",
+              "name": "Undefined"
+            },
+            "subType": {
+              "id": "KZFzBErXgnZfZ7v7lJ",
+              "name": "Undefined"
+            },
+            "family": false
+          }
+        ],
+        "upcomingEvents": {
+          "ticketmaster": 9,
+          "_total": 9,
+          "_filtered": 0
+        },
+        "_links": {
+          "self": {
+            "href": "/discovery/v2/attractions/K8vZ917GJc7?locale=en-us"
+          }
+        }
+      }
+    ]
+  }
+}

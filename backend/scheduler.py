@@ -64,7 +64,7 @@ def update_concerts_for_top_global_singers(n = 100):
 
 @scheduler.scheduled_job(
     id="update_artist_leaderboard",
-    trigger=CronTrigger(hour='*', minute='*', second='*/50', timezone=pytz.UTC, jitter=0)
+    trigger=CronTrigger(hour='*', minute='*/10', timezone=pytz.UTC, jitter=0)
 )
 def update_artist_leaderboard():
     info_on_top_singers = get_info_on_top_singers()
