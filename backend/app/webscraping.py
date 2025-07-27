@@ -36,10 +36,6 @@ def get_info_on_top_singers():
     
     return(data) 
 
-#debugging purposes
-# info = get_info_on_top_singers()[1]
-# print(info)
-
 #extra script for removing html elements from artists name
 def extract_artist_name(item):
     s = item[3]

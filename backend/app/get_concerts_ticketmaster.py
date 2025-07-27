@@ -1,17 +1,16 @@
 import requests
 import os
 from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
 from dateutil.relativedelta import relativedelta
 import redis
 import time
 from dotenv import load_dotenv
 import unicodedata
-from zoneinfo import ZoneInfo
-
+from config import TICKETMASTER_API
 load_dotenv()
 
 #TO-DO implement switching to a backup api key when/if quota is exceeded
-TICKETMASTER_API = os.getenv("TICKETMASTER_API_KEY")
 
 
 #it would make sense to start returning concerts a bit more in the future, like in 2 upcoming days. 
@@ -31,7 +30,6 @@ def query_concert_info_for_one_singer(redis_instance: redis.Redis, artist_id = N
         return 400, "Invalid request"
     
     request_params = {}
-    debug_num_files = 1
     #default values are initialized first, so it's possible to override them with values from a dictionary (params)
     request_params["startDateTime"] = DEFAULT_START_DATE_TIME
     #more relevant events come first
