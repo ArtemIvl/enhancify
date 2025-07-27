@@ -1,5 +1,4 @@
-import requests, re, textwrap, difflib
-import json
+import requests
 import os
 from datetime import datetime, timedelta, timezone
 from dateutil.relativedelta import relativedelta
@@ -8,16 +7,11 @@ import time
 from dotenv import load_dotenv
 import unicodedata
 from zoneinfo import ZoneInfo
-import traceback
-
-# from config import TICKETMASTER_API_KEY
-
 
 load_dotenv()
 
 #TO-DO implement switching to a backup api key when/if quota is exceeded
-TICKETMASTER_API = "NrvIaCsR0hamAEiuWTVOU7NeWyLNW1AL"
-TICKETMASTER_SECRET = os.getenv("TICKETMASTER_SECRET")
+TICKETMASTER_API = os.getenv("TICKETMASTER_API_KEY")
 
 
 #it would make sense to start returning concerts a bit more in the future, like in 2 upcoming days. 
@@ -219,7 +213,6 @@ def get_event_price(event_id):
         min_price = "N/A"
         max_price = "N/A"
         if priceRanges:
-            print(priceRanges)
             min_price = priceRanges[0].get("min", "N/A")
             max_price = priceRanges[0].get("max", "N/A")
         return {"min_price": min_price, "max_price": max_price}

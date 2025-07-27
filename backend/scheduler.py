@@ -58,9 +58,7 @@ def update_concerts_for_top_global_singers(n = 100):
             expiration_time = int((3600*24/CONCERT_UPDATE_FREQUENCY_PER_DAY) + 100)
             r.set(f"top_listened_artists:concert_info:{artist_spotify_id}", json.dumps(concert_info_list), ex=expiration_time)
         else:
-            print(concert_info_list)
             continue
-    print("Finished")
 
 @scheduler.scheduled_job(
     id="update_artist_leaderboard",
@@ -86,7 +84,6 @@ def set_global_artist_ranks_as_separate_keys(top_artist_leaderboard):
     try:
         for item in top_artist_leaderboard:
             r.hset(f"top_listened_artists:numerical_rankings", item["Spotify ID"], item["Rank"])
-        print("It's over")
     except Exception as e:
         print(e)
         

@@ -86,7 +86,7 @@ export default function Home() {
   const totalPages = Math.ceil(filtered.length / artistsPerPage);
 
   return (
-    <div className="px-8">
+    <div className="px-8 overflow-hidden">
     <div className="text-2xl font-bold py-4">Most listened artists on Spotify</div>
     <div className="w-full flex justify-between items-center gap-4">
         {/* Search bar */}

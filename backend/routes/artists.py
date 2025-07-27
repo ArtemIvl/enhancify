@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Request, HTTPException, Query
 import httpx
-import time
 import json
 from redis_client import r
 
@@ -10,12 +9,9 @@ SPOTIFY_API_BASE = "https://api.spotify.com/v1/me/top"
 
 @router.get("/get_top_artists")
 def get_top_artists():
-    exec_start = time.time()
     last_updated_at = r.get("top_listened_artists:last_updated_at")
     data_raw = r.get("top_listened_artists:content")
     info_on_top_singers = json.loads(data_raw) if data_raw else []
-    exec_end = time.time()
-    print(exec_end - exec_start)
     return {"Last updated": last_updated_at, "Top 10000": info_on_top_singers}
 
 @router.get("/top-content")

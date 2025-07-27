@@ -145,7 +145,6 @@ const CrispConcertDetails = React.memo(({ concerts }) => {
         event_id: event_id_str
     }).then(({ data }) => {
       updateEntryPrice(event_id_str, data)
-      console.log(data)
       })
     .catch(error => {
       console.error(error);
@@ -214,7 +213,6 @@ const CrispConcertDetails = React.memo(({ concerts }) => {
             className={`crisp-card brightness-90 ${item.type}-card`}
             style={{ height, backgroundImage: `url(${imageUrl})` }}
           >
-            {console.log(idx)}
             {item.type === 'festival' && (
               <>
               <div className='festival-name-container'>
