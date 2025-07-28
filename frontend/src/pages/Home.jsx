@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import ArtistCard from "../components/ArtistCard.jsx";
-import { fetchTopArtists } from "../services/api.js";
+import { fetchMyArtists, fetchTopArtists } from "../services/api.js";
 import Loading from '../components/Loading.jsx';
 import DropdownComponent from "../components/DropdownComponent.jsx"
 import { FaChevronDown, FaTimes, FaChevronUp } from "react-icons/fa";
+import DropdownComponentDescription from "../components/DropdownComponentDescription.jsx";
 
 export default function Home() {
   const [artists, setArtists] = useState([]);
@@ -17,7 +18,8 @@ export default function Home() {
   const [sortByListenersAsc, setSortByListenersAsc] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [openDropdown, setOpenDropdown] = useState(null);
-
+  const [searchPresetOption, setSearchPresetOption] = useState(null);
+  
   const artistsPerPage = 100;
 
   useEffect(() => {
@@ -33,6 +35,45 @@ export default function Home() {
         setIsLoading(false);
       })
   }, []);
+
+  function filterLeaderboardByUsersMostListened(artists) {
+    
+  }
+  useEffect(() => {
+    setGenreFilter(null)
+    setCountryFilter(null)
+    if (searchPresetOption === "trending") {
+      //select artists who climbed the most positions
+    }
+    else if (searchPresetOption === "winners") {
+      setSortMonthlyAsc(true);
+      setSort24hAsc(null);
+      setSortByListenersAsc(null);
+    }
+    else if (searchPresetOption === "favourite") {
+      const token = localStorage.getItem("spotify_token");
+      const timeRange = "medium_term"
+      fetchMyArtists(timeRange, token).then(artists => {
+
+      })
+
+    }
+    else if (searchPresetOption === "classical") {
+      setGenreFilter("Classical")
+    }
+    else if (searchPresetOption === "french_rap") {
+      setGenreFilter("Pop")
+      setCountryFilter("France")
+    }
+    else if (searchPresetOption === "german_techno") {
+      setGenreFilter("Electronic")
+      setCountryFilter("Germany")
+    }
+    else if (searchPresetOption === "english_rock") {
+      setGenreFilter("Rock")
+      setCountryFilter("United Kingdom")
+    }
+  }, [searchPresetOption]);
 
   useEffect(() => {
     const parser = new DOMParser();
@@ -86,33 +127,33 @@ export default function Home() {
   const totalPages = Math.ceil(filtered.length / artistsPerPage);
 
   return (
-    <div className="px-8">
-    <div className="text-2xl font-bold py-4">Most listened artists on Spotify</div>
-    <div className="w-full flex justify-between items-center gap-4">
+    <div className="px-11">
+    <div className="text-xl font-bold py-4">Most listened artists on Spotify</div>
+    <div className="flex flex-row mt-[1vh] mb-[2vh] items-stretch">
+    <div className="flex-[3.6] flex flex-col gap-6">
+      <div>Select search filters yourself</div>
+      <div className="flex gap-6">
+      <div className="w-[42%]">
         {/* Search bar */}
-      <div className="flex items-center w-full md:w-1/2 relative shadow-md rounded-2xl">
-        <input
+          <input
           type="text"
           placeholder="Search artists by name..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full px-4 py-3 text-sm rounded-2xl bg-white text-black placeholder-[#868686] focus:outline-none"
+          className="px-4 py-2.5 w-full text-sm rounded-2xl bg-white shadow-md rounded-2xl text-black placeholder-[#868686] focus:outline-none"
         />
-        <button onClick={() => {
+        </div>
+        {/*
+        <button onClick={() => { functionality for resetting the filters
           setCountryFilter("");
           setGenreFilter("");
           setSort24hAsc(null);
           setSortMonthlyAsc(null);
           setSortByListenersAsc(null);
           setSearch("");
-        }}
-        className="absolute right-0 top-0 h-full w-16 bg-black rounded-r-2xl flex items-center justify-center cursor-pointer">
-          <FaTimes className="text-white" />
-        </button>
-      </div>
-
+        }} */}
         {/* Filters */}
-        <div className="flex gap-4 w-full md:w-auto">
+        <div className="gap-5 w-[26%]">
           {/* Country Filter */}
         <DropdownComponent
             title="Filter by country"
@@ -123,6 +164,8 @@ export default function Home() {
             setOpenDropdown={setOpenDropdown}
             id="country"
           />
+          </div>
+          <div className="gap-5 w-[26%]">
 
           {/* Genre Filter */}
           <DropdownComponent
@@ -135,8 +178,33 @@ export default function Home() {
             id="genre"
           />
         </div>
-      </div>
 
+      </div>
+      </div>
+      <div className="flex-[0.4] items-center justify-center h-[100px]">
+        <div className="relative flex flex-col items-center h-full">
+          {/* Vertical line */}
+          <div className="w-[2px] bg-black h-full" />
+          {/* OR box, absolutely centered */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-4 py-1 bg-[#d3cfce] rounded text-black font-medium">
+            OR
+          </div>
+        </div>
+      </div>
+      <div className="search-presets-container flex-col flex-2">
+      <div className="mb-[3vh]">Use search presets</div>
+
+          <DropdownComponentDescription
+            title="Select a search preset"
+            onChange={setSearchPresetOption}
+            isOpen={openDropdown === "preset"}
+            spotifyAccountConnected = {true}
+            setOpenDropdown={setOpenDropdown}
+            id="preset">
+
+          </DropdownComponentDescription>
+      </div>
+      </div>
       <div className="w-full sticky top-0 z-10 grid grid-cols-[26%_74%] py-4 text-[12px] bg-[#d3cfce] my-2 pl-4">
         {/* Left Column Header */}
         <div className="flex items-center gap-4">
