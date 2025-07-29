@@ -22,6 +22,19 @@ export default function Home() {
   
   const artistsPerPage = 100;
 
+  function fadeOut() {
+  const el = document.getElementById("box");
+  el.classList.add("opacity-0", "translate-x-[100%]");
+  setTimeout(() => {
+    el.style.display = "none";
+  }, 700)
+  const el2 = document.getElementById("box2");
+  el2.classList.add("opacity-0", "translate-x-[100%]");
+  setTimeout(() => {
+    el2.style.display = "none";
+  }, 700)
+}
+
   useEffect(() => {
     fetchTopArtists()
       .then((data) => {
@@ -42,13 +55,14 @@ export default function Home() {
   useEffect(() => {
     setGenreFilter(null)
     setCountryFilter(null)
+    setSort24hAsc(null);
+    setSortByListenersAsc(null);
+    setSortMonthlyAsc(null);
     if (searchPresetOption === "trending") {
       //select artists who climbed the most positions
     }
     else if (searchPresetOption === "winners") {
       setSortMonthlyAsc(true);
-      setSort24hAsc(null);
-      setSortByListenersAsc(null);
     }
     else if (searchPresetOption === "favourite") {
       const token = localStorage.getItem("spotify_token");
@@ -139,7 +153,12 @@ export default function Home() {
           type="text"
           placeholder="Search artists by name..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={
+            (e) => {
+              setSearch(e.target.value)
+              fadeOut()
+            }
+          }
           className="px-4 py-2.5 w-full text-sm rounded-2xl bg-white shadow-md rounded-2xl text-black placeholder-[#868686] focus:outline-none"
         />
         </div>
@@ -181,7 +200,7 @@ export default function Home() {
 
       </div>
       </div>
-      <div className="flex-[0.4] items-center justify-center h-[100px]">
+      <div className="flex-[0.4] items-center justify-center h-[100px] transition-all duration-700 opacity-100 translate-x-0" id="box2">
         <div className="relative flex flex-col items-center h-full">
           {/* Vertical line */}
           <div className="w-[2px] bg-black h-full" />
@@ -191,7 +210,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="search-presets-container flex-col flex-2">
+      <div id="box" className="search-presets-container flex-col flex-2">
       <div className="mb-[3vh]">Use search presets</div>
 
           <DropdownComponentDescription
@@ -204,17 +223,28 @@ export default function Home() {
 
           </DropdownComponentDescription>
       </div>
+       <div className="flex-[0.4] items-center justify-center h-[100px] transition-all duration-700 opacity-100 translate-x-0" id="box2">
+        <div className="relative flex flex-col items-center h-full">
+          {/* Vertical line */}
+          <div className="w-[2px] bg-black h-full" />
+          {/* OR box, absolutely centered */}
+        </div>
       </div>
-      <div className="w-full sticky top-0 z-10 grid grid-cols-[26%_74%] py-4 text-[12px] bg-[#d3cfce] my-2 pl-4">
+      <div className="flex-col flex-1 mt-[1vw] ml-[2vw]">
+      <button className="mb-[3vh] bg-red-700 text-white rounded-2xl h-[8vh] flex cursor-pointer"><span className="absolute flex-1 mt-[2.5vh] material-icons-outlined relative ml-[1vw]"><div>replay</div></span><div className="flex-[2.5] mt-[0.6vh]">Clear filters</div></button>
+
+      </div>
+      </div>
+      <div className="w-full sticky top-0 z-10 grid grid-cols-[29%_71%] py-4 text-[13px] bg-[#d3cfce] my-2 pl-4">
         {/* Left Column Header */}
         <div className="flex items-center gap-4">
           <div className="w-6 text-center pl-4">#</div>
           <div className="w-24" /> {/* Empty space for image */}
-          <div>Name</div>
+          <div className="ml-[3.6vw]">Name</div>
         </div>
 
         {/* Right Column Headers */}
-        <div className="grid grid-cols-7 items-center text-center">
+        <div className="grid grid-cols-6 items-center text-center">
           <button 
             onClick={() => {
               setSortByListenersAsc((prev) => prev === null ? true: !prev);
@@ -236,8 +266,28 @@ export default function Home() {
               )}
             </div>
           </button>
-          <div>Genre</div>
-          <div>Language</div>
+            <button
+            onClick={() => {
+              setSortMonthlyAsc((prev) => prev === null ? true : !prev);
+              setSort24hAsc(null);
+              setSortByListenersAsc(null);
+            }}
+            className="cursor-pointer flex items-center justify-center gap-1 group"
+          >
+            Monthly Change
+            <div className="flex flex-col ml-1 text-[8px]">
+              {(sortMonthlyAsc === null || sortMonthlyAsc === true) && (
+                <FaChevronUp 
+                  className={`transition-transform group-hover:scale-140 ${sortMonthlyAsc === true ? 'text-black' : 'text-gray-500'}`} 
+                />
+              )}
+              {(sortMonthlyAsc === null || sortMonthlyAsc === false) && (
+                <FaChevronDown 
+                  className={`transition-transform group-hover:scale-140 ${sortMonthlyAsc === false ? 'text-black' : 'text-gray-500'}`} 
+                />
+              )}
+            </div>
+          </button>
           <button
             onClick={() => {
               setSort24hAsc((prev) => prev === null ? true : !prev);
@@ -260,29 +310,8 @@ export default function Home() {
               )}
             </div>
           </button>
-          <button
-            onClick={() => {
-              setSortMonthlyAsc((prev) => prev === null ? true : !prev);
-              setSort24hAsc(null);
-              setSortByListenersAsc(null);
-            }}
-            className="cursor-pointer flex items-center justify-center gap-1 group"
-          >
-            Monthly Change
-            <div className="flex flex-col ml-1 text-[8px]">
-              {(sortMonthlyAsc === null || sortMonthlyAsc === true) && (
-                <FaChevronUp 
-                  className={`transition-transform group-hover:scale-140 ${sortMonthlyAsc === true ? 'text-black' : 'text-gray-500'}`} 
-                />
-              )}
-              {(sortMonthlyAsc === null || sortMonthlyAsc === false) && (
-                <FaChevronDown 
-                  className={`transition-transform group-hover:scale-140 ${sortMonthlyAsc === false ? 'text-black' : 'text-gray-500'}`} 
-                />
-              )}
-            </div>
-          </button>
-          <div>Type</div>
+          <div>Genre</div>
+          <div>Language</div>
           <div>Spotify Page</div>
         </div>
       </div>
