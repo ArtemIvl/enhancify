@@ -1,38 +1,36 @@
 import { useState, useEffect, useRef } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
-const DropdownComponentDescription = ({ title, onChange, isOpen, setOpenDropdown, id, spotifyAccountConnected }) => {
+const DropdownComponentDescription = ({ title, onChange, value, isOpen, setOpenDropdown, id, spotifyAccountConnected }) => {
   const [search, setSearch] = useState("");
   const dropdownRef = useRef(null);
   const [currentSelectedValue, setCurrentSelectedValue] = useState(null)
   const [currentSelectedIcon, setCurrentSelectedIcon] = useState("star")
-  let options = [
-    {
-        main_text: "Trending", icon: "local_fire_department", description: "This artists are climbing the leaderboard fast!", keyword: "trending"
-    },
-    {
-        main_text: "Biggest winners", description: "Artists who gained the most listeners since last month", icon: "arrow_circle_up", keyword: "winners"
-    },
-    {
-        main_text: "Classical", description: "Does anyone still listen to Beethoven in 2025?", icon: "music_note", keyword: "classical"
-    },
-    {
-        main_text: "German Techno", description: "See what's trending before your next Berlin Rave", icon: "music_note", keyword: "german_techno"
-    },
-    {
-        main_text: "French Pop", description: "For those of us with a really sophisticated music taste", icon: "music_note", keyword: "french_rap"
-    },
-    {
-        main_text: "English Rock", description: "See how the founding country of rock is currently doing", icon: "music_note", keyword: "english_rock"
-    },
-    ]
+  const [options, setOptions] = useState([
+    { main_text: "Trending", icon: "local_fire_department", description: "This artists are climbing the leaderboard fast!", keyword: "trending" },
+    { main_text: "Biggest winners", description: "Artists who gained the most listeners since last month", icon: "arrow_circle_up", keyword: "winners" },
+    { main_text: "Classical", description: "Does anyone still listen to Beethoven in 2025?", icon: "music_note", keyword: "classical" },
+    { main_text: "German Techno", description: "See what's trending before your next Berlin Rave", icon: "music_note", keyword: "german_techno" },
+    { main_text: "French Pop", description: "For those of us with a really sophisticated music taste", icon: "music_note", keyword: "french_rap" },
+    { main_text: "English Rock", description: "See how the founding country of rock is currently doing", icon: "music_note", keyword: "english_rock" },
+  ]);
 
-  useEffect(() => {
-    if (spotifyAccountConnected === true) {
-    options.push({main_text: "Your favourite", description: "See where your most listened artists stand on the global leaderboard", icon: "star", keyword: "favourite" })
-    }
-  }, [spotifyAccountConnected])
-
+useEffect(() => {
+  if (spotifyAccountConnected) {
+    setOptions(prev => {
+      if (prev.some(opt => opt.keyword === "favourite")) return prev;
+      return [
+        {
+          main_text: "Your favourite",
+          description: "See where your most listened artists stand on the global leaderboard",
+          icon: "star_rate",
+          keyword: "favourite"
+        },
+        ...prev
+      ];
+    });
+  }
+}, [spotifyAccountConnected]);
   const handleToggle = () => {
     setOpenDropdown(isOpen ? null : id);
     setSearch(""); // reset search on open/close
@@ -84,7 +82,7 @@ const DropdownComponentDescription = ({ title, onChange, isOpen, setOpenDropdown
         onClick={handleToggle}
         className="w-[60%] bg-white rounded-xl px-4 py-2.5 text-left text-sm flex justify-between items-center shadow-md cursor-pointer max-h-[40px]"
       >
-        {currentSelectedValue !== null ? (<div className="flex items-center px-4 py-1 rounded-2xl bg-[#2e2e2e] text-white"><span className="material-icons-outlined">{currentSelectedIcon}</span><div className="ml-[0.5vw] mt-[0.2vh]">{currentSelectedValue}</div></div>) : title}
+        {value !== null ? (<div className="flex items-center px-4 py-1 rounded-2xl bg-[#2e2e2e] text-white"><span className="material-icons-outlined">{currentSelectedIcon}</span><div className="ml-[0.5vw] mt-[0.2vh]">{currentSelectedValue}</div></div>) : title}
         {isOpen ? <FaChevronUp className="text-gray-600" /> : <FaChevronDown className="text-gray-600" />}
       </button>
 

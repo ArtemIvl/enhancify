@@ -19,8 +19,13 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [openDropdown, setOpenDropdown] = useState(null);
   const [searchPresetOption, setSearchPresetOption] = useState(null);
-  
+  const [sortByRankChange, setSortByRankChange] = useState(null);
   const artistsPerPage = 100;
+  const [sortByFavourite, setSortByFavourite] = useState(null);
+
+  const [usersMostListenedArtists, setUsersMostListenedArtists] = useState(null);
+  const [authorized, setAuthorized] = useState(null);
+
 
   function fadeOut() {
   const el = document.getElementById("box");
@@ -47,30 +52,54 @@ export default function Home() {
         console.error(err);
         setIsLoading(false);
       })
-  }, []);
 
-  function filterLeaderboardByUsersMostListened(artists) {
-    
+    const token = localStorage.getItem("spotify_token");
+    const timeRange = "medium_term"
+    fetchMyArtists(timeRange, token).then(artists => {
+      setUsersMostListenedArtists(artists);
+      setAuthorized(true);
+    }).catch((err) => {
+      setAuthorized(false);
+    }
+      
+    )
+  }, []);
+  
+
+  function resetEverythingFilters() {
+    setGenreFilter(null)
+    setCountryFilter(null)
+    setSortByFavourite(null);
+    setSort24hAsc(null);
+    setSortByListenersAsc(null);
+    setSortMonthlyAsc(null);
+    setSortByRankChange(null);
+    setSearchPresetOption(null);
+    setSearch("");
   }
+
+  function filterLeaderboardByUsersMostListened(artists, filteredList) {
+    const artistIds = new Set(artists.map(a => a.id));
+    return filteredList.filter(item => artistIds.has(item["Spotify ID"]));
+  }
+
   useEffect(() => {
     setGenreFilter(null)
     setCountryFilter(null)
     setSort24hAsc(null);
     setSortByListenersAsc(null);
     setSortMonthlyAsc(null);
+    setSortByRankChange(null);
+    setSortByFavourite(null);
     if (searchPresetOption === "trending") {
+      setSortByRankChange(true);
       //select artists who climbed the most positions
     }
     else if (searchPresetOption === "winners") {
       setSortMonthlyAsc(true);
     }
     else if (searchPresetOption === "favourite") {
-      const token = localStorage.getItem("spotify_token");
-      const timeRange = "medium_term"
-      fetchMyArtists(timeRange, token).then(artists => {
-
-      })
-
+      setSortByFavourite(true);
     }
     else if (searchPresetOption === "classical") {
       setGenreFilter("Classical")
@@ -123,10 +152,17 @@ export default function Home() {
           : parseFloat(b["Monthly listeners (millions)"]?.replace(/,/g, '') || 0) - parseFloat(a["Monthly listeners (millions)"]?.replace(/,/g, '') || 0)
       );
     }
+      else if (sortByRankChange !== null) {
+        filteredList = filteredList.sort((a, b) => 
+          parseFloat(b["Ranks change"]) - parseFloat(a["Ranks change"]) || 0);
+      }
+      else if (sortByFavourite !== null) {
+        filteredList = filterLeaderboardByUsersMostListened(usersMostListenedArtists, filteredList);
+      }
 
     setFiltered(filteredList);
     setCurrentPage(1);
-  }, [search, countryFilter, genreFilter, artists, sort24hAsc, sortMonthlyAsc, sortByListenersAsc]);
+  }, [search, countryFilter, genreFilter, artists, sort24hAsc, sortMonthlyAsc, sortByListenersAsc, sortByRankChange, sortByFavourite]);
 
   // Extract unique countries and genre for filter dropdowns
   const uniqueCountries = Array.from(new Set(artists.map((a) => a.Country))).filter(Boolean).sort();
@@ -217,8 +253,9 @@ export default function Home() {
             title="Select a search preset"
             onChange={setSearchPresetOption}
             isOpen={openDropdown === "preset"}
-            spotifyAccountConnected = {true}
+            spotifyAccountConnected = {authorized}
             setOpenDropdown={setOpenDropdown}
+            value={searchPresetOption}
             id="preset">
 
           </DropdownComponentDescription>
@@ -231,7 +268,7 @@ export default function Home() {
         </div>
       </div>
       <div className="flex-col flex-1 mt-[1vw] ml-[2vw]">
-      <button className="mb-[3vh] bg-red-700 text-white rounded-2xl h-[8vh] flex cursor-pointer"><span className="absolute flex-1 mt-[2.5vh] material-icons-outlined relative ml-[1vw]"><div>replay</div></span><div className="flex-[2.5] mt-[0.6vh]">Clear filters</div></button>
+      <button onClick={()=>resetEverythingFilters()} className="mb-[3vh] bg-red-700 text-white rounded-2xl h-[8vh] flex cursor-pointer"><span className="absolute flex-1 mt-[2.5vh] material-icons-outlined relative ml-[1vw]"><div>replay</div></span><div className="flex-[2.5] mt-[0.6vh]">Clear filters</div></button>
 
       </div>
       </div>
