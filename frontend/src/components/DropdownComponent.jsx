@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
-const DropdownComponent = ({ title, options, value, onChange, isOpen, setOpenDropdown, id }) => {
+const DropdownComponent = ({ title, options, onUpdate, value, onChange, isOpen, setOpenDropdown, id }) => {
   const [search, setSearch] = useState("");
   const dropdownRef = useRef(null);
 
@@ -76,6 +76,7 @@ const DropdownComponent = ({ title, options, value, onChange, isOpen, setOpenDro
                 key={option}
                 onClick={() => {
                   onChange(option);
+                  onUpdate("custom")
                   setOpenDropdown(null);
                   setSearch("");
                 }}

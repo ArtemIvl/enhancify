@@ -5,6 +5,7 @@ import Loading from '../components/Loading.jsx';
 import DropdownComponent from "../components/DropdownComponent.jsx"
 import { FaChevronDown, FaTimes, FaChevronUp } from "react-icons/fa";
 import DropdownComponentDescription from "../components/DropdownComponentDescription.jsx";
+import "../index.css"
 
 export default function Home() {
   const [artists, setArtists] = useState([]);
@@ -25,20 +26,7 @@ export default function Home() {
 
   const [usersMostListenedArtists, setUsersMostListenedArtists] = useState(null);
   const [authorized, setAuthorized] = useState(null);
-
-
-  function fadeOut() {
-  const el = document.getElementById("box");
-  el.classList.add("opacity-0", "translate-x-[100%]");
-  setTimeout(() => {
-    el.style.display = "none";
-  }, 700)
-  const el2 = document.getElementById("box2");
-  el2.classList.add("opacity-0", "translate-x-[100%]");
-  setTimeout(() => {
-    el2.style.display = "none";
-  }, 700)
-}
+  const [searchMode, setSearchMode] = useState("default");
 
   useEffect(() => {
     fetchTopArtists()
@@ -71,6 +59,7 @@ export default function Home() {
     setCountryFilter(null)
     setSortByFavourite(null);
     setSort24hAsc(null);
+    setSearchMode("default")
     setSortByListenersAsc(null);
     setSortMonthlyAsc(null);
     setSortByRankChange(null);
@@ -91,6 +80,10 @@ export default function Home() {
     setSortMonthlyAsc(null);
     setSortByRankChange(null);
     setSortByFavourite(null);
+    if (searchPresetOption !== null) {
+      setSearchMode("preset");
+
+    }
     if (searchPresetOption === "trending") {
       setSortByRankChange(true);
       //select artists who climbed the most positions
@@ -180,9 +173,12 @@ export default function Home() {
     <div className="px-11">
     <div className="text-xl font-bold py-4">Most listened artists on Spotify</div>
     <div className="flex flex-row mt-[1vh] mb-[2vh] items-stretch">
-    <div className="flex-[3.6] flex flex-col gap-6">
+    <div className={searchMode === "preset" ? "flex-[4] relative flex flex-col gap-6 pointer-events-none select-none" : "flex-[4] flex flex-col gap-6"}>
+      {searchMode === "preset" && (
+        <div className="absolute inset-[-4px] z-10 backdrop-blur-[3px] rounded-2xl transition-all duration-100" />
+      )}
       <div>Select search filters yourself</div>
-      <div className="flex gap-6">
+      <div className="flex gap-7">
       <div className="w-[42%]">
         {/* Search bar */}
           <input
@@ -192,7 +188,12 @@ export default function Home() {
           onChange={
             (e) => {
               setSearch(e.target.value)
-              fadeOut()
+              if (e.target.value !== "") {
+              setSearchMode("custom")
+              }
+              else {
+              setSearchMode("default")
+              }
             }
           }
           className="px-4 py-2.5 w-full text-sm rounded-2xl bg-white shadow-md rounded-2xl text-black placeholder-[#868686] focus:outline-none"
@@ -215,6 +216,7 @@ export default function Home() {
             options={uniqueCountries}
             value={countryFilter}
             onChange={setCountryFilter}
+            onUpdate = {setSearchMode}
             isOpen={openDropdown === "country"}
             setOpenDropdown={setOpenDropdown}
             id="country"
@@ -226,6 +228,7 @@ export default function Home() {
           <DropdownComponent
             title="Filter by genre"
             options={uniqueGenres}
+            onUpdate = {setSearchMode}
             value={genreFilter}
             onChange={setGenreFilter}
             isOpen={openDropdown === "genre"}
@@ -236,7 +239,7 @@ export default function Home() {
 
       </div>
       </div>
-      <div className="flex-[0.4] items-center justify-center h-[100px] transition-all duration-700 opacity-100 translate-x-0" id="box2">
+      <div className="flex-[0.6] items-center justify-center h-[100px] transition-all duration-700 opacity-100 translate-x-0">
         <div className="relative flex flex-col items-center h-full">
           {/* Vertical line */}
           <div className="w-[2px] bg-black h-full" />
@@ -246,7 +249,11 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div id="box" className="search-presets-container flex-col flex-2">
+      <div id="box" className={searchMode === "custom" ? "relative search-presets-container flex-col flex-[1.6] pointer-events-none select-none" : "search-presets-container flex-col flex-[1.6]"}>
+          {/* Overlay for blur */}
+      {searchMode === "custom" && (
+        <div className="absolute inset-[-4px] z-10 backdrop-blur-[3px] rounded-2xl transition-all duration-100" />
+      )}
       <div className="mb-[3vh]">Use search presets</div>
 
           <DropdownComponentDescription
@@ -260,15 +267,15 @@ export default function Home() {
 
           </DropdownComponentDescription>
       </div>
-       <div className="flex-[0.4] items-center justify-center h-[100px] transition-all duration-700 opacity-100 translate-x-0" id="box2">
+       <div className="flex-[0.3] items-center justify-center h-[100px] transition-all duration-700 opacity-100 translate-x-0" id="box2">
         <div className="relative flex flex-col items-center h-full">
           {/* Vertical line */}
           <div className="w-[2px] bg-black h-full" />
           {/* OR box, absolutely centered */}
         </div>
       </div>
-      <div className="flex-col flex-1 mt-[1vw] ml-[2vw]">
-      <button onClick={()=>resetEverythingFilters()} className="mb-[3vh] bg-red-700 text-white rounded-2xl h-[8vh] flex cursor-pointer"><span className="absolute flex-1 mt-[2.5vh] material-icons-outlined relative ml-[1vw]"><div>replay</div></span><div className="flex-[2.5] mt-[0.6vh]">Clear filters</div></button>
+      <div className={"flex-col flex-[1] mt-[1vw] ml-[1vw] text-sm"}>
+      <button onClick={()=>resetEverythingFilters()} className={(searchMode === "preset" || searchMode === "custom") ? "mt-[2.5vh] w-[62%] bg-red-800 text-white rounded-2xl h-[7vh] flex cursor-pointer transition" : "mt-[2.5vh] w-[62%] bg-[#f5f5f5] rounded-2xl h-[7vh] flex cursor-pointer"}><span className="flex-1 mt-[2vh] material-icons-outlined ml-[1vw]"><div>replay</div></span><div className="flex-[2.5] mt-[0.6vh]">Clear filters</div></button>
 
       </div>
       </div>

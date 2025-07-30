@@ -80,7 +80,7 @@ useEffect(() => {
     <div ref={dropdownRef}>
       <button
         onClick={handleToggle}
-        className="w-[60%] bg-white rounded-xl px-4 py-2.5 text-left text-sm flex justify-between items-center shadow-md cursor-pointer max-h-[40px]"
+        className="w-[90%] bg-white rounded-xl px-4 py-2.5 text-left text-sm flex justify-between items-center shadow-md cursor-pointer max-h-[40px]"
       >
         {value !== null ? (<div className="flex items-center px-4 py-1 rounded-2xl bg-[#2e2e2e] text-white"><span className="material-icons-outlined">{currentSelectedIcon}</span><div className="ml-[0.5vw] mt-[0.2vh]">{currentSelectedValue}</div></div>) : title}
         {isOpen ? <FaChevronUp className="text-gray-600" /> : <FaChevronDown className="text-gray-600" />}

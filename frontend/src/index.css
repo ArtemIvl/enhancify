@@ -94,3 +94,9 @@ h1, h2, h3, h4, h5, h6 {
     display: none;
   }
 }
+
+.blur-bg {
+  backdrop-filter: blur(30px);
+  transition: backdrop-filter 0.5s;
+  /* Optional: for Safari support */
+}
