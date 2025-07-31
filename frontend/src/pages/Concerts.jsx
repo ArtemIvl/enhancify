@@ -330,20 +330,20 @@ function checkIfArtistIsFavorite(artistId) {
           {(active === "followed" && unauthorized === 401) ? 
             <Unauthorized></Unauthorized> : (
           (active === "global" & globalLoading) | (active === "followed" & followedLoading) ? (
-            <div className="concerts-content-container mt-[-12vh] flex flex-col justify-center space-y-6">
-              <div className="loading-bottom mt-[3vh] mb-[1vh]"><div className="w-[91.8%] h-[12.75vh] animate-skeleton rounded-xl flex ml-[7.5vw]">
+            <div className="concerts-content-container flex flex-col justify-center">
+              <div className="loading-bottom mb-[1vh] mt-[-2vh]"><div className="w-[91%] h-[12.75vh] animate-skeleton rounded-xl flex ml-[7.8vw]">
                 <div className="w-[9vh] mt-[2vh] mb-[1.5vh] ml-[1.5vw] h-[9vh] animate-skeleton-sub rounded-xl"></div><div className="w-[16vw] mt-[4.6vh] mb-[3.5vh] ml-[2.5vw] h-[4vh] animate-skeleton-sub rounded-xl"></div>
                 <div className="w-[13.5vw] mt-[4.6vh] mb-[3vh] ml-[2.8vw] h-[4vh] animate-skeleton-sub rounded-xl"></div><div className="w-[16.5vw] mt-[2vh] mb-[2vh] ml-[3vw] h-[9vh] animate-skeleton-sub rounded-xl"></div>
                 <div className="w-[15vw] mt-[2.5vh] mb-[2.5vh] ml-[4vw] h-[8vh] animate-skeleton-sub rounded-4xl mr-[3vw]"></div></div></div>
-              <div className="loading-bottom mt-[3vh] mb-[1vh]"><div className="w-[91.8%] h-[12.75vh] animate-skeleton rounded-xl flex ml-[7.5vw]">
+              <div className="loading-bottom mt-[2vh] mb-[1vh]"><div className="w-[91%] h-[12.75vh] animate-skeleton rounded-xl flex ml-[7.8vw]">
                 <div className="w-[9vh] mt-[2vh] mb-[1.5vh] ml-[1.5vw] h-[9vh] animate-skeleton-sub rounded-xl"></div><div className="w-[16vw] mt-[4.6vh] mb-[3.5vh] ml-[2.5vw] h-[4vh] animate-skeleton-sub rounded-xl"></div>
                 <div className="w-[13.5vw] mt-[4.6vh] mb-[3vh] ml-[2.8vw] h-[4vh] animate-skeleton-sub rounded-xl"></div><div className="w-[16.5vw] mt-[2vh] mb-[2vh] ml-[3vw] h-[9vh] animate-skeleton-sub rounded-xl"></div>
                 <div className="w-[15vw] mt-[2.5vh] mb-[2.5vh] ml-[4vw] h-[8vh] animate-skeleton-sub rounded-4xl mr-[3vw]"></div></div></div>
-              <div className="loading-bottom mt-[3vh] mb-[1vh]"><div className="w-[91.8%] h-[12.75vh] animate-skeleton rounded-xl flex ml-[7.5vw]">
+              <div className="loading-bottom mt-[2vh] mb-[1vh]"><div className="w-[91%] h-[12.75vh] animate-skeleton rounded-xl flex ml-[7.8vw]">
                 <div className="w-[9vh] mt-[2vh] mb-[1.5vh] ml-[1.5vw] h-[9vh] animate-skeleton-sub rounded-xl"></div><div className="w-[16vw] mt-[4.6vh] mb-[3.5vh] ml-[2.5vw] h-[4vh] animate-skeleton-sub rounded-xl"></div>
                 <div className="w-[13.5vw] mt-[4.6vh] mb-[3vh] ml-[2.8vw] h-[4vh] animate-skeleton-sub rounded-xl"></div><div className="w-[16.5vw] mt-[2vh] mb-[2vh] ml-[3vw] h-[9vh] animate-skeleton-sub rounded-xl"></div>
                 <div className="w-[15vw] mt-[2.5vh] mb-[2.5vh] ml-[4vw] h-[8vh] animate-skeleton-sub rounded-4xl mr-[3vw]"></div></div></div>
-              <div className="loading-bottom mt-[3vh] mb-[1vh]"><div className="w-[91.8%] h-[12.75vh] animate-skeleton rounded-xl flex ml-[7.5vw]">
+              <div className="loading-bottom mt-[2vh] mb-[1vh]"><div className="w-[91%] h-[12.75vh] animate-skeleton rounded-xl flex ml-[7.8vw]">
                 <div className="w-[9vh] mt-[2vh] mb-[1.5vh] ml-[1.5vw] h-[9vh] animate-skeleton-sub rounded-xl"></div><div className="w-[16vw] mt-[4.6vh] mb-[3.5vh] ml-[2.5vw] h-[4vh] animate-skeleton-sub rounded-xl"></div>
                 <div className="w-[13.5vw] mt-[4.6vh] mb-[3vh] ml-[2.8vw] h-[4vh] animate-skeleton-sub rounded-xl"></div><div className="w-[16.5vw] mt-[2vh] mb-[2vh] ml-[3vw] h-[9vh] animate-skeleton-sub rounded-xl"></div>
                 <div className="w-[15vw] mt-[2.5vh] mb-[2.5vh] ml-[4vw] h-[8vh] animate-skeleton-sub rounded-4xl mr-[3vw]"></div></div></div>
