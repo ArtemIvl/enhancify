@@ -38,4 +38,4 @@ def callback(request: Request):
     if not access_token:
         return JSONResponse({"error": "Failed to get access token"}, status_code=400)
 
-    return RedirectResponse(f"http://localhost:5173/?token={access_token}")
+    return RedirectResponse(f"http://localhost:8080/?token={access_token}")

@@ -121,7 +121,7 @@ const activeRef = useRef(active);
 
   useEffect(() => {
     setGlobalLoading(true)
-    axios.post('http://localhost:8000/get_concerts', {
+    axios.post('/api/get_concerts', {
     get_top_artist_info: 1,
     start_date: dateToSearchFrom.toISOString(),
     end_date: dateToSearchUntil.toISOString(),
@@ -149,7 +149,7 @@ useEffect(() => {
     .then(artists => {
       setMostListenedArtistList(artists);
       // return the axios promise so the next .then waits on it
-      return axios.post('http://localhost:8000/get_concerts', {
+      return axios.post('/api/get_concerts', {
         get_top_artist_info: 0,
         artists: preprocessFavouriteArtistsArray(artists),
         start_date: dateToSearchFrom.toISOString(),

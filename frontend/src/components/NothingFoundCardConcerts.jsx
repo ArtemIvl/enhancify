@@ -67,7 +67,7 @@ function handleClick(selectedItem) {
     params["geo_longitude"] = lng;
   }
   //GLOBAL
-  axios.post('http://localhost:8000/get_concerts', params)
+  axios.post('/api/get_concerts', params)
     .then(response => {
       if (toggleMode === "global") {
         setConcerts(response.data);
@@ -83,7 +83,7 @@ function handleClick(selectedItem) {
   //FOR FOLLOWERS
   params["get_top_artist_info"] = 0;
   params["artists"] = followedArtistsToQuery;
-  axios.post('http://localhost:8000/get_concerts', params)
+  axios.post('/api/get_concerts', params)
     .then(response => {
       if (toggleMode === "followed") {
         setConcerts(response.data)

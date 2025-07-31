@@ -141,7 +141,7 @@ const CrispConcertDetails = React.memo(({ concerts }) => {
   };
 
   function getEventPrices(event_id_str) {
-    axios.post('http://localhost:8000/get_event_ticket_price', {
+    axios.post('/api/get_event_ticket_price', {
         event_id: event_id_str
     }).then(({ data }) => {
       updateEntryPrice(event_id_str, data)

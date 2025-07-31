@@ -13,7 +13,7 @@ export default function Profile() {
       setIsLoading(false);
       return;
     }
-    fetch(`http://localhost:8000/profile?token=${token}`)
+    fetch(`/api/profile?token=${token}`)
       .then((res) => {
         if (res.status === 401 || res.status === 400) {
           logout();

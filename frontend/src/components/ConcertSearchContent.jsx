@@ -124,7 +124,7 @@ function handleClick() {
     }
   }
   //GLOBAL
-  axios.post('http://localhost:8000/get_concerts', params)
+  axios.post('/api/get_concerts', params)
     .then(response => {
       if (toggleModeRef.current === "global") {
         setConcerts(response.data);
@@ -141,7 +141,7 @@ function handleClick() {
   //FOR FOLLOWERS
   params["get_top_artist_info"] = 0;
   params["artists"] = followedArtistsToQuery;
-  axios.post('http://localhost:8000/get_concerts', params)
+  axios.post('/api/get_concerts', params)
     .then(response => {
       if (toggleModeRef.current === "followed") {
         setConcerts(response.data)
@@ -168,7 +168,7 @@ function handleClick() {
       artist_id: selectedItem.code,
       artists_name: selectedItem.label
       } 
-   axios.post('http://localhost:8000/get_concerts_by_singer', params)
+   axios.post('/api/get_concerts_by_singer', params)
     .then(response => {
       setConcerts(response.data);
       if (toggleMode === "global") {
