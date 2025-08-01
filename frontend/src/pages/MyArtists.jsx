@@ -65,8 +65,9 @@ export default function TopContent() {
 
   return (
     <>
-    <div className="px-8">
-      <div className="text-2xl font-bold py-4">Your personal TOP 50</div>
+    <div className="px-14">
+      <div className="text-2xl font-semibold font-bold py-3">Your most listened artists and tracks</div>
+      <div className="mb-[2vw] italic">No need to wait for Wrapped.</div>
       <div className="flex w-full justify-between items-center gap-4">
         <div className="flex gap-4 w-1/3">
           <button
@@ -124,21 +125,20 @@ export default function TopContent() {
 
       {!isLoading && tab === "tracks" && (
         <div>
-          <div className="w-full sticky top-0 z-10 grid grid-cols-[26%_74%] py-4 text-[12px] bg-[#d3cfce] my-2 pl-4">
+          <div className="w-full sticky top-0 z-10 grid grid-cols-[26%_74%] py-4 text-[13px] bg-[#d3cfce] my-2 pl-4">
             {/* Left Column Header */}
-            <div className="flex items-center gap-4">
+            <div className="ml-[0.5vw] flex items-center gap-4">
               <div className="w-6 pl-4">#</div>
               <div className="w-24" /> {/* Empty space for image */}
-              <div>Name</div>
+              <div>Track</div>
             </div>
 
             {/* Right Column Headers */}
-            <div className="grid grid-cols-6 items-center text-center">
-              <div>Artist</div>
-              <div>Album</div>
+            <div className="ml-[1vw] grid grid-cols-5 items-center text-center">
+              <div>Global popularity</div>
               <div>Release Date</div>
-              <div>Duration</div>
-              <div>Popularity Index</div>
+              <div>Album</div>
+              <div>Duration (min)</div>
               <div>Spotify Page</div>
             </div>
           </div>

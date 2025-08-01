@@ -6,6 +6,12 @@ export function extractImageSrc(html) {
   return img ? img.src : null;
 }
 
+export function parseDateTracks(input) {
+  const months = ["Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
+  const [year, month, day] = input.split("-");
+  return `${parseInt(day)} ${months[parseInt(month) - 1]} ${year}`;
+}
+
 //calculates how many shows are available as a string
 export function calculateShowsAvailable(concertList) {
     var concerts = concertList.length;
