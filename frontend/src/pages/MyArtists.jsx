@@ -19,7 +19,7 @@ export default function TopContent() {
   const [search, setSearch] = useState("");
   const [openDropdown, setOpenDropdown] = useState(null);
   const [unauthorized, setUnauthorized] = useState(false);
-
+  const [descAscFilter, setDescAscFilter] = useState("desc");
   useEffect(() => {
     if (!token) {
       setIsLoading(false);
@@ -69,9 +69,9 @@ export default function TopContent() {
       <div className="text-2xl font-semibold font-bold py-3">Your most listened artists and tracks</div>
       <div className="mb-[2vw] italic">No need to wait for Wrapped.</div>
       <div className="flex w-full justify-between items-center gap-4">
-        <div className="flex gap-4 w-1/3">
+        <div className="flex gap-4 w-[25%]">
           <button
-            className={`rounded-md py-3 px-6 flex cursor-pointer font-light text-sm items-center gap-3 ${tab === "tracks" ? "bg-[#2e2e2e] text-white" : "bg-[#d3cfce]"}`}
+            className={`rounded-xl py-3 px-7 flex cursor-pointer font-base text-sm items-center gap-3 ${tab === "tracks" ? "bg-[#2e2e2e] text-white" : "bg-[#d3cfce]"}`}
             onClick={() => setTab("tracks")}
             onMouseDown={e => (e.currentTarget.style.transform = "scale(0.95)")}
             onMouseUp={e => (e.currentTarget.style.transform = "scale(1)")}
@@ -81,7 +81,7 @@ export default function TopContent() {
             Top Songs
           </button>
           <button
-            className={`px-6 py-3 rounded-md flex text-sm cursor-pointer font-light items-center gap-3 ${tab === "artists" ? "bg-[#2e2e2e] text-white" : "bg-[#d3cfce]"}`}
+            className={`px-7 py-3 rounded-xl flex text-sm cursor-pointer font-base items-center gap-3 ${tab === "artists" ? "bg-[#2e2e2e] text-white" : "bg-[#d3cfce]"}`}
             onClick={() => setTab("artists")}
             onMouseDown={e => (e.currentTarget.style.transform = "scale(0.95)")}
             onMouseUp={e => (e.currentTarget.style.transform = "scale(1)")}
@@ -90,23 +90,51 @@ export default function TopContent() {
             <FaMusic className="w-4 h-4"/>
             Top Artists
           </button>
-        </div>
+          </div>
+          <div className="h-[2.5vw] w-[2%]"><div className="w-[2px] h-full color-[#2e2e2e] bg-[#2e2e2e]"></div></div>
 
-        <div className="flex gap-8 w-2/3">
-          <div className="flex items-center w-3/4 relative rounded-2xl shadow-md">
+        <div className="flex gap-8 w-[67%]">
+          <div className="flex h-[2.75vw] text-[14px]">
+          <button onClick={() => setTimeRange("short_term")} className={`cursor-pointer rounded-tl-3xl rounded-bl-3xl w-[9vw] py-3 ${
+            timeRange === "short_term"
+              ? "bg-[#f5f5f5] text-black border"
+              : "bg-[#2e2e2e] text-white"
+          }`}>Last 4 weeks</button>
+          <div className=" h-[100%] bg-white w-[1px]"></div>
+          <button onClick={()=>setTimeRange("medium_term")} className={`cursor-pointer w-[9vw] py-3 ${
+            timeRange === "medium_term"
+              ? "bg-[#f5f5f5] text-black border"
+              : "bg-[#2e2e2e] text-white"
+          }`}>Last 6 months</button>
+          <div className="h-[100%] bg-white w-[1px]"></div>
+          <button onClick={()=>setTimeRange("long_term")} className={`w-[9vw] rounded-br-3xl rounded-tr-3xl py-3 cursor-pointer ${
+            timeRange === "long_term"
+              ? "bg-[#f5f5f5] text-black border"
+              : "bg-[#2e2e2e] text-white"
+          }`}>All time</button>
+          </div>
+          <div className="ml-[2vw] flex items-center w-[35%] relative rounded-3xl shadow-md">
             <input
               type="text"
               placeholder={tab === "artists" ? "Search artists by name..." : "Search tracks by name..."}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full px-4 py-3 text-sm rounded-2xl bg-white text-black placeholder-[#868686] focus:outline-none"
+              className="w-full px-4 py-3 text-sm h-[2.6vw] rounded-2xl bg-white text-black placeholder-[#868686] focus:outline-none"
             />
+            
             <button
-            className="absolute right-0 top-0 h-full w-16 bg-black rounded-r-2xl flex items-center justify-center cursor-pointer">
-              <FaSearch className="text-white" />
+            className="absolute right-0 top-[4px] w-[18%] h-[2.3vw] w-16 text-black bg-white border-l rounded-r-2xl flex items-center justify-center ">
+              <FaSearch className="text-black" />
             </button>
           </div>
-
+          {/*
+          <div className="flex h-[2.75vw] text-[14px] cursor-pointer ml-[4vw]">
+          <button onClick={() => setDescAscFilter("desc")} className={`cursor-pointer rounded-tl-3xl rounded-bl-3xl w-[9vw] py-3 ${descAscFilter === "desc" ? "bg-[#f5f5f5] text-black border" : "bg-[#2e2e2e] text-white"}`}><span className="material-icons-outlined icons-tweaked">arrow_downward</span>Descending</button>
+          <div className=" h-[100%] bg-white w-[1px]"></div>
+          <button onClick={() => setDescAscFilter("asc")} className={`cursor-pointer rounded-br-3xl rounded-tr-3xl w-[9vw] py-3 ${descAscFilter === "asc" ? "bg-[#f5f5f5] text-black border" : "bg-[#2e2e2e] text-white"}`}><span className="material-icons-outlined icons-tweaked">arrow_upward</span>Ascending</button>
+          </div>
+          */}
+          {/*
           <DropdownComponent
             title="Select time range"
             options={["short_term", "medium_term", "long_term"]}
@@ -115,7 +143,7 @@ export default function TopContent() {
             isOpen={openDropdown === "time-range"}
             setOpenDropdown={setOpenDropdown}
             id="time-range"
-          />
+          /> */}
         </div>
       </div>
       {(!token || unauthorized) ? <Unauthorized></Unauthorized> : (<>
@@ -125,7 +153,7 @@ export default function TopContent() {
 
       {!isLoading && tab === "tracks" && (
         <div>
-          <div className="w-full sticky top-0 z-10 grid grid-cols-[26%_74%] py-4 text-[13px] bg-[#d3cfce] my-2 pl-4">
+          <div className="w-full sticky top-0 z-10 grid grid-cols-[26%_74%] mt-[2.5vh] py-4 text-[13px] bg-[#d3cfce] my-2 pl-4">
             {/* Left Column Header */}
             <div className="ml-[0.5vw] flex items-center gap-4">
               <div className="w-6 pl-4">#</div>
@@ -152,29 +180,11 @@ export default function TopContent() {
       )}
 
       {!isLoading && tab === "artists" && (
-        <div>
-          <div className="w-full sticky top-0 z-10 grid grid-cols-[26%_74%] py-4 text-[12px] bg-[#d3cfce] my-2 pl-4">
-            {/* Left Column Header */}
-            <div className="flex items-center gap-4">
-              <div className="w-6 pl-4">#</div>
-              <div className="w-24" /> {/* Empty space for image */}
-              <div>Name</div>
-            </div>
-
-            {/* Right Column Headers */}
-            <div className="grid grid-cols-4 items-center text-center">
-              <div>Genres</div>
-              <div>Popularity Index</div>
-              <div>Followers on Spotify</div>
-              <div>Spotify Profile link</div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-4 w-full">
+          <div className="flex flex-col gap-x-6 gap-y-5 w-full grid grid-cols grid-cols-[repeat(auto-fill,_minmax(34ch,1fr))] mt-[6.5vh]">
             {filteredArtists.map((artist, index) => (
               <SpotifyArtistCard key={artist.id} artist={artist} rank={artist.rank} />
             ))}
           </div>
-        </div>
       )}
       <div className="mb-2"></div></>)}
     </div>
