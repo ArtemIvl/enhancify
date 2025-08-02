@@ -113,17 +113,17 @@ export default function TopContent() {
               : "bg-[#2e2e2e] text-white"
           }`}>All time</button>
           </div>
-          <div className="ml-[2vw] flex items-center w-[35%] relative rounded-3xl shadow-md">
+          <div className="ml-[3.5vw] flex items-center w-[35%] relative rounded-3xl">
             <input
               type="text"
               placeholder={tab === "artists" ? "Search artists by name..." : "Search tracks by name..."}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full px-4 py-3 text-sm h-[2.6vw] rounded-2xl bg-white text-black placeholder-[#868686] focus:outline-none"
+              className="w-full px-4 py-3 text-sm h-[2.6vw] rounded-2xl bg-[#f5f5f5] text-black placeholder-[#868686] focus:outline-none shadow-md"
             />
             
             <button
-            className="absolute right-0 top-[4px] w-[18%] h-[2.3vw] w-16 text-black bg-white border-l rounded-r-2xl flex items-center justify-center ">
+            className="absolute right-0 top-[4px] w-[18%] h-[2.3vw] w-16 text-black bg-[#f5f5f5] border-l rounded-r-2xl flex items-center justify-center ">
               <FaSearch className="text-black" />
             </button>
           </div>

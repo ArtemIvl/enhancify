@@ -244,8 +244,8 @@ const CrispConcertDetails = React.memo(({ concerts }) => {
                 <div className='crisp-horizontal-line-2'>|</div>
                 <div className='universal-concert-container-2 flex-[1.7]'>
                   <div className='concert-crisp'>
-                    <span className={`fi fi-${item.elements[0]._embedded.venues[0].country.countryCode.toLowerCase()} increase-size brightness-90 contrast-110 ml-[0.6vw] mr-[0.8vw] rounded-lg mt-[0.6vh]`}></span>
-                    {item.elements[0]._embedded.venues[0].city.name}
+                    <span className={`fi fi-${item.elements?.[0]?._embedded?.venues?.[0]?.country?.countryCode ? item.elements[0]._embedded.venues[0].country.countryCode.toLowerCase() : "un"} increase-size brightness-90 contrast-110 ml-[0.6vw] mr-[0.8vw] rounded-lg mt-[0.6vh]`}></span>
+                    {item.elements?.[0]?._embedded?.venues?.[0]?.city?.name ? item.elements[0]._embedded.venues[0].city.name : "Unknown"}
                   </div>
                 </div>
                 <div className='crisp-horizontal-line-2'>|</div>
