@@ -58,7 +58,11 @@ export default function SpotifyArtistCard({ artist, rank }) {
         <div className="w-14 min-w-14 h-14 rounded-md overflow-hidden">
           <img src={imageUrl} alt={artist.name} className="w-full h-full object-cover" />
         </div> 
-        <div className="truncate mt-[0.5vh]"><div className="font-semibold">{artist.name}</div><div className="flex text-white text-[13px] mt-[1.2vh] gap-3 "><div className="px-2 py-1 rounded-xl bg-[#2e2e2e]">{artist.genres.length ? artist.genres[0].charAt(0).toUpperCase() + artist.genres[0].slice(1) : (followers >= 1_000_000
+        <div className="truncate mt-[0.5vh]"><div className="font-semibold transition-transform origin-left hover:scale-108 cursor-pointer"><a
+            href={externalUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >{artist.name}</a></div><div className="flex text-white text-[13px] mt-[1.2vh] gap-3 "><div className="px-2 py-1 rounded-xl bg-[#2e2e2e]">{artist.genres.length ? artist.genres[0].charAt(0).toUpperCase() + artist.genres[0].slice(1) : (followers >= 1_000_000
             ? `${(followers / 1_000_000).toFixed(1)}M fans`
             : followers >= 1_000
             ? `${(followers / 1_000).toFixed(1)}K fans`

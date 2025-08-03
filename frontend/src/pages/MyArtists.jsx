@@ -100,13 +100,13 @@ export default function TopContent() {
               ? "bg-[#2e2e2e] text-white"
               : "bg-[#f5f5f5] text-black"
           }`}>Last 4 weeks</button>
-          <div className=" h-[100%] bg-white w-[1px]"></div>
+          <div className=" h-[100%] bg-black w-[1px]"></div>
           <button onClick={()=>setTimeRange("medium_term")} className={`cursor-pointer w-[9vw] py-3 ${
             timeRange === "medium_term"
               ? "bg-[#2e2e2e] text-white"
               : "bg-[#f5f5f5] text-black"
           }`}>Last 6 months</button>
-          <div className="h-[100%] bg-white w-[1px]"></div>
+          <div className="h-[100%] bg-black w-[1px]"></div>
           <button onClick={()=>setTimeRange("long_term")} className={`w-[9vw] rounded-br-3xl rounded-tr-3xl py-3 cursor-pointer ${
             timeRange === "long_term"
               ? "bg-[#2e2e2e] text-white"

@@ -39,7 +39,7 @@ function App() {
       ) : (
 <div className='ml-[20%] mr-[20%] vertical-align flex items-center justify-center min-h-screen'>
   <div className='bg-[#ececec] p-5 rounded-2xl'>
-     At this moment phone view is not supported.
+     We are still working on smartphone-friendly design.
      Please use your PC or laptop to access the website
   </div>
 </div>
