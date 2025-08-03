@@ -66,7 +66,7 @@ export default function TopContent() {
   return (
     <>
     <div className="px-14">
-      <div className="text-2xl font-semibold font-bold py-3">Your most listened artists and tracks</div>
+      <div className="text-xl font-semibold font-bold py-3">Your most listened artists and tracks</div>
       <div className="mb-[2vw] italic">No need to wait for Wrapped.</div>
       <div className="flex w-full justify-between items-center gap-4">
         <div className="flex gap-4 w-[25%]">
