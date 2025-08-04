@@ -82,7 +82,7 @@ useEffect(() => {
         onClick={handleToggle}
         className="w-[90%] bg-white rounded-xl px-4 py-2.5 text-left text-sm flex justify-between items-center shadow-md cursor-pointer max-h-[40px]"
       >
-        {value !== null ? (<div className="flex items-center px-4 py-1 rounded-2xl bg-[#2e2e2e] text-white"><span className="material-icons-outlined">{currentSelectedIcon}</span><div className="ml-[0.5vw] mt-[0.2vh]">{currentSelectedValue}</div></div>) : title}
+        {value !== null ? (<div className="flex items-center px-4 py-1 rounded-2xl bg-[#2e2e2e] truncate text-white mr-[1vw]"><span className="material-icons-outlined icons-tweaked mt-[0.5vh]">{currentSelectedIcon}</span><div className="mr-[1vw]">{currentSelectedValue}</div></div>) : <div className="text-[clamp(11px,1vw,20px)]">{title}</div>}
         {isOpen ? <FaChevronUp className="text-gray-600" /> : <FaChevronDown className="text-gray-600" />}
       </button>
 
@@ -102,7 +102,7 @@ useEffect(() => {
                 className="w-full px-4 py-2 text-left hover:bg-gray-100 cursor-pointer"
               >
                 <div className="flex mt-[1vh] mb-[0.5vh]"><span className="material-icons-outlined">{option.icon}</span><div className="ml-[0.5vw]">{option.main_text}</div></div>
-                <div className="text-[0.8vw]">{option.description}</div>
+                <div className="text-[clamp(11px,0.8vw,15px)] hide-item-width-1100">{option.description}</div>
               </button>
             ))}
             {filteredOptions.length === 0 && (

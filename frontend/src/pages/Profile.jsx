@@ -51,7 +51,7 @@ export default function Profile() {
           <img
             src={profile.images[0].url}
             alt="Profile"
-            className="w-60 h-60 rounded-full object-cover"
+            className="w-60 h-60 rounded-full object-cover "
           />
         )}
           <div className="flex text-sm flex-col gap-4 mt-[3vh] ml-[1.5vw]">
@@ -69,7 +69,7 @@ export default function Profile() {
             href={profile.external_urls.spotify}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 h-[4vw] w-[14vw] justify-center bg-black rounded-md cursor-pointer hover:bg-[#2e2e2e] hover:scale-95 active:scale-95 transition-transform duration-150 ease-in-out"
+            className="flex items-center gap-2 h-[60px] w-[200px] justify-center bg-black rounded-md cursor-pointer hover:bg-[#2e2e2e] hover:scale-95 active:scale-95 transition-transform duration-150 ease-in-out"
           >
             <span>Open in Spotify</span>
             <FaSpotify className="text-green-500 text-4xl" />
@@ -77,7 +77,7 @@ export default function Profile() {
 
           <button
             onClick={logout}
-            className="bg-black h-[4vw] justify-center w-[14vw] rounded-md flex items-center gap-3 cursor-pointer hover:bg-[#2e2e2e] hover:scale-95 active:scale-95 transition-transform duration-150 ease-in-out"
+            className="bg-black h-[60px] justify-center w-[200px] rounded-md flex items-center gap-3 cursor-pointer hover:bg-[#2e2e2e] hover:scale-95 active:scale-95 transition-transform duration-150 ease-in-out"
           >
             <span>Log out</span>
             <FaArrowRightFromBracket className="text-xl"/>
@@ -89,27 +89,27 @@ export default function Profile() {
     <div className="text-center">
           <div className="text-xl items-center justify-center mt-[4vh]">Thank you for trying out our website!</div>
           <div className="text-base italic mt-[2vh]">Developed with passion by:</div>
-          <div className="w-[58%] ml-[21vw] h-[13vw] rounded-4xl mt-[4vh] bg-[rgb(223,223,223)] flex flex-row">
+          <div className="w-[58%] ml-[21vw] mr-[21vw] h-[13vw] min-h-[170px] rounded-4xl mt-[4vh] bg-[rgb(223,223,223)] flex flex-row">
             <div className="flex-1 mt-[3.5vh]">
-            <div className="font-bold text-xl"><span className="material-icons-outlined icons-tweaked">person</span>Tymofii Katyshev</div>
-            <div className="mt-[2.2vh]"><span className="material-icons-outlined icons-tweaked">alternate_email</span>tymofii.katyshev@gmail.com</div>
-            <div className="flex justify-center mt-[1vh]"><a  href="https://www.linkedin.com/in/tymofii-katyshev/"
+            <div className="font-bold text-[clamp(16px,1.3vw,30px)]"><span className="material-icons-outlined icons-tweaked">person</span>Tymofii Katyshev</div>
+            <div className="mt-[2.2vh] text-[clamp(14px,1.05vw,20px)]"><span className="material-icons-outlined icons-tweaked">alternate_email</span>tymofii.katyshev@gmail.com</div>
+            <div className="flex justify-center mt-[1vh] text-[clamp(14px,1.05vw,20px)]"><a  href="https://www.linkedin.com/in/tymofii-katyshev/"
             target="_blank"
             rel="noopener noreferrer" className="flex items-center gap-x-2"><img src="https://i.imghippo.com/files/GTD3587uIY.png" className="h-[2rem] w-[2rem]"></img>linkedin.com/in/tymofii-katyshev</a>
             </div>
-            <div className="flex justify-center mt-[1vh]"><a  href="https://github.com/tymakat"
+            <div className="flex justify-center mt-[1vh] text-[clamp(14px,1.05vw,20px)]"><a  href="https://github.com/tymakat"
             target="_blank"
             rel="noopener noreferrer" className="flex items-center gap-x-2"><img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" className="h-[1.5rem] w-[1.5rem] mr-[0.5vw]"></img>github.com/in/tymakat</a>
             </div>
             </div>
-            <div className="flex-1 mt-[3vh]">
-            <div className="font-bold text-xl"><span className="material-icons-outlined icons-tweaked">person</span>Artemii Ivliev</div>
-            <div className="mt-[2.2vh]"><span className="material-icons-outlined icons-tweaked">alternate_email</span>artemivliev7@gmail.com</div>
-            <div className="flex justify-center mt-[1vh]"><a  href="https://www.linkedin.com/in/artemii-ivliev/"
+            <div className="flex-1 mt-[3.5vh]">
+            <div className="font-bold font-bold text-[clamp(16px,1.3vw,30px)]"><span className="material-icons-outlined icons-tweaked">person</span>Artemii Ivliev</div>
+            <div className="mt-[2.2vh] text-[clamp(14px,1.05vw,20px)]"><span className="material-icons-outlined icons-tweaked">alternate_email</span>artemivliev7@gmail.com</div>
+            <div className="flex justify-center mt-[1vh] text-[clamp(14px,1.05vw,20px)]"><a  href="https://www.linkedin.com/in/artemii-ivliev/"
             target="_blank"
             rel="noopener noreferrer" className="flex items-center gap-x-2"><img src="https://i.imghippo.com/files/GTD3587uIY.png" className="h-[2rem] w-[2rem]"></img>linkedin.com/in/artemii-ivliev</a>
             </div>
-            <div className="flex justify-center mt-[1vh]"><a  href="https://github.com/ArtemIvl"
+            <div className="flex justify-center mt-[1vh] text-[clamp(14px,1.05vw,20px)]"><a  href="https://github.com/ArtemIvl"
             target="_blank"
             rel="noopener noreferrer" className="flex items-center gap-x-2"><img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" className="h-[1.5rem] w-[1.5rem] mr-[0.5vw]"></img>github.com/in/ArtemIvl</a>
             </div>

@@ -179,7 +179,7 @@ export default function Home() {
       )}
       <div>Select search filters yourself</div>
       <div className="flex gap-7">
-      <div className="w-[42%]">
+      <div className="flex-[4.2]">
         {/* Search bar */}
           <input
           type="text"
@@ -196,7 +196,7 @@ export default function Home() {
               }
             }
           }
-          className="px-4 py-2.5 w-full text-sm rounded-2xl bg-white shadow-md rounded-2xl text-black placeholder-[#868686] focus:outline-none"
+          className="px-4 py-2.5 w-full text-[clamp(12px,0.95vw,20px)] rounded-2xl bg-white shadow-md rounded-2xl text-black placeholder-[#868686] focus:outline-none"
         />
         </div>
         {/*
@@ -209,7 +209,7 @@ export default function Home() {
           setSearch("");
         }} */}
         {/* Filters */}
-        <div className="gap-5 w-[26%]">
+        <div className="gap-5 flex-[2.6]">
           {/* Country Filter */}
         <DropdownComponent
             title="Filter by country"
@@ -222,7 +222,7 @@ export default function Home() {
             id="country"
           />
           </div>
-          <div className="gap-5 w-[26%]">
+          <div className="gap-5 flex-[2.6] hide-item-width-1100">
 
           {/* Genre Filter */}
           <DropdownComponent
@@ -275,11 +275,11 @@ export default function Home() {
         </div>
       </div>
       <div className={"flex-col flex-[1] mt-[1vw] ml-[1vw] text-sm"}>
-      <button onClick={()=>resetEverythingFilters()} className={(searchMode === "preset" || searchMode === "custom") ? "mt-[2.5vh] w-[62%] bg-red-800 text-white rounded-2xl h-[7vh] flex cursor-pointer transition" : "mt-[2.5vh] w-[62%] bg-[#f5f5f5] rounded-2xl h-[7vh] flex cursor-pointer"}><span className="flex-1 mt-[2vh] material-icons-outlined ml-[1vw]"><div>replay</div></span><div className="flex-[2.5] mt-[0.6vh]">Clear filters</div></button>
+      <button onClick={()=>resetEverythingFilters()} className={(searchMode === "preset" || searchMode === "custom") ? "mt-[2.5vh] w-[62%] bg-red-800 text-white rounded-2xl h-[7vh] flex cursor-pointer transition" : "mt-[2.5vh] w-[62%] bg-[#f5f5f5] rounded-2xl h-[7vh] flex cursor-pointer"}><span className="flex-1 mt-[2vh] material-icons-outlined ml-[1vw]"><div>replay</div></span><div className="flex-[2.5] mt-[0.6vh] hide-item-width-1100">Clear filters</div></button>
 
       </div>
       </div>
-      <div className="w-full sticky top-0 z-10 grid grid-cols-[29%_71%] py-4 text-[13px] bg-[#d3cfce] my-2 pl-4">
+      <div className="w-full sticky top-0 z-10 leaderboard-grid py-4 text-[13px] bg-[#d3cfce] my-2 pl-4">
         {/* Left Column Header */}
         <div className="flex items-center gap-4">
           <div className="w-6 text-center pl-4">#</div>
@@ -288,14 +288,14 @@ export default function Home() {
         </div>
 
         {/* Right Column Headers */}
-        <div className="grid grid-cols-6 items-center text-center">
+        <div className="flex items-center text-center">
           <button 
             onClick={() => {
               setSortByListenersAsc((prev) => prev === null ? true: !prev);
               setSort24hAsc(null);
               setSortMonthlyAsc(null);
             }} 
-            className="cursor-pointer flex items-center justify-center gap-1 group">
+            className="cursor-pointer flex flex-1 items-center justify-center gap-1 group">
               Listeners
             <div className="flex flex-col ml-1 text-[8px]">
               {(sortByListenersAsc === null || sortByListenersAsc === true) && (
@@ -316,10 +316,10 @@ export default function Home() {
               setSort24hAsc(null);
               setSortByListenersAsc(null);
             }}
-            className="cursor-pointer flex items-center justify-center gap-1 group"
+            className="cursor-pointer flex-1 flex items-center justify-center gap-1 group"
           >
             Monthly Change
-            <div className="flex flex-col ml-1 text-[8px]">
+            <div className="flex flex-1 flex-col ml-1 text-[8px]">
               {(sortMonthlyAsc === null || sortMonthlyAsc === true) && (
                 <FaChevronUp 
                   className={`transition-transform group-hover:scale-140 ${sortMonthlyAsc === true ? 'text-black' : 'text-gray-500'}`} 
@@ -338,7 +338,7 @@ export default function Home() {
               setSortMonthlyAsc(null);
               setSortByListenersAsc(null);
             }}
-            className="cursor-pointer flex items-center justify-center gap-1 group"
+            className="cursor-pointer flex flex-1 hide-item-width-900 items-center justify-center gap-1 group"
           >
             24h Change
             <div className="flex flex-col ml-1 text-[8px]">
@@ -354,9 +354,9 @@ export default function Home() {
               )}
             </div>
           </button>
-          <div>Genre</div>
-          <div>Language</div>
-          <div>Spotify Page</div>
+          <div className="flex-1">Genre</div>
+          <div className="flex-1 hide-item-width-900">Language</div>
+          <div className="flex-1 hide-item-width-1200">Spotify Page</div>
         </div>
       </div>
 

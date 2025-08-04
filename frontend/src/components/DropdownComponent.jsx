@@ -59,10 +59,10 @@ const DropdownComponent = ({ title, options, onUpdate, value, onChange, isOpen, 
   );
 
   return (
-    <div ref={dropdownRef}>
+    <div ref={dropdownRef} className="min-w-[150px]">
       <button
         onClick={handleToggle}
-        className="w-full bg-white rounded-xl px-4 py-2.5 text-left text-sm flex justify-between items-center shadow-md cursor-pointer"
+        className="w-full bg-white rounded-xl px-4 py-2.5 text-left text-[clamp(12px,0.95vw,20px)] flex justify-between items-center shadow-md cursor-pointer"
       >
         {formatLabel(value) || title}
         {isOpen ? <FaChevronUp className="text-gray-600" /> : <FaChevronDown className="text-gray-600" />}

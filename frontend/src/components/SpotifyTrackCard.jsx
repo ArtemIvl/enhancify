@@ -59,7 +59,7 @@ export default function SpotifyTrackCard({ track, rank }) {
     "#E5E4E2";
 
   return (
-    <div className="w-full grid grid-cols-[26%_74%] items-center bg-[#E5E4E2] rounded-xl pl-4 py-5">
+    <div className="w-full custom-grid items-center bg-[#E5E4E2] rounded-xl pl-4 py-5">
       <div className="flex items-center gap-8">
         <div className="ml-[0.5vw] text-lg font-semibold w-8 text-center rounded-md py-1"
         style={{ background: bgGradient }}>{rank}</div>
@@ -71,18 +71,18 @@ export default function SpotifyTrackCard({ track, rank }) {
         <div><div className="font-semibold truncate mb-[0.1vh]">{truncate_text(track.name, 30)}</div>{artists}</div>
       </div>
 
-      <div className="grid grid-cols-5 items-center ml-[1vw]">
-        <div className="flex justify-center"><div className="px-2 py-1 text-sm rounded-xl bg-[#2e2e2e] text-white"><span className="material-icons-outlined icons-tweaked">{getTrackIcon()}</span>{getTrackPopularityClassification()}<span className="text-xs"> ({(track.popularity / 10).toString()}/10)</span></div></div>
-        <div className="text-sm text-center">{parseDateTracks(album?.release_date)}</div>
-        <div className="text-sm text-center">{truncate_text(album?.name, 45)}</div>
-        <div className="justify-center flex mt-[0.5vh]"><span className="material-icons-outlined icons-tweaked">timer</span><div className="text-sm">{durationMin}:{durationSec}</div></div>
+      <div className="flex items-center ml-[1vw] min-w-0 overflow-x-hidden">
+        <div className="flex-1 flex justify-center"><div className="px-2 py-1 text-sm rounded-xl bg-[#2e2e2e] text-white"><span className="material-icons-outlined icons-tweaked">{getTrackIcon()}</span>{getTrackPopularityClassification()}<span className="text-xs hide-item-width-900"> ({(track.popularity / 10).toString()}/10)</span></div></div>
+        <div className="flex-1 text-sm text-center justify-center">{parseDateTracks(album?.release_date)}</div>
+        <div className="flex-1 text-sm text-center hide-item-width-900">{truncate_text(album?.name, 45)}</div>
+        <div className="flex-1 justify-center flex mt-[0.5vh] hide-item-width-1100"><span className="material-icons-outlined icons-tweaked">timer</span><div className="text-sm">{durationMin}:{durationSec}</div></div>
 
-        <div className="flex justify-center">
+        <div className="flex-1 flex justify-center hide-item-width-1200">
           <a
             href={externalUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative flex items-center w-33 h-13 bg-black rounded-md px-4 overflow-hidden"
+            className="group relative flex items-center w-[8.5vw] oigin-left h-13 bg-black rounded-md px-4 overflow-hidden"
           >
             <span className="absolute ml-10 text-white text-sm opacity-0 group-hover:opacity-100 group-hover:translate-x-0 translate-x-4 transition-all duration-500 z-0 whitespace-nowrap">
               Spotify

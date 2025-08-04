@@ -91,39 +91,39 @@ export default function TopContent() {
             Top Artists
           </button>
           </div>
-          <div className="h-[2.5vw] w-[2%]"><div className="w-[2px] h-full color-[#2e2e2e] bg-[#2e2e2e]"></div></div>
+          <div className="h-[2.5vw] w-[2%] hide-item-width-1200"><div className="w-[2px] h-full color-[#2e2e2e] bg-[#2e2e2e]"></div></div>
 
         <div className="flex gap-8 w-[67%]">
-          <div className="flex h-[2.75vw] text-[14px]">
-          <button onClick={() => setTimeRange("short_term")} className={`cursor-pointer rounded-tl-3xl rounded-bl-3xl w-[9vw] py-3 ${
+          <div className="flex flex-3 justify-center h-[40px] text-[14px]">
+          <button onClick={() => setTimeRange("short_term")} className={`cursor-pointer rounded-tl-3xl rounded-bl-3xl min-w-[100px] w-[9vw] py-3 ${
             timeRange === "short_term"
               ? "bg-[#2e2e2e] text-white"
               : "bg-[#f5f5f5] text-black"
           }`}>Last 4 weeks</button>
           <div className=" h-[100%] bg-black w-[1px]"></div>
-          <button onClick={()=>setTimeRange("medium_term")} className={`cursor-pointer w-[9vw] py-3 ${
+          <button onClick={()=>setTimeRange("medium_term")} className={`cursor-pointer w-[9vw] min-w-[100px] py-3 ${
             timeRange === "medium_term"
               ? "bg-[#2e2e2e] text-white"
               : "bg-[#f5f5f5] text-black"
           }`}>Last 6 months</button>
           <div className="h-[100%] bg-black w-[1px]"></div>
-          <button onClick={()=>setTimeRange("long_term")} className={`w-[9vw] rounded-br-3xl rounded-tr-3xl py-3 cursor-pointer ${
+          <button onClick={()=>setTimeRange("long_term")} className={`w-[9vw] min-w-[100px] rounded-br-3xl rounded-tr-3xl py-3 cursor-pointer ${
             timeRange === "long_term"
               ? "bg-[#2e2e2e] text-white"
               : "bg-[#f5f5f5] text-black"
           }`}>All time</button>
           </div>
-          <div className="ml-[3.5vw] flex items-center w-[35%] relative rounded-3xl">
+          <div className="ml-[3.5vw] flex flex-2 mr-[5vw] items-center w-[35%] relative rounded-3xl hide-item-width-900">
             <input
               type="text"
               placeholder={tab === "artists" ? "Search artists by name..." : "Search tracks by name..."}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full px-4 py-3 text-sm h-[2.6vw] rounded-2xl bg-[#f5f5f5] text-black placeholder-[#868686] focus:outline-none shadow-md"
+              className="w-full px-4 py-3 text-sm h-[40px] rounded-2xl bg-[#f5f5f5] text-black placeholder-[#868686] focus:outline-none shadow-md"
             />
             
             <button
-            className="absolute right-0 top-[4px] w-[18%] h-[2.3vw] w-16 text-black bg-[#f5f5f5] border-l rounded-r-2xl flex items-center justify-center ">
+            className="absolute right-0 top-[2px] w-[18%] h-[36px] w-16 text-black bg-[#f5f5f5] border-l rounded-r-2xl flex items-center justify-center ">
               <FaSearch className="text-black cursor-pointer" />
             </button>
           </div>
@@ -136,7 +136,7 @@ export default function TopContent() {
 
       {!isLoading && tab === "tracks" && (
         <div>
-          <div className="w-full sticky top-0 z-10 grid grid-cols-[26%_74%] mt-[2.5vh] py-4 text-[13px] bg-[#d3cfce] my-2 pl-4">
+          <div className="w-full sticky top-0 z-10 custom-grid mt-[2.5vh] py-4 text-[13px] bg-[#d3cfce] my-2 pl-4">
             {/* Left Column Header */}
             <div className="ml-[0.5vw] flex items-center gap-4">
               <div className="w-6 pl-4">#</div>
@@ -145,12 +145,12 @@ export default function TopContent() {
             </div>
 
             {/* Right Column Headers */}
-            <div className="ml-[1vw] grid grid-cols-5 items-center text-center">
-              <div>Global popularity</div>
-              <div>Release Date</div>
-              <div>Album</div>
-              <div>Duration (min)</div>
-              <div>Spotify Page</div>
+            <div className="ml-[1vw] flex items-center text-center">
+              <div className="flex-1">Global popularity</div>
+              <div className="flex-1">Release Date</div>
+              <div className="flex-1 hide-item-width-900">Album</div>
+              <div className="flex-1 hide-item-width-1100">Duration (min)</div>
+              <div className="flex-1 hide-item-width-1200">Spotify Page</div>
             </div>
           </div>
 

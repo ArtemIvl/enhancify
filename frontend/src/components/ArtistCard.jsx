@@ -66,7 +66,7 @@ export default function ArtistCard({ artist }) {
     "gray"
 
   return (
-  <div className="w-full grid grid-cols-[29%_71%] items-center bg-[#E5E4E2] rounded-xl pl-4 py-4">
+  <div className="w-full leaderboard-grid items-center bg-[#E5E4E2] rounded-xl pl-4 py-4">
     <div className="flex items-center gap-8">
       <div 
         className="text-lg font-semibold w-8 text-center rounded-md ml-[0.3vw] py-1"
@@ -90,31 +90,31 @@ export default function ArtistCard({ artist }) {
       <div className="flex items-center w-auto overflow-hidden gap-2">
         <span className="font-semibold truncate">{artistName}</span>
       </div>
-      <span className={`fi fi-${getCountryCode(country)} rounded min-w-6`} />
+      <span className={`fi fi-${getCountryCode(country)} hide-item-width-900 rounded min-w-6`} />
     </div>
 
-    <div className="grid grid-cols-6 items-center">
-      <div className="flex justify-center">
+    <div className="flex items-center">
+      <div className="flex flex-1 justify-center">
         <div className="text-sm text-center bg-black rounded-md p-2">{(listeners / 1_000_000).toFixed(2)}M</div>
       </div>
 
-      <div className={`flex justify-center ${getChangeColor(changeMonthly)}`}>
+      <div className={`flex flex-1 justify-center ${getChangeColor(changeMonthly)}`}>
         <div className="text-sm text-center rounded-xl bg-[#f5f5f5] py-1 px-3 font-semibold">
         {formatNumber(changeMonthly)}
         </div>
       </div>
-      <div className={`flex justify-center ${getChangeColor(change24h)}`}>
+      <div className={`flex flex-1 hide-item-width-900 justify-center ${getChangeColor(change24h)}`}>
         <div className="text-sm text-center rounded-xl bg-[#f5f5f5] py-1 px-3">
         {formatNumber(change24h)}
         </div>
       </div>
 
-      <div className="text-sm text-center">{sanitizeValue(genre)}</div>
+      <div className="text-sm flex-1 text-center">{sanitizeValue(genre)}</div>
 
-      <div className="text-sm text-center">{sanitizeValue(language)}</div>
+      <div className="text-sm flex-1 text-center hide-item-width-900">{sanitizeValue(language)}</div>
 
 
-<div className="flex justify-center">
+<div className="flex flex-1 justify-center hide-item-width-1200">
   <a
     href={spotifyLink}
     target="_blank"

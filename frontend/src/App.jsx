@@ -9,12 +9,12 @@ import { useState, useEffect } from 'react';
 
 function App() {
   const [isDesktop, setIsDesktop] = useState(
-    window.innerWidth > 800 && window.innerHeight < window.innerWidth
+    window.innerWidth > 825 && window.innerHeight < window.innerWidth
   );
 
   useEffect(() => {
     const handleResize = () => {
-      setIsDesktop(window.innerWidth > 800 && window.innerHeight < window.innerWidth);
+      setIsDesktop(window.innerWidth > 825 && window.innerHeight < window.innerWidth);
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
