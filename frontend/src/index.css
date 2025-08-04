@@ -94,3 +94,53 @@ h1, h2, h3, h4, h5, h6 {
     display: none;
   }
 }
+
+@media (max-width: 900px) {
+  .hide-item-width-900 {
+    display: none;
+  }
+}
+
+@media (max-width: 1100px) {
+  .hide-item-width-1100 {
+    display: none;
+  }
+}
+
+@media (max-width: 1200px) {
+  .hide-item-width-1200 {
+    display: none;
+  }
+}
+
+.blur-bg {
+  backdrop-filter: blur(30px);
+  transition: backdrop-filter 0.5s;
+  /* Optional: for Safari support */
+}
+
+.custom-grid {
+  display: grid;
+  grid-template-columns: clamp(250px, 26%, 1000px) clamp(0px, 74%, 2000px);
+}
+
+@media (max-width: 1000px) {
+  .custom-grid {
+    /* Adjust for smaller screens */
+    display: grid;
+    grid-template-columns: clamp(300px, 48%, 600px) clamp(200px, 48%, 5000px);
+  }
+}
+
+.leaderboard-grid {
+  display: grid;
+  grid-template-columns: clamp(250px, 29%, 1000px) clamp(0px, 71%, 2000px);
+}
+
+@media (max-width: 1200px) {
+  .leaderboard-grid {
+    /* Adjust for smaller screens */
+    display: grid;
+    grid-template-columns: clamp(300px, 40%, 600px) clamp(200px, 60%, 5000px);
+  }
+}

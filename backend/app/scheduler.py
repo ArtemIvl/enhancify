@@ -62,18 +62,32 @@ def update_concerts_for_top_global_singers(n = 100):
 
 @scheduler.scheduled_job(
     id="update_artist_leaderboard",
-    trigger=CronTrigger(hour='*', minute='*/10', timezone=pytz.UTC, jitter=0)
+    trigger=CronTrigger(hour='*', minute='*/1', timezone=pytz.UTC, jitter=0)
 )
 def update_artist_leaderboard():
     info_on_top_singers = get_info_on_top_singers()
 
+    yesterdays_listeners = dict()
     columns = [
         "Index", "Rank", "Image", "Artist", "Monthly listeners (millions)",
         "Change vs yesterday", "Change vs last month", "Spotify ID",
         "Country", "Genre", "Language", "Group type"
     ]
-
+        
     info_on_top_singers_dicts = [dict(zip(columns, row)) for row in info_on_top_singers]
+    #1 - get original ranks
+    #2 - calculate ranks with change vs. yesterday subtracted
+    #compare original ranks to yesterdays ranks
+    
+    for item in info_on_top_singers_dicts:
+        yesterdays_listeners[item["Spotify ID"]] = int(item["Monthly listeners (millions)"].replace(",", "")) - int(item["Change vs last month"].replace(",", ""))
+        
+    yesterdays_ranks = {k: rank for rank, (k, v) in enumerate(
+    sorted(yesterdays_listeners.items(), key=lambda x: x[1], reverse=True), 1)}
+    
+    for item in info_on_top_singers_dicts:
+        item["Ranks change"] = yesterdays_ranks[item["Spotify ID"]] - int(item["Rank"].replace(",", ""))
+        
     current_date = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
     r.set("top_listened_artists:content", json.dumps(info_on_top_singers_dicts))
     r.set("top_listened_artists:last_updated_at", current_date)

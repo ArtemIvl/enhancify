@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
-const DropdownComponent = ({ title, options, value, onChange, isOpen, setOpenDropdown, id }) => {
+const DropdownComponent = ({ title, options, onUpdate, value, onChange, isOpen, setOpenDropdown, id }) => {
   const [search, setSearch] = useState("");
   const dropdownRef = useRef(null);
 
@@ -59,23 +59,24 @@ const DropdownComponent = ({ title, options, value, onChange, isOpen, setOpenDro
   );
 
   return (
-    <div className="relative w-64" ref={dropdownRef}>
+    <div ref={dropdownRef} className="min-w-[150px]">
       <button
         onClick={handleToggle}
-        className="w-full bg-white rounded-xl px-4 py-3 text-left text-sm flex justify-between items-center shadow-md cursor-pointer"
+        className="w-full bg-white rounded-xl px-4 py-2.5 text-left text-[clamp(12px,0.95vw,20px)] flex justify-between items-center shadow-md cursor-pointer"
       >
         {formatLabel(value) || title}
         {isOpen ? <FaChevronUp className="text-gray-600" /> : <FaChevronDown className="text-gray-600" />}
       </button>
 
       {isOpen && (
-        <div className="absolute z-11 mt-2 w-full bg-white rounded-xl shadow-lg overflow-hidden text-sm max-h-60">
+        <div className="absolute z-11 mt-2 w-[14%] bg-white rounded-xl shadow-lg overflow-hidden text-sm max-h-60">
           <div className="overflow-y-auto max-h-60">
             {filteredOptions.map((option) => (
               <button
                 key={option}
                 onClick={() => {
                   onChange(option);
+                  onUpdate("custom")
                   setOpenDropdown(null);
                   setSearch("");
                 }}

@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import ArtistCard from "../components/ArtistCard.jsx";
-import { fetchTopArtists } from "../services/api.js";
+import { fetchMyArtists, fetchTopArtists } from "../services/api.js";
 import Loading from '../components/Loading.jsx';
 import DropdownComponent from "../components/DropdownComponent.jsx"
 import { FaChevronDown, FaTimes, FaChevronUp } from "react-icons/fa";
+import DropdownComponentDescription from "../components/DropdownComponentDescription.jsx";
+import "../index.css"
 
 export default function Home() {
   const [artists, setArtists] = useState([]);
@@ -17,8 +19,14 @@ export default function Home() {
   const [sortByListenersAsc, setSortByListenersAsc] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [openDropdown, setOpenDropdown] = useState(null);
-
+  const [searchPresetOption, setSearchPresetOption] = useState(null);
+  const [sortByRankChange, setSortByRankChange] = useState(null);
   const artistsPerPage = 100;
+  const [sortByFavourite, setSortByFavourite] = useState(null);
+
+  const [usersMostListenedArtists, setUsersMostListenedArtists] = useState(null);
+  const [authorized, setAuthorized] = useState(null);
+  const [searchMode, setSearchMode] = useState("default");
 
   useEffect(() => {
     fetchTopArtists()
@@ -32,7 +40,76 @@ export default function Home() {
         console.error(err);
         setIsLoading(false);
       })
+
+    const token = localStorage.getItem("spotify_token");
+    const timeRange = "medium_term"
+    fetchMyArtists(timeRange, token).then(artists => {
+      setUsersMostListenedArtists(artists);
+      setAuthorized(true);
+    }).catch((err) => {
+      setAuthorized(false);
+    }
+      
+    )
   }, []);
+  
+
+  function resetEverythingFilters() {
+    setGenreFilter(null)
+    setCountryFilter(null)
+    setSortByFavourite(null);
+    setSort24hAsc(null);
+    setSearchMode("default")
+    setSortByListenersAsc(null);
+    setSortMonthlyAsc(null);
+    setSortByRankChange(null);
+    setSearchPresetOption(null);
+    setSearch("");
+  }
+
+  function filterLeaderboardByUsersMostListened(artists, filteredList) {
+    const artistIds = new Set(artists.map(a => a.id));
+    return filteredList.filter(item => artistIds.has(item["Spotify ID"]));
+  }
+
+  useEffect(() => {
+    setGenreFilter(null)
+    setCountryFilter(null)
+    setSort24hAsc(null);
+    setSortByListenersAsc(null);
+    setSortMonthlyAsc(null);
+    setSortByRankChange(null);
+    setSortByFavourite(null);
+    if (searchPresetOption !== null) {
+      setSearchMode("preset");
+
+    }
+    if (searchPresetOption === "trending") {
+      setSortByRankChange(true);
+      //select artists who climbed the most positions
+    }
+    else if (searchPresetOption === "winners") {
+      setSortMonthlyAsc(true);
+    }
+    else if (searchPresetOption === "favourite") {
+      setSortByFavourite(true);
+    }
+    else if (searchPresetOption === "classical") {
+      setGenreFilter("Classical")
+    }
+    else if (searchPresetOption === "french_rap") {
+      setGenreFilter("Pop")
+      setCountryFilter("France")
+    }
+    else if (searchPresetOption === "german_techno") {
+      setGenreFilter("Electronic")
+      setCountryFilter("Germany")
+    }
+    else if (searchPresetOption === "english_rock") {
+      setGenreFilter("Rock")
+      setCountryFilter("United Kingdom")
+    }
+  }, [searchPresetOption]);
 
   useEffect(() => {
     const parser = new DOMParser();
@@ -68,10 +145,17 @@ export default function Home() {
           : parseFloat(b["Monthly listeners (millions)"]?.replace(/,/g, '') || 0) - parseFloat(a["Monthly listeners (millions)"]?.replace(/,/g, '') || 0)
       );
     }
+      else if (sortByRankChange !== null) {
+        filteredList = filteredList.sort((a, b) => 
+          parseFloat(b["Ranks change"]) - parseFloat(a["Ranks change"]) || 0);
+      }
+      else if (sortByFavourite !== null) {
+        filteredList = filterLeaderboardByUsersMostListened(usersMostListenedArtists, filteredList);
+      }
 
     setFiltered(filteredList);
     setCurrentPage(1);
-  }, [search, countryFilter, genreFilter, artists, sort24hAsc, sortMonthlyAsc, sortByListenersAsc]);
+  }, [search, countryFilter, genreFilter, artists, sort24hAsc, sortMonthlyAsc, sortByListenersAsc, sortByRankChange, sortByFavourite]);
 
   // Extract unique countries and genre for filter dropdowns
   const uniqueCountries = Array.from(new Set(artists.map((a) => a.Country))).filter(Boolean).sort();
@@ -86,48 +170,65 @@ export default function Home() {
   const totalPages = Math.ceil(filtered.length / artistsPerPage);
 
   return (
-    <div className="px-8 overflow-hidden">
-    <div className="text-2xl font-bold py-4">Most listened artists on Spotify</div>
-    <div className="w-full flex justify-between items-center gap-4">
+    <div className="px-11">
+    <div className="text-xl font-bold py-4">Most listened artists on Spotify</div>
+    <div className="flex flex-row mt-[1vh] mb-[2vh] items-stretch">
+    <div className={searchMode === "preset" ? "flex-[4] relative flex flex-col gap-6 pointer-events-none select-none" : "flex-[4] flex flex-col gap-6"}>
+      {searchMode === "preset" && (
+        <div className="absolute inset-[-4px] z-10 backdrop-blur-[3px] rounded-2xl transition-all duration-100" />
+      )}
+      <div>Select search filters yourself</div>
+      <div className="flex gap-7">
+      <div className="flex-[4.2]">
         {/* Search bar */}
-      <div className="flex items-center w-full md:w-1/2 relative shadow-md rounded-2xl">
-        <input
+          <input
           type="text"
           placeholder="Search artists by name..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full px-4 py-3 text-sm rounded-2xl bg-white text-black placeholder-[#868686] focus:outline-none"
+          onChange={
+            (e) => {
+              setSearch(e.target.value)
+              if (e.target.value !== "") {
+              setSearchMode("custom")
+              }
+              else {
+              setSearchMode("default")
+              }
+            }
+          }
+          className="px-4 py-2.5 w-full text-[clamp(12px,0.95vw,20px)] rounded-2xl bg-white shadow-md rounded-2xl text-black placeholder-[#868686] focus:outline-none"
         />
-        <button onClick={() => {
+        </div>
+        {/*
+        <button onClick={() => { functionality for resetting the filters
           setCountryFilter("");
           setGenreFilter("");
           setSort24hAsc(null);
           setSortMonthlyAsc(null);
           setSortByListenersAsc(null);
           setSearch("");
-        }}
-        className="absolute right-0 top-0 h-full w-16 bg-black rounded-r-2xl flex items-center justify-center cursor-pointer">
-          <FaTimes className="text-white" />
-        </button>
-      </div>
-
+        }} */}
         {/* Filters */}
-        <div className="flex gap-4 w-full md:w-auto">
+        <div className="gap-5 flex-[2.6]">
           {/* Country Filter */}
         <DropdownComponent
             title="Filter by country"
             options={uniqueCountries}
             value={countryFilter}
             onChange={setCountryFilter}
+            onUpdate = {setSearchMode}
             isOpen={openDropdown === "country"}
             setOpenDropdown={setOpenDropdown}
             id="country"
           />
+          </div>
+          <div className="gap-5 flex-[2.6] hide-item-width-1100">
 
           {/* Genre Filter */}
           <DropdownComponent
             title="Filter by genre"
             options={uniqueGenres}
+            onUpdate = {setSearchMode}
             value={genreFilter}
             onChange={setGenreFilter}
             isOpen={openDropdown === "genre"}
@@ -135,25 +236,66 @@ export default function Home() {
             id="genre"
           />
         </div>
-      </div>
 
-      <div className="w-full sticky top-0 z-10 grid grid-cols-[26%_74%] py-4 text-[12px] bg-[#d3cfce] my-2 pl-4">
+      </div>
+      </div>
+      <div className="flex-[0.6] items-center justify-center h-[100px] transition-all duration-700 opacity-100 translate-x-0">
+        <div className="relative flex flex-col items-center h-full">
+          {/* Vertical line */}
+          <div className="w-[2px] bg-black h-full" />
+          {/* OR box, absolutely centered */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-4 py-1 bg-[#d3cfce] rounded text-black font-medium">
+            OR
+          </div>
+        </div>
+      </div>
+      <div id="box" className={searchMode === "custom" ? "relative search-presets-container flex-col flex-[1.6] pointer-events-none select-none" : "search-presets-container flex-col flex-[1.6]"}>
+          {/* Overlay for blur */}
+      {searchMode === "custom" && (
+        <div className="absolute inset-[-4px] z-10 backdrop-blur-[3px] rounded-2xl transition-all duration-100" />
+      )}
+      <div className="mb-[3vh]">Use search presets</div>
+
+          <DropdownComponentDescription
+            title="Select a search preset"
+            onChange={setSearchPresetOption}
+            isOpen={openDropdown === "preset"}
+            spotifyAccountConnected = {authorized}
+            setOpenDropdown={setOpenDropdown}
+            value={searchPresetOption}
+            id="preset">
+
+          </DropdownComponentDescription>
+      </div>
+       <div className="flex-[0.3] items-center justify-center h-[100px] transition-all duration-700 opacity-100 translate-x-0" id="box2">
+        <div className="relative flex flex-col items-center h-full">
+          {/* Vertical line */}
+          <div className="w-[2px] bg-black h-full" />
+          {/* OR box, absolutely centered */}
+        </div>
+      </div>
+      <div className={"flex-col flex-[1] mt-[1vw] ml-[1vw] text-sm"}>
+      <button onClick={()=>resetEverythingFilters()} className={(searchMode === "preset" || searchMode === "custom") ? "mt-[2.5vh] w-[62%] bg-red-800 text-white rounded-2xl h-[7vh] flex cursor-pointer transition" : "mt-[2.5vh] w-[62%] bg-[#f5f5f5] rounded-2xl h-[7vh] flex cursor-pointer"}><span className="flex-1 mt-[2vh] material-icons-outlined ml-[1vw]"><div>replay</div></span><div className="flex-[2.5] mt-[0.6vh] hide-item-width-1100">Clear filters</div></button>
+
+      </div>
+      </div>
+      <div className="w-full sticky top-0 z-10 leaderboard-grid py-4 text-[13px] bg-[#d3cfce] my-2 pl-4">
         {/* Left Column Header */}
         <div className="flex items-center gap-4">
           <div className="w-6 text-center pl-4">#</div>
           <div className="w-24" /> {/* Empty space for image */}
-          <div>Name</div>
+          <div className="ml-[3.6vw]">Name</div>
         </div>
 
         {/* Right Column Headers */}
-        <div className="grid grid-cols-7 items-center text-center">
+        <div className="flex items-center text-center">
           <button 
             onClick={() => {
               setSortByListenersAsc((prev) => prev === null ? true: !prev);
               setSort24hAsc(null);
               setSortMonthlyAsc(null);
             }} 
-            className="cursor-pointer flex items-center justify-center gap-1 group">
+            className="cursor-pointer flex flex-1 items-center justify-center gap-1 group">
               Listeners
             <div className="flex flex-col ml-1 text-[8px]">
               {(sortByListenersAsc === null || sortByListenersAsc === true) && (
@@ -168,15 +310,35 @@ export default function Home() {
               )}
             </div>
           </button>
-          <div>Genre</div>
-          <div>Language</div>
+            <button
+            onClick={() => {
+              setSortMonthlyAsc((prev) => prev === null ? true : !prev);
+              setSort24hAsc(null);
+              setSortByListenersAsc(null);
+            }}
+            className="cursor-pointer flex-1 flex items-center justify-center gap-1 group"
+          >
+            Monthly Change
+            <div className="flex flex-1 flex-col ml-1 text-[8px]">
+              {(sortMonthlyAsc === null || sortMonthlyAsc === true) && (
+                <FaChevronUp 
+                  className={`transition-transform group-hover:scale-140 ${sortMonthlyAsc === true ? 'text-black' : 'text-gray-500'}`} 
+                />
+              )}
+              {(sortMonthlyAsc === null || sortMonthlyAsc === false) && (
+                <FaChevronDown 
+                  className={`transition-transform group-hover:scale-140 ${sortMonthlyAsc === false ? 'text-black' : 'text-gray-500'}`} 
+                />
+              )}
+            </div>
+          </button>
           <button
             onClick={() => {
               setSort24hAsc((prev) => prev === null ? true : !prev);
               setSortMonthlyAsc(null);
               setSortByListenersAsc(null);
             }}
-            className="cursor-pointer flex items-center justify-center gap-1 group"
+            className="cursor-pointer flex flex-1 hide-item-width-900 items-center justify-center gap-1 group"
           >
             24h Change
             <div className="flex flex-col ml-1 text-[8px]">
@@ -192,30 +354,9 @@ export default function Home() {
               )}
             </div>
           </button>
-          <button
-            onClick={() => {
-              setSortMonthlyAsc((prev) => prev === null ? true : !prev);
-              setSort24hAsc(null);
-              setSortByListenersAsc(null);
-            }}
-            className="cursor-pointer flex items-center justify-center gap-1 group"
-          >
-            Monthly Change
-            <div className="flex flex-col ml-1 text-[8px]">
-              {(sortMonthlyAsc === null || sortMonthlyAsc === true) && (
-                <FaChevronUp 
-                  className={`transition-transform group-hover:scale-140 ${sortMonthlyAsc === true ? 'text-black' : 'text-gray-500'}`} 
-                />
-              )}
-              {(sortMonthlyAsc === null || sortMonthlyAsc === false) && (
-                <FaChevronDown 
-                  className={`transition-transform group-hover:scale-140 ${sortMonthlyAsc === false ? 'text-black' : 'text-gray-500'}`} 
-                />
-              )}
-            </div>
-          </button>
-          <div>Type</div>
-          <div>Spotify Page</div>
+          <div className="flex-1">Genre</div>
+          <div className="flex-1 hide-item-width-900">Language</div>
+          <div className="flex-1 hide-item-width-1200">Spotify Page</div>
         </div>
       </div>
 
