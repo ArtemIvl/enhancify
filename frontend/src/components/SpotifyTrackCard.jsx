@@ -61,7 +61,7 @@ export default function SpotifyTrackCard({ track, rank }) {
   return (
     <div className="w-full custom-grid items-center bg-[#E5E4E2] rounded-xl pl-4 py-5">
       <div className="flex items-center gap-8">
-        <div className="ml-[0.5vw] text-lg font-semibold w-8 text-center rounded-md py-1"
+        <div className="ml-[0.5vw] text-lg font-semibold w-8 min-w-[25px] text-center rounded-md py-1"
         style={{ background: bgGradient }}>{rank}</div>
 
         <div className="w-14 min-w-14 h-14 rounded-md overflow-hidden">

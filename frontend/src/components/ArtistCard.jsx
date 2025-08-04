@@ -69,7 +69,7 @@ export default function ArtistCard({ artist }) {
   <div className="w-full leaderboard-grid items-center bg-[#E5E4E2] rounded-xl pl-4 py-4">
     <div className="flex items-center gap-8">
       <div 
-        className="text-lg font-semibold w-8 text-center rounded-md ml-[0.3vw] py-1"
+        className="text-lg font-semibold w-8 min-w-[25px] text-center rounded-md ml-[0.3vw] py-1"
         style={{ background: bgGradient }}>{rank}</div>
         <div
           className={`flex justify-center ${rank.length >= 5 ? "flex-col w-2 ml-[1vw]" : "flex-row w-1"} items-center`}
